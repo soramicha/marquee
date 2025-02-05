@@ -1,23 +1,32 @@
 {
-  "name": "307-team-project",
-  "version": "1.0.0",
-  "description": "",
-  "homepage": "https://github.com/soramicha/307-team-project#readme",
-  "bugs": {
-    "url": "https://github.com/soramicha/307-team-project/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/soramicha/307-team-project.git"
-  },
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+    "name": "307-team-project",
+    "version": "1.0.0",
+    "description": "",
+    "homepage": "https://github.com/soramicha/307-team-project#readme",
+    "bugs": {
+        "url": "https://github.com/soramicha/307-team-project/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/soramicha/307-team-project.git"
+    },
+    "license": "ISC",
+    "author": "",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
+    },
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "@eslint/compat": "^1.2.6",
+        "@eslint/eslintrc": "^3.2.0",
+        "@eslint/js": "^9.19.0",
+        "eslint": "^9.19.0",
+        "globals": "^15.14.0",
+        "prettier": "^3.4.2"
+    }
 }
