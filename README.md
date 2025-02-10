@@ -1,5 +1,7 @@
 # marquee
 
+## Sequence Diagram: https://www.figma.com/board/m09ipWSAiB344xhBuNDznC/TE4%3A-Authentication-and-Access-Contrtol?node-id=0-1&p=f&t=Dq4ZyuCFLlLRc2IT-0
+
 ## How to Contribute
 1. **Clone the Forked Repo**:  
     ```sh
