@@ -58,6 +58,7 @@ export function authenticateUser(req, res, next) {
 }
 
 export function registerUser(req, res) {
+    // TODO: make user input fields more secure?(character minimum, symbols, etc)
     const { username, pwd } = req.body; // from form
     
     if (!username || !pwd) {
