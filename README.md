@@ -8,7 +8,7 @@
 2. **Setup**:
     ```sh
     npm install
-    cd packages/react-frontend && npm install
+    cd packages/frontend && npm install
 
 3. **Create a New Branch**:
     ```sh
