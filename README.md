@@ -39,7 +39,7 @@ Notes:
 
 To run the backend:
 - npm run dev in the backend directory
-- make sure you create a .env file for TOKEN_SECRET so you can run it properly
+- make sure you create a .env file for TOKEN_SECRET so you can run it properly (put some random thing for now: ex. TOKEN_SECRET=hi
 - make sure you install dotenv as well (documentation online)
 
 Using Postman: Postman is a convenient way to test our API's
