@@ -5,7 +5,9 @@ import mongoose from "mongoose";
 const creds = [];
 
 export function loginUser(req, res) {
+  console.log(creds)
   const { username, pwd } = req.body; // from form
+  console.log(username, pwd)
   const retrievedUser = creds.find(
     (c) => c.username === username
   );
@@ -19,6 +21,7 @@ export function loginUser(req, res) {
       .then((matched) => {
         if (matched) {
           generateAccessToken(username).then((token) => {
+            console.log("Authorized!")
             res.status(200).send({ token: token });
           });
         } else {
@@ -37,7 +40,8 @@ export function authenticateUser(req, res, next) {
   const authHeader = req.headers["authorization"];
   // Getting the 2nd part of the auth header (the token)
   const token = authHeader && authHeader.split(" ")[1];
-
+  console.log("authenticateUser authHeader:", authHeader)
+  console.log("authenticateUser Token:", token)
   if (!token) {
     console.log("No token received");
     res.status(401).end();
@@ -61,7 +65,7 @@ export function registerUser(req, res) {
   console.log("registerUser on backend called", req.body)
   // TODO: make user input fields more secure?(character minimum, symbols, etc)
   const { username, pwd } = req.body; // from form
-  console.log(username, pwd)
+  console.log("username:", username, "password:", pwd)
   // if either username or password doesn't exist
   if (!username || !pwd) {
     // then send status of 400 meaning bad request
@@ -77,6 +81,7 @@ export function registerUser(req, res) {
       .genSalt(10) // generate the salt
       .then((salt) => bcrypt.hash(pwd, salt)) // hash the password with the salt
       .then((hashedPassword) => {
+        console.log("Generating token now...")
         // create a token to send to frontend
         generateAccessToken(username).then((token) => {
           console.log("Token:", token);
