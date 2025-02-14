@@ -33,3 +33,19 @@
 - Follow Prettier
 - Ensure your code is well-documented.
 - Write meaningful commit messages.
+
+
+Notes:
+
+To run the backend:
+- npm run dev in the backend directory
+- make sure you create a .env file for TOKEN_SECRET so you can run it properly
+- make sure you install dotenv as well (documentation online)
+
+Using Postman: Postman is a convenient way to test our API's
+- when you download Postman, make sure your backend (npm run dev) is running! it will not work if you don't run it first
+- copy paste the local host link into Postman, and make sure the type of HTTP request (GET, POST, PUT, etc) is correctly adjusted before hitting send
+- console.log or inspect console on browser to check for error messages
+
+To run frontend:
+- npm start in the frontend directory
