@@ -1,10 +1,11 @@
 //import "./App.css";
-import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
+//import SignUp from "./pages/SignUp";
 
 function App() {
     return (
         <>
-        <SignUp/>
+        <Login/>
         </>
     );
 }
