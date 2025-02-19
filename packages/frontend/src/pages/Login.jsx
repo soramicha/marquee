@@ -1,5 +1,6 @@
-import { Box, Link, Text, Center, Button, Input } from '@chakra-ui/react'
+import { Box, Link as L, Text, Center, Button, Input } from '@chakra-ui/react'
 import { useState } from "react"
+import { Link } from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -53,14 +54,14 @@ function Login() {
             type="text"
           ></Input>
           </Center>
-          <Link href="/" color="black" mt={3} ml={5}><Text textStyle="sm">Forgot Password?</Text></Link>
+          <L href="/" color="black" mt={3} ml={5}><Text textStyle="sm">Forgot Password?</Text></L>
           <Center>
           <Button onClick={logUser} borderWidth={0} mt={7} w="90%" borderRadius={10} backgroundColor="#2E55C4">
             <Text color="white">Sign In</Text>
           </Button>
           </Center>
           <Center>
-            <Text textStyle="sm" mt={2} color="#596334">Don&#39;t have an account?{" "}<Link href="/" color="black">Sign Up Now</Link></Text>
+            <Text textStyle="sm" mt={2} color="#596334">Don&#39;t have an account?{" "}<Link to="/signup" color="black">Sign Up Now</Link></Text>
             </Center>
         </Box>
     </div>

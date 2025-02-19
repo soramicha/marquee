@@ -1,5 +1,6 @@
-import { Box, Link, Text, Center, Button, Input } from '@chakra-ui/react'
+import { Box, Text, Center, Button, Input } from '@chakra-ui/react'
 import { useState } from "react"
+import { Link } from "react-router-dom";
 
 function SignUp() {
     const [name, setName] = useState("");
@@ -29,7 +30,7 @@ function SignUp() {
             width={"90%"}
             backgroundColor="#F3F3F3"
             mt={8}
-            color="#989898"
+            color="black"
             placeholder="School"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -41,7 +42,7 @@ function SignUp() {
           borderWidth={0}
             borderRadius={"10px"}
             width={"90%"}
-            color="#989898"
+            color="black"
             backgroundColor="#F3F3F3"
             mt={4}
             placeholder="Student Email (ex. john@college.edu)"
@@ -55,7 +56,7 @@ function SignUp() {
           borderWidth={0}
             borderRadius={"10px"}
             width={"90%"}
-            color="#989898"
+            color="black"
             backgroundColor="#F3F3F3"
             mt={4}
             placeholder="Password"
@@ -69,7 +70,7 @@ function SignUp() {
           borderWidth={0}
             borderRadius={"10px"}
             width={"90%"}
-            color="#989898"
+            color="black"
             backgroundColor="#F3F3F3"
             mt={4}
             placeholder="Confirm Password"
@@ -84,7 +85,7 @@ function SignUp() {
           </Button>
           </Center>
           <Center>
-            <Text mt={2} color="#596334">Already have an account?{" "}<Link href="/" color="black">Login Now</Link></Text>
+            <Text mt={2} color="#596334">Already have an account?{" "}<Link to="/login" color="black">Login Now</Link></Text>
             </Center>
         </Box>
     </div>
