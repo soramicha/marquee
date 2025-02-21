@@ -1,70 +1,74 @@
-import { Box, Link as L, Text, Center, Button, Input } from '@chakra-ui/react'
+import { Heading, Box, Text, Button, Input, Flex } from '@chakra-ui/react'
 import { useState } from "react"
 import { Link } from "react-router-dom";
+import { useAuth } from '@/context/authContext';
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { auth } = useAuth();
+    
 
-    const logUser = () => {
+    const logUser = async () => {
         // login user
-        console.log(email, password)
+        console.log(email, password);
+        
     }
 
-    return <div style={{ backgroundColor:"#F3F3F3", display: "flex", justifyContent:"center", alignItems:"center", width: "100vw", height: "100vh"}}>
-        <Box maxH="90vh" overflowY="auto" borderWidth={0} h="450px" bg="white" borderRadius={"15px"} alignItems="center" w="450px" p={3}>
-        <Center>
-            <Text mt={10} textStyle="3xl" color="black">Welcome Back</Text>
-        </Center>
-        <Center>
-        <Text pt={6} textStyle="sm" color="black" display="flex" justifyContent="center" alignItems="center" mt={1}>
-          Buy, sell, and trade with students on your campus.
-          </Text>
-        </Center>
-        <Center>
-        <Text textStyle="sm" color="black" display="flex" justifyContent="center" alignItems="center" mt={1}>
-          Sign in to start connecting!
-          </Text>
-        </Center>
-        <Center>
-          <Input
-          mt={5}
-          borderWidth={0}
-            borderRadius={"10px"}
-            width={"90%"}
-            color="#989898"
-            backgroundColor="#F3F3F3"
-            placeholder="Username@yourschool.edu"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-          ></Input>
-          </Center>
-          <Center>
-          <Input
-          borderWidth={0}
-            borderRadius={"10px"}
-            width={"90%"}
-            color="#989898"
-            backgroundColor="#F3F3F3"
-            mt={4}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="text"
-          ></Input>
-          </Center>
-          <L href="/" color="black" mt={3} ml={5}><Text textStyle="sm">Forgot Password?</Text></L>
-          <Center>
-          <Button onClick={logUser} borderWidth={0} mt={7} w="90%" borderRadius={10} backgroundColor="#2E55C4">
-            <Text color="white">Sign In</Text>
-          </Button>
-          </Center>
-          <Center>
-            <Text textStyle="sm" mt={2} color="#596334">Don&#39;t have an account?{" "}<Link to="/signup" color="black">Sign Up Now</Link></Text>
-            </Center>
-        </Box>
-    </div>
+    return (
+      <Box h={"100vh"} w={"100vw"} bg="#F3F3F3">
+        <Flex justify="center" alignItems="center" height="100%" >
+          <Box bg="white" borderWidth={0} h="450px" w="450px" borderRadius={"15px"} p={"55px"}>
+            <Flex flexDirection="column" justify="center" align="center" gap="">
+              <Flex flexDirection="column" justify="center" align="center" textAlign={"center"}>
+                <Heading size="md" fontWeight={600}>Welcome Back</Heading>
+                <Text mt="20px" whiteSpace={"nowrap"}>
+                  Buy, sell, and trade with students on your campus.
+                </Text>
+                <Text>
+                  Sign in to start connecting!
+                </Text>
+              </Flex>
+              <Flex w="100%" textAlign="left" flexDirection="column" justify="center" align="center">
+                <Input
+                mt={5}
+                borderWidth={0}
+                borderRadius={"10px"}
+                color="#989898"
+                backgroundColor="#F3F3F3"
+                placeholder="Username@yourschool.edu"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                />
+                <Input
+                  borderWidth={0}
+                  borderRadius={"10px"}
+                  color="#989898"
+                  backgroundColor="#F3F3F3"
+                  mt={4}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="text"
+                />
+                <Box fontWeight={400} w="100%" alignSelf={"left"} mt={"10px"}>
+                  <Link to="/" color="black">
+                      Forgot Password?
+                  </Link>
+                </Box>
+              </Flex> 
+              <Button onClick={logUser} borderWidth={0} mt={7} w="100%" borderRadius={10} backgroundColor="#2E55C4">
+                <Text color="white">Sign In</Text>
+              </Button>
+                <Text fontWeight={400} textStyle="sm" mt={"10px"}>
+                  Don&#39;t have an account?{" "}<Link to="/signup" color="black">Sign Up Now</Link>
+                </Text>
+            </Flex>
+          </Box>
+        </Flex>        
+      </Box>
+    );
 }
 
 export default Login;
