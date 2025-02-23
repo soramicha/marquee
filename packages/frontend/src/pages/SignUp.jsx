@@ -1,8 +1,8 @@
 import { Heading, Flex, Box, Text, Center, Button, Input, FormControl, FormErrorMessage } from '@chakra-ui/react';
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from '@/api/axios';
-import { useAuth } from '@/context/authContext';
+import { useAuth } from '@/context/AuthContext';
 
 function SignUp() {
     const [name, setName] = useState("");
@@ -10,7 +10,14 @@ function SignUp() {
     const [password, setPassword] = useState("");
     const [confirmedPassword, setConfirmedPassword] = useState("");
     const [error, setError] = useState("");
-    const { login } = useAuth();
+    const { auth, signup } = useAuth();
+    let navigate = useNavigate();
+
+    useEffect(() => {
+      if (auth?.access_token) {
+          navigate('/home');
+      }
+    }, [auth, navigate]);
 
     const signUpUser = async (e) => {
         e.preventDefault();
@@ -29,7 +36,7 @@ function SignUp() {
         }
 
         try {
-            login(email, password);
+            await signup(email, password);
         } catch (error) {
             console.error('Error submitting form:', error);
             setError('An error occurred while submitting the form.');
