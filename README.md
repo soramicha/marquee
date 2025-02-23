@@ -39,13 +39,16 @@ Notes:
 
 To run the backend:
 - npm run dev in the backend directory
-- make sure you create a .env file for TOKEN_SECRET so you can run it properly (put some random thing for now: ex. TOKEN_SECRET=hi
+- make sure you create a .env file for TOKEN_SECRET so you can run it properly (put some random thing for now: ex. TOKEN_SECRET=hi)
 - make sure you install dotenv as well (documentation online)
 
 Using Postman: Postman is a convenient way to test our API's
 - when you download Postman, make sure your backend (npm run dev) is running! it will not work if you don't run it first
+- make sure that you use http://localhost:8000 instead of the frontend's http://localhost:5173/ when testing on Postman!
 - copy paste the local host link into Postman, and make sure the type of HTTP request (GET, POST, PUT, etc) is correctly adjusted before hitting send
 - console.log or inspect console on browser to check for error messages
+- if your backend doesn't run and it talks about a cookie-parser, run: npm install cookie-parser
 
 To run frontend:
+- make sure you npm i axios so you can run it!
 - npm start in the frontend directory
