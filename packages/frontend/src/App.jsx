@@ -4,6 +4,8 @@ import SignUp from "@/pages/SignUp";
 import PersistLogin from "@/components/PersistLogin";
 import RequireAuth from "@/components/RequireAuth";
 import Home from "@/pages/Home";
+import CreateListing from "./pages/CreateListing";
+import EditListing from "./pages/EditListing";
 
 function App() {
     return (
@@ -11,6 +13,9 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/">
+                {/* add into protected route later */}
+                <Route path="listing/create" element={<CreateListing/>}/>
+                <Route path="listing/edit" element={<EditListing/>}/>
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<SignUp />} />
                 <Route element={<PersistLogin />}>
