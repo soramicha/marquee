@@ -4,6 +4,7 @@ import SignUp from "@/pages/SignUp";
 import PersistLogin from "@/components/PersistLogin";
 import RequireAuth from "@/components/RequireAuth";
 import Home from "@/pages/Home";
+import Profile from "./pages/Profile";
 
 function App() {
     return (
@@ -11,6 +12,8 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/">
+                {/* add to protected routes later */}
+                <Route path="profile" element={<Profile/>}/>
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<SignUp />} />
                 <Route element={<PersistLogin />}>
