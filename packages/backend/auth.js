@@ -2,12 +2,31 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
+// TODO: move this logic to DB
+//TODO: when not testing on localhost, set cookies' secure flags to true
+
 const creds = [];
+const refreshTokens = new Map();
+
+async function setTokensAndRespond(res, username, hashedPassword = null) {
+  const access_token = await generateAccessToken(username);
+  const refresh_token = await generateRefreshToken(username);
+
+  if (access_token && refresh_token) {
+    console.log("Access Token:", access_token);
+    console.log("Refresh Token:", refresh_token);
+    res.cookie('refreshToken', refresh_token, { httpOnly: true, secure: false, sameSite: 'lax', path: '/'});
+    res.status(201).send({ access_token });
+
+    if (hashedPassword) {
+      creds.push({ username, hashedPassword });
+    }
+    refreshTokens.set(username, refresh_token);
+  }
+}
 
 export function loginUser(req, res) {
-  console.log(creds)
-  const { username, pwd } = req.body; // from form
-  console.log(username, pwd)
+  const { username, password } = req.body; // from form
   const retrievedUser = creds.find(
     (c) => c.username === username
   );
@@ -17,95 +36,111 @@ export function loginUser(req, res) {
     res.status(401).send("Unauthorized");
   } else {
     bcrypt
-      .compare(pwd, retrievedUser.hashedPassword)
-      .then((matched) => {
+      .compare(password, retrievedUser.hashedPassword)
+      .then(async (matched) => {
         if (matched) {
-          generateAccessToken(username).then((token) => {
-            console.log("Authorized!")
-            res.status(200).send({ token: token });
-          });
+          await setTokensAndRespond(res, username);
         } else {
           // invalid password
           res.status(401).send("Unauthorized");
         }
-      })
-      .catch(() => {
-        res.status(401).send("Unauthorized");
       });
   }
 }
+
+export function logout(req, res) {
+  const username = req.body.username;
+  refreshTokens.delete(username);
+
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: false
+  });
+  res.status(204).send("Logged out successfully");
+};
 
 // verifies the user JWT tokens
 export function authenticateUser(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  // Getting the 2nd part of the auth header (the token)
+  const authHeader = req.headers["Authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-  console.log("authenticateUser authHeader:", authHeader)
-  console.log("authenticateUser Token:", token)
+
+  console.log("authenticateUser authHeader:", authHeader);
+  console.log("authenticateUser Token:", token);
+
   if (!token) {
     console.log("No token received");
-    res.status(401).end();
-  } else {
-    jwt.verify(
-      token,
-      process.env.TOKEN_SECRET,
-      (error, decoded) => {
-        if (decoded) {
-          next();
-        } else {
-          console.log("JWT error:", error);
-          res.status(401).end();
-        }
-      }
-    );
+    return res.status(401).send("Unauthorized: No token received");
   }
+
+  jwt.verify(token, process.env.TOKEN_SECRET, (error, decoded) => {
+    if (error) {
+      console.log("JWT error:", error);
+      return res.status(401).send("Unauthorized: Invalid token");
+    }
+
+    req.user = decoded; // Optionally, attach the decoded user info to the request object
+    next();
+  });
 }
 
 export function registerUser(req, res) {
-  console.log("registerUser on backend called", req.body)
   // TODO: make user input fields more secure?(character minimum, symbols, etc)
-  const { username, pwd } = req.body; // from form
-  console.log("username:", username, "password:", pwd)
-  // if either username or password doesn't exist
-  if (!username || !pwd) {
-    // then send status of 400 meaning bad request
+  const { username, password } = req.body; // from form
+  console.log("username:", username, "password:", password)
+  if (!username || !password) {
     res.status(400).send("Bad request: Invalid input data.");
   }
-  // if the username was already taken
   else if (creds.find((c) => c.username === username)) {
-    // then send status of 409
     res.status(409).send("Username already taken");
   } else {
-    // encrypt the password
     bcrypt
-      .genSalt(10) // generate the salt
-      .then((salt) => bcrypt.hash(pwd, salt)) // hash the password with the salt
-      .then((hashedPassword) => {
-        console.log("Generating token now...")
-        // create a token to send to frontend
-        generateAccessToken(username).then((token) => {
-          console.log("Token:", token);
-          res.status(201).send({ token: token });
-          // store it temporarily in the array of creds for now
-          creds.push({ username, hashedPassword });
-        });
+      .genSalt(10)
+      .then((salt) => bcrypt.hash(password, salt)) 
+      .then(async (hashedPassword) => {
+        await setTokensAndRespond(res, username, hashedPassword);
       });
   }
 }
 
-function generateAccessToken(username) {
-  return new Promise((resolve, reject) => {
-    jwt.sign(
+export function refreshUserTokens(req, res) {
+  const refreshToken = req.cookies.refreshToken;
+  
+  if (!refreshToken) return res.status(401).send("No refresh token");
+
+  // Find the username associated with the refresh token
+  const username = Array.from(refreshTokens.keys()).find(key => refreshTokens.get(key) === refreshToken);
+
+  if (!username) return res.status(403).send("Refresh token doesn't exist in backend");
+
+  jwt.verify(refreshToken, process.env.TOKEN_SECRET, async (err, user) => {
+    if (err) return res.status(403).send("Error verifying refresh token");
+
+    await setTokensAndRespond(res, username);
+  });
+}
+
+async function generateRefreshToken(username) {
+  try {
+    const token = await jwt.sign(
       { username: username },
       process.env.TOKEN_SECRET, // key used to encrypt and decrypt token
-      { expiresIn: "1d" }, // token that will expire in a day
-      (error, token) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(token);
-        }
-      }
+      { expiresIn: "30d" } // token that will expire in 30 days
     );
-  });
+    return token;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function generateAccessToken(username) {
+  try {
+    const token = await jwt.sign(
+      { username: username },
+      process.env.TOKEN_SECRET, // key used to encrypt and decrypt token
+      { expiresIn: "1d" } // token that will expire in a day
+    );
+    return token;
+  } catch (error) {
+    console.error(error);
+  }
 }

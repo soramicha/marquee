@@ -1,94 +1,123 @@
-import { Box, Text, Center, Button, Input } from '@chakra-ui/react'
-import { useState } from "react"
-import { Link } from "react-router-dom";
+import { Heading, Flex, Box, Text, Center, Button, Input, FormControl, FormErrorMessage } from '@chakra-ui/react';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from '@/api/axios';
+import { useAuth } from '@/context/AuthContext';
 
 function SignUp() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmedPassword, setConfirmedPassword] = useState("");
+    const [error, setError] = useState("");
+    const { auth, signup } = useAuth();
+    let navigate = useNavigate();
 
-    const StoreSignUp = () => {
-        // store sign up info
-        console.log(name, email, password, confirmedPassword)
-    }
+    useEffect(() => {
+      if (auth?.access_token) {
+          navigate('/home');
+      }
+    }, [auth, navigate]);
 
-    return <div style={{ backgroundColor:"#F3F3F3", display: "flex", justifyContent:"center", alignItems:"center", width: "100vw", height: "100vh"}}>
-        <Box maxH="90vh" overflowY="auto" borderWidth={0} h="500px" bg="white" borderRadius={"15px"} alignItems="center" w="450px" p={3}>
-        <Center>
-        <Text mt={5} textStyle="3xl" color="black">Create New Account</Text>
-        </Center>
-        <Center>
-          <Text color="black" align="center" mt={1}>
-            Join your campus marketplace!
-          </Text>
-          </Center>
-          <Center>
-          <Input
-            borderWidth={0}
-            borderRadius={"10px"}
-            width={"90%"}
-            backgroundColor="#F3F3F3"
-            mt={8}
-            color="black"
-            placeholder="School"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            type="text"
-          ></Input>
-          </Center>
-          <Center>
-          <Input
-          borderWidth={0}
-            borderRadius={"10px"}
-            width={"90%"}
-            color="black"
-            backgroundColor="#F3F3F3"
-            mt={4}
-            placeholder="Student Email (ex. john@college.edu)"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-          ></Input>
-          </Center>
-          <Center>
-          <Input
-          borderWidth={0}
-            borderRadius={"10px"}
-            width={"90%"}
-            color="black"
-            backgroundColor="#F3F3F3"
-            mt={4}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="text"
-          ></Input>
-          </Center>
-          <Center>
-          <Input
-          borderWidth={0}
-            borderRadius={"10px"}
-            width={"90%"}
-            color="black"
-            backgroundColor="#F3F3F3"
-            mt={4}
-            placeholder="Confirm Password"
-            value={confirmedPassword}
-            onChange={(e) => setConfirmedPassword(e.target.value)}
-            type="text"
-          ></Input>
-          </Center>
-          <Center>
-          <Button onClick={StoreSignUp} borderWidth={0} mt={10} w="90%" borderRadius={10} backgroundColor="#2E55C4">
-            <Text color="white">Sign Up</Text>
-          </Button>
-          </Center>
-          <Center>
-            <Text mt={2} color="#596334">Already have an account?{" "}<Link to="/login" color="black">Login Now</Link></Text>
-            </Center>
-        </Box>
-    </div>
+    const signUpUser = async (e) => {
+        e.preventDefault();
+        // Reset error state
+        setError('');
+
+        // Basic validation
+        if (!name || !email || !password || !confirmedPassword) {
+            setError('All fields are required.');
+            return;
+        }
+
+        if (password !== confirmedPassword) {
+            setError('Passwords do not match.');
+            return;
+        }
+
+        try {
+            await signup(email, password);
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setError('An error occurred while submitting the form.');
+        }
+    };
+    
+    return (
+      <Box h={"100vh"} w={"100vw"} bg="#F3F3F3">
+        <Flex justify="center" align="center" height="100%">
+          <Box bg="white" borderWidth={0} w="450px" borderRadius={"15px"} p={"55px"}>
+            <Flex flexDirection="column" justify="center" align="center" gap="">
+              <Flex flexDirection="column" justify="center" align="center" textAlign={"center"}>
+                <Heading size="md" fontWeight={600}>Create New Account</Heading>
+                <Text mt="20px" whiteSpace={"nowrap"}>
+                  Join your campus marketplace!
+                </Text>
+              </Flex>
+                <form onSubmit={signUpUser} style={{ width: "100%" }}>
+                  <FormControl isInvalid={!!error} isRequired>
+                    <Flex flexDirection="column" justify="center" align="center">
+                      <Input
+                          borderWidth={0}
+                          borderRadius={"10px"}
+                          backgroundColor="#F3F3F3"
+                          mt={8}
+                          color="black"
+                          placeholder="School"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          type="text"
+                      />
+                      <Input
+                          borderWidth={0}
+                          borderRadius={"10px"}
+                          color="black"
+                          backgroundColor="#F3F3F3"
+                          mt={4}
+                          placeholder="Student Email (ex. john@college.edu)"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          type="email"
+                      />
+                      <Input
+                          borderWidth={0}
+                          borderRadius={"10px"}
+                          color="black"
+                          backgroundColor="#F3F3F3"
+                          mt={4}
+                          placeholder="Password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          type="password"
+                      />
+                      <Input
+                          borderWidth={0}
+                          borderRadius={"10px"}
+                          color="black"
+                          backgroundColor="#F3F3F3"
+                          mt={4}
+                          placeholder="Confirm Password"
+                          value={confirmedPassword}
+                          onChange={(e) => setConfirmedPassword(e.target.value)}
+                          type="password"
+                      />
+                      {error && (
+                        <Center>
+                            <FormErrorMessage>{error}</FormErrorMessage>
+                        </Center>
+                      )}
+                      <Button type="submit" borderWidth={0} mt={10} w="90%" borderRadius={10} backgroundColor="#2E55C4">
+                          <Text color="white">Sign Up</Text>
+                      </Button>
+                    </Flex>
+                  </FormControl>
+                </form>
+                <Text mt={2}>Already have an account?{" "}<Link to="/login" color="black">Login Now</Link></Text>
+            </Flex>
+          </Box>
+        </Flex>
+      </Box>
+    );
 }
 
 export default SignUp;
