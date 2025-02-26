@@ -35,7 +35,7 @@ function CreateListing() {
     };
 
     return (
-        <Box h="100vh" w="100vw" bg="white">
+        <Box h="100vh" w="100vw" bg="white" overflow="scroll">
             <Center>
                 <Box mt={150} w={{ base: "90%", md: "80%", lg: "60%" }}>
                     <form onSubmit={handleSubmit}>
@@ -81,7 +81,7 @@ function CreateListing() {
                                     backgroundColor="white"
                                     mt={1}
                                     width="100%"
-                                    height="50%"
+                                    height="250px"
                                     type="text"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
@@ -147,6 +147,7 @@ function CreateListing() {
                                         <Search color="#989898" />
                                     </InputRightElement>
                                     <Input
+                                        mb={10}
                                         borderWidth={1}
                                         borderRadius="10px"
                                         color="#989898"
