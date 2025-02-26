@@ -1,3 +1,4 @@
+import { Flex } from "@chakra-ui/react" 
 function FilterNavbar() {
     return (
         <div className="w-64 h-screen p-6 bg-gray-200">
@@ -7,12 +8,15 @@ function FilterNavbar() {
             <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-2">Categories</h3>
                 <div className="flex flex-col space-y-2">
+                    <Flex direction="column">
                     {["Apparel", "Electronics", "Free Stuff", "Furniture", "Housing", "Pet Supplies", "Textbooks", "Vehicles"].map((category) => (
                         <label key={category} className="flex items-center space-x-2">
                             <input type="checkbox" className="w-4 h-4" />
                             <span className="text-base">{category}</span>
                         </label>
                     ))}
+                    </Flex>
+                    
                 </div>
             </div>
 
@@ -20,12 +24,14 @@ function FilterNavbar() {
             <div>
                 <h3 className="text-lg font-semibold mb-2">Location</h3>
                 <div className="flex flex-col space-y-2">
+                    <Flex direction="column">
                     {["On Campus", "Off Campus"].map((location) => (
                         <label key={location} className="flex items-center space-x-2">
                             <input type="checkbox" className="w-4 h-4" />
                             <span className="text-base">{location}</span>
                         </label>
                     ))}
+                    </Flex>
                 </div>
             </div>
         </div>
