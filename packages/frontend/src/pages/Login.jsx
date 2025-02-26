@@ -21,7 +21,7 @@ function Login() {
     }, [auth, navigate]);
 
     return (
-      <Box h={"100vh"} w={"100vw"} bg="#F3F3F3">
+      <Box h={"100vh"} w={"100vw"} bg="#F3F3F3" overflow="scroll">
         <Flex justify="center" alignItems="center" height="100%" >
           <Box bg="white" borderWidth={0} h="450px" w="450px" borderRadius={"15px"} p={"55px"}>
             <Flex flexDirection="column" justify="center" align="center" gap="">
