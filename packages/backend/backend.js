@@ -1,26 +1,29 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { registerUser, authenticateUser, loginUser } from "./auth.js";
+import { registerUser, authenticateUser, loginUser, logout, refreshUserTokens } from "./auth.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const app = express();
 const port = 8000;
-app.use(cors());
+//TODO: edit origin link 
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
+app.use(cookieParser());
 app.use(express.json());
 
-app.post('/register', registerUser);
+app.post('/signup', registerUser);
 app.post('/login', loginUser);
+app.post('/logout', logout);
+app.get('/refresh', refreshUserTokens);
 
-app.post("/users", authenticateUser, (req, res) => {
+app.get("/protected", authenticateUser, (req, res) => {
     // this code will only run if authenticateUser calls next()
-    console.log("test");
-    res.status(201).send();
-    // const userToAdd = req.body;
-    // Users.addUser(userToAdd).then((result) =>
-    //   res.status(201).send(result)
-    // );
+    res.status(201).send("Access token verified!");
 });
 
 app.listen(port, () => {

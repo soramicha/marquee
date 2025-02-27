@@ -1,22 +1,27 @@
 import { Heading, Box, Text, Button, Input, Flex } from '@chakra-ui/react'
-import { useState } from "react"
-import { Link } from "react-router-dom";
-import { useAuth } from '@/context/authContext';
+import { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from '@/context/AuthContext';
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { auth } = useAuth();
-    
+    const { auth, login, logout } = useAuth();
+    let navigate = useNavigate();
 
     const logUser = async () => {
-        // login user
         console.log(email, password);
-        
-    }
+        await login(email, password);
+    };
+
+    useEffect(() => {
+      if (auth?.access_token) {
+          navigate('/home');
+      }
+    }, [auth, navigate]);
 
     return (
-      <Box h={"100vh"} w={"100vw"} bg="#F3F3F3">
+      <Box h={"100vh"} w={"100vw"} bg="#F3F3F3" overflow="scroll">
         <Flex justify="center" alignItems="center" height="100%" >
           <Box bg="white" borderWidth={0} h="450px" w="450px" borderRadius={"15px"} p={"55px"}>
             <Flex flexDirection="column" justify="center" align="center" gap="">
