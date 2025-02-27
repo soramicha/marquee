@@ -1,3 +1,5 @@
+import Navbar from "./Navbar";
+
 function Profile() {
   const user = {
     name: "Samantha Smith",
@@ -11,6 +13,7 @@ function Profile() {
 
   return (
     <div style={styles.page}>
+      <Navbar/>
       <div style={styles.container}>
         {/* Profile Header */}
         <div style={styles.profileHeader}>
