@@ -1,7 +1,7 @@
 import { useState } from "react"
 import {Box, Flex, Center, Text} from "@chakra-ui/react";
 
-function IndivEmail() {
+function IndivEmailComponent() {
     // this is temporary in order to put dummy data, we will pass these info in as props instead of using useState
     const [subject_header, setSubjectHeader] = useState("Hi there!! dsfsfdfdfdfdfdfdfdfdfsdfdsfsfsfsfdsfdsfdsfdsdsfsfdfdfdfdfdfdfdfdfsdfdsfsfsfsfdsfdsfdsfdsdsfsfdfdfdfdfdfdfdfdfsdfdsfsfsfsfdsfdsfdsfdsdsfsfdfdfdfdfdfdfdfdfsdfdsfsfsfsfdsfdsfdsfds")
     const [sender_email, setSenderEmail] = useState("s@gmail.com")
@@ -28,4 +28,4 @@ function IndivEmail() {
     </>
 }
 
-export default IndivEmail;
+export default IndivEmailComponent;
