@@ -2,8 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import ListingCard from "./components/ui/ListingCard";
-import Login from "@/pages/Login";
-import SignUp from "@/pages/SignUp";
 import PersistLogin from "@/components/PersistLogin";
 import RequireAuth from "@/components/RequireAuth";
 import Home from "@/pages/Home";
@@ -11,6 +9,7 @@ import CreateListing from "./pages/CreateListing";
 import Profile from "./pages/Profile";
 import EditListing from "./pages/EditListing";
 import Navbar from "./pages/Navbar";
+import SendMessage from "./pages/SendMessage";
 
 function App() {
     return (
@@ -19,6 +18,7 @@ function App() {
             <Routes>
               <Route path="/">
                 {/* add into protected route later */}
+                <Route path="message/create" element={<SendMessage/>}/>
                 <Route path="navbar" element={<Navbar/>}></Route>
                 <Route path="listing/create" element={<CreateListing/>}/>
                 <Route path="listing/edit" element={<EditListing/>}/>
