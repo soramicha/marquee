@@ -9,6 +9,7 @@ import CreateListing from "./pages/CreateListing";
 import Profile from "./pages/Profile";
 import EditListing from "./pages/EditListing";
 import Navbar from "./pages/Navbar";
+import IndivEmail from "./components/ui/IndivEmail";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
             <Routes>
               <Route path="/">
                 {/* add into protected route later */}
+                <Route path="email" element={<IndivEmail/>}/>
                 <Route path="navbar" element={<Navbar/>}></Route>
                 <Route path="listing/create" element={<CreateListing/>}/>
                 <Route path="listing/edit" element={<EditListing/>}/>
