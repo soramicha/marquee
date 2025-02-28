@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/context/AuthContext';
 import { Search } from 'lucide-react';
 import FileUpload from '@/components/ui/FileUpload';
+import Navbar from './Navbar';
 
 function EditListing() {
     const [photos, setPhotos] = useState([]);
@@ -36,6 +37,7 @@ function EditListing() {
 
     return (
         <Box h="100vh" w="100vw" bg="white" overflow="scroll">
+            <Navbar/>
             <Center>
                 <Box mt={150} w={{ base: "90%", md: "80%", lg: "60%" }}>
                     <form onSubmit={handleSubmit}>
