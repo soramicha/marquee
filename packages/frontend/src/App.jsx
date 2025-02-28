@@ -9,6 +9,7 @@ import CreateListing from "./pages/CreateListing";
 import Profile from "./pages/Profile";
 import EditListing from "./pages/EditListing";
 import Navbar from "./pages/Navbar";
+import SendMessage from "./pages/SendMessage";
 import IndivEmailComponent from "./components/ui/IndivEmailComponent";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Routes>
               <Route path="/">
                 {/* add into protected route later */}
+                <Route path="message/create" element={<SendMessage/>}/>
                 <Route path="email" element={<IndivEmailComponent/>}/>
                 <Route path="navbar" element={<Navbar/>}></Route>
                 <Route path="listing/create" element={<CreateListing/>}/>
