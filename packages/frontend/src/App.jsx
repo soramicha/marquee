@@ -12,35 +12,52 @@ import Navbar from "./pages/Navbar";
 import SendMessage from "./pages/SendMessage";
 import IndivEmailComponent from "./components/ui/IndivEmailComponent";
 
+import ListingDetail from "./pages/ListingDetail"; 
+
 function App() {
-    return (
-        <>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/">
-                {/* add into protected route later */}
-                <Route path="message/create" element={<SendMessage/>}/>
-                <Route path="email" element={<IndivEmailComponent/>}/>
-                <Route path="navbar" element={<Navbar/>}></Route>
-                <Route path="listing/create" element={<CreateListing/>}/>
-                <Route path="listing/edit" element={<EditListing/>}/>
-                <Route path="listingcard" element={<ListingCard name="Gray Hoodie" price = "$50.00" location="PCV Corralitos"/>} />
-                <Route path="/home" element={<Home />} />
-                {/* add to protected routes later */}
-                <Route path="profile" element={<Profile/>}/>
-                <Route path="login" element={<Login />} />
-                <Route path="signup" element={<SignUp />} />
-                <Route element={<PersistLogin />}>
-                {/* protected routes */}
-                  <Route element={<RequireAuth />}>
-                    {/*<Route path="/home" element={<Home />} />*/}
-                  </Route>
-                </Route>
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </>
-    );
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Root route wrapper */}
+        <Route path="/">
+          {/* existing routes */}
+          <Route path="message/create" element={<SendMessage />} />
+          <Route path="email" element={<IndivEmailComponent />} />
+          <Route path="navbar" element={<Navbar />} />
+          <Route path="listing/create" element={<CreateListing />} />
+          <Route path="listing/edit" element={<EditListing />} />
+
+          {/* 2) Add a new route for listing detail */}
+          <Route path="listing/:id" element={<ListingDetail />} />
+
+          {/* This is for quick testing your ListingCard */}
+          <Route
+            path="listingcard"
+            element={
+              <ListingCard
+                name="Gray Hoodie"
+                price="$50.00"
+                location="PCV Corralitos"
+              />
+            }
+          />
+
+          {/* Adjust 'home' path if you want /home instead of duplicating */}
+          <Route path="home" element={<Home />} />
+
+          <Route path="profile" element={<Profile />} />
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<SignUp />} />
+
+          <Route element={<PersistLogin />}>
+            <Route element={<RequireAuth />}>
+              {/* protected routes go here */}
+            </Route>
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
