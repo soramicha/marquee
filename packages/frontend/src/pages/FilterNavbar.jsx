@@ -1,12 +1,8 @@
 import { Flex } from "@chakra-ui/react" 
 function FilterNavbar() {
     return (
-<<<<<<< Updated upstream
         <div className="w-64 h-screen p-6 bg-gray-200">
             {/* use Text to replace h2 */}
-=======
-        <div className="w-64 h-screen p-6">
->>>>>>> Stashed changes
             <h2 className="text-xl font-bold mb-4">Filters</h2>
 
             {/* Categories */}
