@@ -13,6 +13,8 @@ import IndivEmail from "./pages/IndivEmail";
 import SendMessage from "./pages/SendMessage";
 import IndivEmailComponent from "./components/ui/IndivEmailComponent";
 
+import ListingDetail from "./pages/ListingDetail"; 
+
 function App() {
     return (
         <>
@@ -20,6 +22,20 @@ function App() {
             <Routes>
               <Route path="/">
                 {/* add into protected route later */}
+                {/* 2) Add a new route for listing detail */}
+                <Route path="listing/:id" element={<ListingDetail />} />
+
+                {/* This is for quick testing your ListingCard */}
+                <Route
+                  path="listingcard"
+                  element={
+                    <ListingCard
+                      name="Gray Hoodie"
+                      price="$50.00"
+                      location="PCV Corralitos"
+                    />
+                  }
+                />
                 <Route path="message/create" element={<SendMessage/>}/>
                 <Route path="email" element={<IndivEmailComponent/>}/>
                 <Route path="navbar" element={<Navbar/>}></Route>
