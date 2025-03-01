@@ -10,6 +10,8 @@ import Profile from "./pages/Profile";
 import EditListing from "./pages/EditListing";
 import Navbar from "./pages/Navbar";
 import IndivEmail from "./pages/IndivEmail";
+import SendMessage from "./pages/SendMessage";
+import IndivEmailComponent from "./components/ui/IndivEmailComponent";
 
 function App() {
     return (
@@ -18,12 +20,14 @@ function App() {
             <Routes>
               <Route path="/">
                 {/* add into protected route later */}
+                <Route path="message/create" element={<SendMessage/>}/>
+                <Route path="email" element={<IndivEmailComponent/>}/>
                 <Route path="navbar" element={<Navbar/>}></Route>
                 <Route path="listing/create" element={<CreateListing/>}/>
                 <Route path="listing/edit" element={<EditListing/>}/>
                 <Route path="email/id" element={<IndivEmail/>}/> {/* replace id with actual email id */}
                 <Route path="listingcard" element={<ListingCard name="Gray Hoodie" price = "$50.00" location="PCV Corralitos"/>} />
-
+                <Route path="/home" element={<Home />} />
                 {/* add to protected routes later */}
                 <Route path="profile" element={<Profile/>}/>
                 <Route path="login" element={<Login />} />
@@ -31,7 +35,7 @@ function App() {
                 <Route element={<PersistLogin />}>
                 {/* protected routes */}
                   <Route element={<RequireAuth />}>
-                    <Route path="/home" element={<Home />} />
+                    {/*<Route path="/home" element={<Home />} />*/}
                   </Route>
                 </Route>
               </Route>

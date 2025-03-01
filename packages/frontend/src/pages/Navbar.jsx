@@ -1,4 +1,4 @@
-import { Box, Text, Flex, Spacer, AvatarGroup, Avatar, Image } from "@chakra-ui/react";
+import { Box, Text, Flex, Spacer, Image } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 function Navbar() {
@@ -49,24 +49,6 @@ function Navbar() {
               Create Listing
             </Text>
           </Link>
-
-        {/* Profile Circle
-          <Link to="/profile">
-            <Avatar
-              name="Your Profile"
-              src="/userPersona.jpg" 
-              size="sm"
-              cursor="pointer"
-            />
-          </Link> */}
-         
-         
-            {/*<Avatar
-                name="Your Profile"
-                src="/userPersona.jpg" 
-                size="sm"
-                cursor="pointer"
-            ></Avatar>*/}
         
         <Image src="cat.png"
         boxSize="50px"
