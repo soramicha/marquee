@@ -9,6 +9,7 @@ import CreateListing from "./pages/CreateListing";
 import Profile from "./pages/Profile";
 import EditListing from "./pages/EditListing";
 import Navbar from "./pages/Navbar";
+import IndivEmail from "./pages/IndivEmail";
 import SendMessage from "./pages/SendMessage";
 import IndivEmailComponent from "./components/ui/IndivEmailComponent";
 
@@ -24,6 +25,7 @@ function App() {
                 <Route path="navbar" element={<Navbar/>}></Route>
                 <Route path="listing/create" element={<CreateListing/>}/>
                 <Route path="listing/edit" element={<EditListing/>}/>
+                <Route path="email/id" element={<IndivEmail/>}/> {/* replace id with actual email id */}
                 <Route path="listingcard" element={<ListingCard name="Gray Hoodie" price = "$50.00" location="PCV Corralitos"/>} />
                 <Route path="/home" element={<Home />} />
                 {/* add to protected routes later */}
