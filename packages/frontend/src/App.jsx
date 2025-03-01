@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import FilterNavbar from "./pages/FilterNavbar";
 import ListingCard from "./components/ui/ListingCard";
 import PersistLogin from "@/components/PersistLogin";
 import RequireAuth from "@/components/RequireAuth";
@@ -12,7 +13,6 @@ import Navbar from "./pages/Navbar";
 import IndivEmail from "./pages/IndivEmail";
 import SendMessage from "./pages/SendMessage";
 import IndivEmailComponent from "./components/ui/IndivEmailComponent";
-
 import ListingDetail from "./pages/ListingDetail"; 
 
 function App() {
@@ -37,6 +37,7 @@ function App() {
                   }
                 />
                 <Route path="message/create" element={<SendMessage/>}/>
+                <Route path="filternavbar" element={<FilterNavbar/>}></Route>
                 <Route path="email" element={<IndivEmailComponent/>}/>
                 <Route path="navbar" element={<Navbar/>}></Route>
                 <Route path="listing/create" element={<CreateListing/>}/>
