@@ -1,111 +1,172 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { getUsers, addUser } from "./services/user-service.js";
 
-const creds = [];
+//TODO: when not testing on localhost, set cookies' secure flags to true
 
-export function loginUser(req, res) {
-  console.log(creds)
-  const { username, pwd } = req.body; // from form
-  console.log(username, pwd)
-  const retrievedUser = creds.find(
-    (c) => c.username === username
-  );
+async function setTokensAndRespond(res, username, id) {
+  const access_token = await generateAccessToken(username, id);
+  const refresh_token = await generateRefreshToken(username, id);
 
-  if (!retrievedUser) {
+  if (access_token && refresh_token) {
+    res.cookie('refreshToken', refresh_token, { httpOnly: true, secure: false, sameSite: 'lax', path: '/'});
+    return res.status(201).send({ access_token });
+  }
+}
+
+export async function loginUser(req, res) {
+  const { username, password } = req.body; // from form
+  const existingUser = await getUsers(username);
+  if (!password) {
+    return res.status(401).send("No password was given");
+  }
+
+  if (existingUser.length === 0) {
     // invalid username
-    res.status(401).send("Unauthorized");
+    return res.status(401).send("Unauthorized");
   } else {
     bcrypt
-      .compare(pwd, retrievedUser.hashedPassword)
-      .then((matched) => {
+      .compare(password, existingUser[0].password)
+      .then(async (matched) => {
         if (matched) {
-          generateAccessToken(username).then((token) => {
-            console.log("Authorized!")
-            res.status(200).send({ token: token });
-          });
+          const id = existingUser[0]._id.toString();
+          return await setTokensAndRespond(res, username, id);
         } else {
           // invalid password
-          res.status(401).send("Unauthorized");
+          return res.status(401).send("Unauthorized");
         }
-      })
-      .catch(() => {
-        res.status(401).send("Unauthorized");
       });
   }
 }
+
+export function logout(req, res) {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: false
+  });
+  console.log("successful logout")
+  return res.status(204).send("Logged out successfully");
+};
 
 // verifies the user JWT tokens
 export function authenticateUser(req, res, next) {
   const authHeader = req.headers["authorization"];
-  // Getting the 2nd part of the auth header (the token)
-  const token = authHeader && authHeader.split(" ")[1];
-  console.log("authenticateUser authHeader:", authHeader)
-  console.log("authenticateUser Token:", token)
+  if (!authHeader?.startsWith('Bearer ')) {
+    return res.status(401).send("Unauthorized: Invalid token format");
+  }
+
+  const token = authHeader.split(" ")[1];
+
   if (!token) {
-    console.log("No token received");
-    res.status(401).end();
-  } else {
-    jwt.verify(
-      token,
-      process.env.TOKEN_SECRET,
-      (error, decoded) => {
-        if (decoded) {
-          next();
-        } else {
-          console.log("JWT error:", error);
-          res.status(401).end();
-        }
-      }
-    );
+    return res.status(401).send("Unauthorized: No token provided");
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+    
+    if (decoded.type !== 'access') {
+      return res.status(401).send("Unauthorized: Invalid token type");
+    }
+
+    req.user = decoded;
+    next();
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).send("Unauthorized: Token expired");
+    }
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).send("Unauthorized: Invalid token");
+    }
+    return res.status(500).send("Internal Server Error");
   }
 }
 
-export function registerUser(req, res) {
-  console.log("registerUser on backend called", req.body)
-  // TODO: make user input fields more secure?(character minimum, symbols, etc)
-  const { username, pwd } = req.body; // from form
-  console.log("username:", username, "password:", pwd)
-  // if either username or password doesn't exist
-  if (!username || !pwd) {
-    // then send status of 400 meaning bad request
-    res.status(400).send("Bad request: Invalid input data.");
+export async function registerUser(req, res) {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).send("Bad request: Invalid input data.");
   }
-  // if the username was already taken
-  else if (creds.find((c) => c.username === username)) {
-    // then send status of 409
-    res.status(409).send("Username already taken");
-  } else {
-    // encrypt the password
-    bcrypt
-      .genSalt(10) // generate the salt
-      .then((salt) => bcrypt.hash(pwd, salt)) // hash the password with the salt
-      .then((hashedPassword) => {
-        console.log("Generating token now...")
-        // create a token to send to frontend
-        generateAccessToken(username).then((token) => {
-          console.log("Token:", token);
-          res.status(201).send({ token: token });
-          // store it temporarily in the array of creds for now
-          creds.push({ username, hashedPassword });
-        });
-      });
+
+  if (password.length <= 5) {
+    return res.status(400).send("Password must be longer than 5 characters");
+  }
+
+  try {
+    // check if user already exists in db
+    const existingUser = await getUsers(username);
+    if (existingUser.length > 0) {
+      return res.status(409).send("Username already taken");
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    if (hashedPassword) {
+      const result = await addUser({ username, password: hashedPassword });
+
+      if (!result.success) {
+        return res.status(400).json({ error: result.error });
+      }
+
+      const id = result.data._id.toString();
+      return await setTokensAndRespond(res, username, id);
+    }
+  } catch (error) {
+    console.error('Error registering user:', error);
+    return res.status(500).send("Internal server error");
   }
 }
 
-function generateAccessToken(username) {
-  return new Promise((resolve, reject) => {
-    jwt.sign(
-      { username: username },
-      process.env.TOKEN_SECRET, // key used to encrypt and decrypt token
-      { expiresIn: "1d" }, // token that will expire in a day
-      (error, token) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(token);
-        }
-      }
-    );
+export function refreshUserTokens(req, res) {
+  const refreshToken = req.cookies.refreshToken;
+  
+  if (!refreshToken) return res.status(401).send("No refresh token");
+  
+  const decodedPayload = jwt.decode(refreshToken);
+  const id = decodedPayload.userID;
+  const username = decodedPayload.username;
+  if (!id || !username) {
+    return res.status(401).send("Invalid refresh token payload");
+  }
+
+  jwt.verify(refreshToken, process.env.TOKEN_SECRET, async (err, user) => {
+    if (err) return res.status(403).send("Error verifying refresh token");
+
+    await setTokensAndRespond(res, username, id);
   });
+}
+
+function generateRefreshToken(username, id) {
+  try {
+    const token = jwt.sign(
+      { 
+        username: username,
+        userID: id,
+        type: "refresh",
+      },
+      process.env.TOKEN_SECRET, // key used to encrypt and decrypt token
+      { expiresIn: "30d" } // token that will expire in 30 days
+    );
+    return token;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function generateAccessToken(username, id) {
+  try {
+    const token = jwt.sign(
+      { 
+        username: username,
+        userID: id,
+        type: "access",
+      },
+      process.env.TOKEN_SECRET, // key used to encrypt and decrypt token
+      { expiresIn: "1d" } // token that will expire in a day
+    );
+    return token;
+  } catch (error) {
+    console.error(error);
+  }
 }
