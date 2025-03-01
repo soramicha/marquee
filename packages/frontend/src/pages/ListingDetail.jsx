@@ -58,6 +58,7 @@ function ListingDetail() {
         - pt/pb for top/bottom spacing
       */}
       <Box
+        mt={20}
         w="100%"
         pt={{ base: "60px", md: "125px" }}
         pb={{ base: "60px", md: "100px" }}
