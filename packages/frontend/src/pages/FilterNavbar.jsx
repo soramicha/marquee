@@ -1,7 +1,8 @@
-import { Box, Text, Flex, Checkbox, CheckboxGroup } from "@chakra-ui/react";
+"use client"
+import { Box, Text, Flex, CheckboxGroup } from "@chakra-ui/react";
 
 function FilterNavbar() {
-  return (
+  return <>
     <Box w="64" h="100vh" p="6" bg="gray.200">
       {/* Heading */}
       {/* Use Text to replace h2 */}
@@ -32,11 +33,12 @@ function FilterNavbar() {
               "Pet Supplies",
               "Textbooks",
               "Vehicles",
-            ].map((category) => (
-              <Checkbox key={category} value={category}>
-                {category}
-              </Checkbox>
-            ))}
+            ].map(category =>
+              <label key={category} className="flex items-center space-x-2">
+                <input type="checkbox" className="w-4 h-4" />
+                <span className="text-base">{category}</span>
+              </label>
+            )}
           </Flex>
         </CheckboxGroup>
       </Box>
@@ -52,15 +54,16 @@ function FilterNavbar() {
         <CheckboxGroup>
           <Flex direction="column" gap="2">
             {["On Campus", "Off Campus"].map((location) => (
-              <Checkbox key={location} value={location}>
-                {location}
-              </Checkbox>
+              <label key={location} className="flex items-center space-x-2">
+                <input type="checkbox" className="w-4 h-4" />
+                <span className="text-base">{location}</span>
+              </label>
             ))}
           </Flex>
         </CheckboxGroup>
       </Box>
     </Box>
-  );
+  </>
 }
 
 export default FilterNavbar;
