@@ -45,6 +45,7 @@ export function logout(req, res) {
     httpOnly: true,
     secure: false
   });
+  console.log("successful logout")
   return res.status(204).send("Logged out successfully");
 };
 
