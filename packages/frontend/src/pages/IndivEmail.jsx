@@ -2,6 +2,7 @@ import { Center, Box, Text, Flex, Button, Textarea } from '@chakra-ui/react';
 import { useState } from "react";
 import Navbar from './Navbar';
 
+// TODO: make as a popup instead of a whole page(?)
 function IndivEmail() {
     {/* once again, the respective information would be passed through the props */}
     const subject = "Hi There!"
