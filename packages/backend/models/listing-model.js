@@ -1,33 +1,84 @@
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema(
+// FIELDS:
+// STATUS(required) 
+// NAME(required)
+// PRICE(required)
+// CATEGORY(required)
+// DESCRIPTION(required)
+// PHOTOS(required)
+// VIDEOS
+// TAGS
+// LOCATION(required)
+// CONDITION(required)
+// USER/SELLER(required)
+
+
+const ListingSchema = new mongoose.Schema(
   {
-    username: {
+    // for sale/sold
+    status: {
+      type: Boolean,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true, 
+    },
+    price: {
+      type: Number,
+      required: true,
+      trim: true
+    },
+    // apparell, electronics, free stuff, etc..
+    category: {
       type: String,
       required: true,
       trim: true,
-      unique: true,
-      validate: {
-        validator: function(value) {
-            // ___@__.edu
-            return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.edu$/.test(value);
-        },
-        message: "Username must end with '.edu'."
-      }
     },
-    password: {
+    description: {
       type: String,
       required: true,
       trim: true,
-      validate(value) {
-        if (value.length < 5)
-          throw new Error("Invalid password, must be at least 5 characters.");
-      },
     },
+    photos: {
+      // array of URLs
+      // TODO: AWS S3 to store photos/videos?
+      type: [String],
+      required: true,      
+    },
+    videos: {
+      type: [String],
+    },
+    tags: {
+      type: Array,
+    },
+    location: {
+      type: String,
+      required: true,
+    },
+    condition: {
+      type: String,
+      required: true,
+    },
+    // reference to user ObjectID
+    user: { 
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true 
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      immutable: true
+    }
   },
-  { collection: "users" }
+  { collection: "listings",
+    timestamps: true
+  }
 );
 
-const User = mongoose.model("User", UserSchema);
+const Listing = mongoose.model("Listings", ListingSchema);
 
-export default User;
+export default Listing;
