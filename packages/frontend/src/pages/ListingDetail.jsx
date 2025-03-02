@@ -1,4 +1,4 @@
-// ListingDetail.jsx
+// src/pages/ListingDetail.jsx
 import React, { useState } from "react";
 import {
   Box,
@@ -7,7 +7,12 @@ import {
   Text,
   Button,
   IconButton,
-  Avatar
+  Avatar,
+  SimpleGrid,
+  Wrap,
+  WrapItem,
+  Tag,
+  TagLabel,
 } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
 
@@ -16,12 +21,11 @@ import alt1 from "../assets/alt1.webp";
 import alt2 from "../assets/alt2.webp";
 import alt3 from "../assets/alt3.webp";
 
-
 import Navbar from "./Navbar";
-import ListingCard from "@/components/ui/ListingCard";
+import ListingCard from "../components/ui/ListingCard";
 
 function ListingDetail() {
-  // Example data
+  // Example product data including tags
   const productData = {
     title: "Oversized Gray Hoodie",
     price: 20.0,
@@ -32,31 +36,23 @@ function ListingDetail() {
     sellerName: "Samantha Smith",
     sellerEmail: "samantha@calpoly.edu",
     mainImage: grayHoodie,
-    otherImages: [grayHoodie, alt1, alt2, alt3]  };
+    otherImages: [grayHoodie, alt1, alt2, alt3],
+    tags: ["Apparel", "Casual", "Vintage"],
+  };
 
   const similarListings = [
     { id: 1, name: "Gray Hoodie", price: "$15", location: "Yosemite Hall" },
     { id: 2, name: "Blue Sweater", price: "$25", location: "Cerro Vista" },
-    { id: 3, name: "Black Jacket", price: "$30", location: "Sierra Madre" }
+    { id: 3, name: "Black Jacket", price: "$30", location: "Sierra Madre" },
   ];
 
-  // State for "I'm Interested" button & favorite icon
   const [interested, setInterested] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-
-  // Main image display
   const [selectedImage, setSelectedImage] = useState(productData.mainImage);
 
   return (
     <Box bg="gray.100" minH="100vh">
-      {/* Full-width Navbar (fixed at top) */}
       <Navbar />
-
-      {/*
-        Outer container:
-        - px={{ base: "20px", md: "100px" }} → 100px left/right margin on md+ screens
-        - pt/pb for top/bottom spacing
-      */}
       <Box
         mt={20}
         w="100%"
@@ -64,12 +60,8 @@ function ListingDetail() {
         pb={{ base: "60px", md: "100px" }}
         px={{ base: "20px", md: "100px" }}
       >
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          align="flex-start"
-          gap={8}
-        >
-          {/* LEFT: Thumbnails (vertical on md, horizontal on mobile) */}
+        <Flex direction={{ base: "column", md: "row" }} align="flex-start" gap={8}>
+          {/* LEFT: Thumbnails */}
           <Box
             display="flex"
             flexDirection={{ base: "row", md: "column" }}
@@ -81,10 +73,9 @@ function ListingDetail() {
                 key={idx}
                 src={img}
                 alt={`Thumbnail ${idx + 1}`}
-                boxSize="90px" /* bigger thumbnails */
+                boxSize="90px"
                 objectFit="cover"
                 borderRadius="md"
-                border="1px solid #ccc"
                 cursor="pointer"
                 onClick={() => setSelectedImage(img)}
                 _hover={{ borderColor: "#2E55C4" }}
@@ -98,7 +89,7 @@ function ListingDetail() {
               <Image
                 src={selectedImage}
                 alt={productData.title}
-                maxH="700px" /* bigger main image */
+                maxH="700px"
                 objectFit="cover"
                 borderRadius="md"
               />
@@ -121,7 +112,6 @@ function ListingDetail() {
           <Box
             flex="1"
             bg="white"
-            borderRadius="md"
             p={6}
             display="flex"
             flexDirection="column"
@@ -134,11 +124,9 @@ function ListingDetail() {
               <Text fontSize="2xl" fontWeight="semibold" mt={2}>
                 ${productData.price.toFixed(2)}
               </Text>
-
               <Text mt={6} fontSize="lg" color="gray.700">
                 {productData.description}
               </Text>
-
               <Box mt={6} fontSize="lg">
                 <Text>
                   <strong>Condition:</strong> {productData.condition}
@@ -147,14 +135,21 @@ function ListingDetail() {
                   <strong>Location:</strong> {productData.location}
                 </Text>
               </Box>
-
+              {/* Tags */}
+              <Wrap mt={6}>
+                {productData.tags.map((tag) => (
+                  <WrapItem key={tag}>
+                    <Tag size="md" variant="solid" colorScheme="blue">
+                      <TagLabel>{tag}</TagLabel>
+                    </Tag>
+                  </WrapItem>
+                ))}
+              </Wrap>
               <Flex align="center" mt={6}>
                 <Avatar name={productData.sellerName} size="md" mr={3} />
                 <Text fontSize="lg">{productData.sellerName}</Text>
               </Flex>
             </Box>
-
-            {/* I'm Interested button */}
             <Box mt={8}>
               <Button
                 fontSize="lg"
@@ -170,24 +165,22 @@ function ListingDetail() {
             </Box>
           </Box>
         </Flex>
-
-        {/* SIMILAR LISTINGS */}
+        {/* Similar Listings */}
         <Box mt={12}>
           <Text fontSize="2xl" fontWeight="bold" mb={4}>
             Similar Listings
           </Text>
-          <Flex wrap="wrap" gap={6}>
+          <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6}>
             {similarListings.map((item) => (
               <ListingCard
                 key={item.id}
+                id={item.id}
                 name={item.name}
                 price={item.price}
                 location={item.location}
-                // If you want them all to be hoodie:
-                // imageSrc={grayHoodie}
               />
             ))}
-          </Flex>
+          </SimpleGrid>
         </Box>
       </Box>
     </Box>
