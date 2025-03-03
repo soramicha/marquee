@@ -1,4 +1,4 @@
-# marquee
+# marquee - a project made by 6 students for our cs class
 
 ## Sequence Diagram: https://www.figma.com/board/m09ipWSAiB344xhBuNDznC/TE4%3A-Authentication-and-Access-Contrtol?node-id=0-1&p=f&t=Dq4ZyuCFLlLRc2IT-0
 
