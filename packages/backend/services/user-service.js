@@ -61,3 +61,16 @@ export async function addUser(user) {
     return { success: false, error: error.message };
   }
 }
+
+// jessica code here
+export async function addFavorite(username, listing_id) {
+  try {
+    // retrieve user from database
+    const user = await getUsersFromDB(username);
+    // add listing_id inside favorites array
+    // push to database
+
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
