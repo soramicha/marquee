@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import Listing from "../models/listing-model.js"
 
-//TODO: need functions to delete photos/videos?
-
 export async function postListing(req, res) {
     try {
         // Required fields
@@ -108,6 +106,8 @@ async function deleteListingFromDB(id) {
     }
 }
 
+// NOTE: fields that are not included in the request will not be modified
+// if you want to delete a photo/video, for example, you will have to pass in a new/empty array
 export async function updateListing(req, res) {
     try {
         const id = req.query.id.toString();
