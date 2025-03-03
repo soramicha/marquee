@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-import { getUsers, addUser } from "./services/user-service.js";
+import { getUsersFromDB, addUser } from "./services/user-service.js";
 
 //TODO: when not testing on localhost, set cookies' secure flags to true
 
@@ -17,7 +17,7 @@ async function setTokensAndRespond(res, username, id) {
 
 export async function loginUser(req, res) {
   const { username, password } = req.body; // from form
-  const existingUser = await getUsers(username);
+  const existingUser = await getUsersFromDB(username);
   if (!password) {
     return res.status(401).send("No password was given");
   }
@@ -95,7 +95,7 @@ export async function registerUser(req, res) {
 
   try {
     // check if user already exists in db
-    const existingUser = await getUsers(username);
+    const existingUser = await getUsersFromDB(username);
     if (existingUser.length > 0) {
       return res.status(409).send("Username already taken");
     }
