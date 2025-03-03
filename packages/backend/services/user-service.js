@@ -1,6 +1,32 @@
 import UserModel from "../models/user-model.js";
 
-export async function getUsers(username) {
+export async function getUsers(req, res) {
+  try {
+    const users = await getUsersFromDB(req.body.username);
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching users", error });
+  }
+}
+
+export async function deleteUser(req, res) {
+  try {
+    const { username } = req.query;
+    if (!username) {
+      return res.status(400).json({ error: "Username is required" });
+    }
+    const result = await UserModel.deleteOne({ username });
+    if (result.deletedCount === 0) {
+      res.status(404).json({ error: "User not found" });
+    }
+
+    res.sendStatus(204); // successful delete
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function getUsersFromDB(username) {
   try {
     let promise;
     if (username == undefined) {
@@ -33,33 +59,5 @@ export async function addUser(user) {
     return { success: true, data: savedUser };
   } catch (error) {
     return { success: false, error: error.message };
-  }
-}
-
-export async function findUserByName(name) {
-  try {
-    return await UserModel.find({ name: name });
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-export async function findUserByJob(job) {
-  try {
-    return await UserModel.find({ job: job });
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-export async function deleteUser(username) {
-  try {
-    const user = await findUserByName(username);
-
-  } catch (error) {
-    console.error(error);
-    throw error;
   }
 }

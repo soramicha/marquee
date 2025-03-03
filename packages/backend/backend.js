@@ -4,9 +4,9 @@ import dotenv from "dotenv";
 import { registerUser, authenticateUser, loginUser, logout, refreshUserTokens } from "./auth.js";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose"
-import { getUsers } from "./services/user-service.js";
+import { deleteUser, getUsers } from "./services/user-service.js";
 import userModel from "./models/user-model.js";
-import { getListing, postListing } from "./services/listing-service.js";
+import { deleteListing, getListing, postListing, updateListing } from "./services/listing-service.js";
 
 dotenv.config();
 
@@ -32,69 +32,16 @@ app.post('/signup', registerUser);
 app.post('/login', loginUser);
 app.get('/logout', logout);
 app.get('/refresh', refreshUserTokens);
-app.get('/users', async (req, res) => {
-  try {
-    const users = await getUsers(req.body.username);
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching users", error });
-  }
-});
-app.delete('/users', async (req, res) => {
-  try {
-    const { username } = req.query;
-    if (!username) {
-      return res.status(400).json({ error: "Username is required" });
-    }
-    const result = await userModel.deleteOne({ username });
-    if (result.deletedCount === 0) {
-      res.status(404).json({ error: "User not found" });
-    }
-
-    res.sendStatus(204); // successful delete
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-app.post("/post", authenticateUser, async (req, res) => {
-  try {
-    // Required fields
-    // TODO: add photos for required field after testing
-    const requiredFields = ['name', 'price', 'category', 'description', 'location', 'condition'];
-    const missingFields = requiredFields.filter(field => !req.body[field]);
-    
-    if (missingFields.length > 0) {
-      return res.status(400).json({ 
-        error: `Missing required fields: ${missingFields.join(', ')}` 
-      });
-    }
-
-    const result = await postListing({
-      ...req.body,
-      status: true,
-      user: req.user.userID
-    });
-
-    if (!result.success) {
-      return res.status(400).json({ error: result.error });
-    }
-
-    res.status(201).json(result.data);
-  } catch (error) {
-    console.error('Error creating listing:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.get("/post", async (req, res) => {
-  try {
-    const id = req.query.id.toString();
-    const listing = await getListing(id);
-    res.status(200).json(listing);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching listing", error });
-  }
-});
+app.get('/users', getUsers);
+app.delete('/users', authenticateUser, deleteUser);
+// TODO: make a function that verifies the appropriate user with the tokens 
+// TODO: that is making these API calls
+// TODO: since we don't want other people deleting others/posting for others
+// TODO: i.e. decoding jwt token and extracting id and comparing both ids from the req and token
+app.post("/listing", authenticateUser, postListing);
+app.get("/listing", getListing);
+app.delete('/listing', authenticateUser, deleteListing);
+app.patch('/listing', authenticateUser, updateListing);
 
 app.get("/protected", authenticateUser, (req, res) => {
     // this code will only run if authenticateUser calls next()
