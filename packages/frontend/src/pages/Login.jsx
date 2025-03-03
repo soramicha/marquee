@@ -55,7 +55,7 @@ function Login() {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  type="text"
+                  type="password"
                 />
                 <Box fontWeight={400} w="100%" alignSelf={"left"} mt={"10px"}>
                   <Link to="/" color="black">

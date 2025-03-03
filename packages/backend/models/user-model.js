@@ -19,6 +19,9 @@ const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    favorites: {
+      type: [mongoose.Schema.Types.ObjectId],
+    }
   },
   { collection: "users" }
 );

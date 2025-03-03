@@ -25,7 +25,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Home Page as the root route */}
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
 
         {/* Other routes */}
         <Route path="listing/:id" element={<ListingDetail />} />
@@ -46,7 +46,7 @@ function App() {
         <Route path="listing/edit" element={<EditListing />} />
         <Route path="/favorites" element={<Favorites />} />
         {/* Use a URL parameter for email id */}
-        <Route path="navbar" element={<Navbar/>}></Route>
+        <Route path="navbar" element={<Navbar />} />
 
         <Route path="email/:id" element={<IndivEmail />} />
         <Route path="profile" element={<Profile />} />
