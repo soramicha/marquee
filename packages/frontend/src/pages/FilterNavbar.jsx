@@ -34,11 +34,11 @@ function FilterNavbar({
         </Text>
         <CheckboxGroup
           value={selectedCategories}
-          onChange={(values) => setSelectedCategories(values)}
+          onChange={(values) => setSelectedCategories([...values])}
         >
           <Flex direction="column" gap="2">
             {categories.map((category) => (
-              <Checkbox key={category} value={category}>
+              <Checkbox key={category} value={category} borderColor="gray.600">
                 {category}
               </Checkbox>
             ))}
@@ -52,11 +52,11 @@ function FilterNavbar({
         </Text>
         <CheckboxGroup
           value={selectedLocations}
-          onChange={(values) => setSelectedLocations(values)}
+          onChange={(values) => setSelectedLocations([...values])}
         >
           <Flex direction="column" gap="2">
             {locations.map((loc) => (
-              <Checkbox key={loc} value={loc}>
+              <Checkbox key={loc} value={loc} borderColor="gray.600">
                 {loc}
               </Checkbox>
             ))}
