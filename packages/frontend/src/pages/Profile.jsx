@@ -1,4 +1,5 @@
 import Navbar from "./Navbar";
+import ListingCard from "../components/ui/ListingCard.jsx";
 
 function Profile() {
   const user = {
@@ -13,114 +14,171 @@ function Profile() {
 
   return (
     <div style={styles.page}>
-      <Navbar/>
-      <div style={styles.container}>
-        {/* Profile Header */}
-        <div style={styles.profileHeader}>
-          <div style={styles.profilePic}></div>
-          <div>
-            <h2 style={styles.name}>
-              {user.name}{" "}
-              <span role="img" aria-label="edit">
-                ✏️
-              </span>
-            </h2>
-            <p style={styles.email}>{user.email}</p>
+      <Navbar />
+
+      <div style={styles.profileContainer}>
+        <div style={styles.leftColumn}>
+          {/* Profile Header */}
+          <div style={styles.profileHeader}>
+            <div style={styles.profilePic}></div>
+            <div>
+              <h2 style={styles.name}>
+                {user.name}{" "}
+                <span role="img" aria-label="edit">
+                  ✏️
+                </span>
+              </h2>
+              <p style={styles.email}>{user.email}</p>
+            </div>
+          </div>
+
+          {/* Bio Section */}
+          <div style={styles.bioBox}>
+            <p style={styles.bioText}>{user.bio}</p>
+          </div>
+
+          {/* Stats Section */}
+          <div style={styles.statsBox}>
+            <p>
+              <strong style={styles.statNumber}>{user.listings}</strong> Listings
+            </p>
+            <p>
+              <strong style={styles.statNumber}>{user.pageViews}</strong> Page Views
+            </p>
+            <p>
+              <strong style={styles.statNumber}>{user.pendings}</strong> Pendings
+            </p>
+            <p>
+              <strong style={styles.statNumber}>{user.reviews}</strong> Reviews
+            </p>
           </div>
         </div>
 
-        {/* Bio Section */}
-        <div style={styles.bioBox}>
-          <p style={styles.bioText}>{user.bio}</p>
-        </div>
-
-        {/* Stats Section */}
-        <div style={styles.statsBox}>
-          <p>
-            <strong style={styles.statNumber}>{user.listings}</strong> Listings
-          </p>
-          <p>
-            <strong style={styles.statNumber}>{user.pageViews}</strong> Page
-            Views
-          </p>
-          <p>
-            <strong style={styles.statNumber}>{user.pendings}</strong> Pendings
-          </p>
-          <p>
-            <strong style={styles.statNumber}>{user.reviews}</strong> Reviews
-          </p>
+        {/* RIGHT COLUMN: My Listings */}
+        <div style={styles.rightColumn}>
+          <h3 style={styles.listingsHeading}>My Listings</h3>
+          <div style={styles.listingsGrid}>
+          <ListingCard
+              id="2"
+              name="Vintage Lamp"
+              price="$25.00"
+              location="Listing Location"
+              tags={["vintage", "home"]}
+            />
+            <ListingCard
+              id="2"
+              name="Vintage Lamp"
+              price="$25.00"
+              location="Listing Location"
+              tags={["vintage", "home"]}
+            />
+                        <ListingCard
+              id="2"
+              name="Vintage Lamp"
+              price="$25.00"
+              location="Listing Location"
+              tags={["vintage", "home"]}
+            />
+                        <ListingCard
+              id="2"
+              name="Vintage Lamp"
+              price="$25.00"
+              location="Listing Location"
+              tags={["vintage", "home"]}
+            />
+            {/* fix the info and add more cards if needed */}
+          </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
-// Updated Styling to Match Figma
 const styles = {
   page: {
-    backgroundColor: "#F5F5F5", // Light gray background to match Figma
+    backgroundColor: "#F5F5F5",
     minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
   },
-  container: {
-    width: "90%",
-    maxWidth: "400px",
-    padding: "20px",
+
+  profileContainer: {
+    display: "grid",
+    gridTemplateColumns: "450px 1fr", 
+    columnGap: "35px",
+    width: "100%",
     fontFamily: "Inter, sans-serif",
+    paddingTop: "150px",
+    paddingLeft: "40px",
+    paddingRight: "40px",
   },
+
+  leftColumn: {
+  },
+
+  rightColumn: {
+  },
+
   profileHeader: {
     display: "flex",
     alignItems: "center",
-    gap: "15px",
-    marginBottom: "10px",
+    marginBottom: "15px",
   },
   profilePic: {
     width: "65px",
     height: "65px",
-    backgroundColor: "#C4C4C4", // Slightly darker placeholder
+    backgroundColor: "#C4C4C4",
     borderRadius: "50%",
+    marginRight: "10px",
   },
   name: {
-    margin: "0",
+    margin: 0,
     fontSize: "20px",
-    fontWeight: "700", // Make bold
-    color: "#000", // Black text
-    display: "flex",
-    alignItems: "center",
+    fontWeight: 700,
+    color: "#000",
   },
   email: {
-    margin: "0",
+    margin: 0,
     color: "#666",
     fontSize: "14px",
   },
+
   bioBox: {
     backgroundColor: "#E5E5E5",
     padding: "12px",
     borderRadius: "8px",
-    marginBottom: "10px",
+    marginBottom: "15px",
   },
   bioText: {
     fontSize: "14px",
-    color: "#000", // Black text
+    color: "#000",
+    margin: 0,
   },
+
   statsBox: {
     display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "12px",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "10px",
     textAlign: "center",
     backgroundColor: "#E5E5E5",
     padding: "12px",
     borderRadius: "8px",
-    color: "#000", // Black text
-
+    color: "#000",
   },
   statNumber: {
-    fontWeight: "700", // Bold for numbers
+    fontWeight: 700,
     fontSize: "16px",
-    color: "#000", // Black text
+  },
 
+  listingsHeading: {
+    margin: 0,
+    marginBottom: "15px",
+    fontSize: "18px",
+    fontWeight: 600,
+  },
+
+  listingsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "20px",
   },
 };
 
