@@ -32,6 +32,7 @@ export async function postListing(req, res) {
 }
 
 async function postListingToDB(listing) {
+    // TODO: add objectID to user model, under listings field
     try {
         const listingToAdd = new Listing(listing);
         const savedListing = await listingToAdd.save();
