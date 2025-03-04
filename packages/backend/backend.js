@@ -7,6 +7,7 @@ import mongoose from "mongoose"
 import { deleteUser, getUsers } from "./services/user-service.js";
 import userModel from "./models/user-model.js";
 import { deleteListing, getListing, postListing, updateListing } from "./services/listing-service.js";
+import { postEmail } from "./services/email-service.js";
 
 dotenv.config();
 
@@ -42,6 +43,9 @@ app.post("/listing", authenticateUser, postListing);
 app.get("/listing", getListing);
 app.delete('/listing', authenticateUser, deleteListing);
 app.patch('/listing', authenticateUser, updateListing);
+
+// email service
+app.post("/email", authenticateUser, postEmail);
 
 app.get("/protected", authenticateUser, (req, res) => {
     // this code will only run if authenticateUser calls next()

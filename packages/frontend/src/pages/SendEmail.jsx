@@ -2,8 +2,9 @@ import { Center, Box, Text, Button, Input, Textarea } from "@chakra-ui/react"
 import Navbar from "./Navbar";
 import { useState, useRef } from "react"
 import emailjs from "@emailjs/browser";
+import axios from "axios";
 
-function SendMessage() {
+function SendEmail() {
     // create a ref hook
     const form = useRef();
 
@@ -12,8 +13,22 @@ function SendMessage() {
     const [receiver, setReceiver] = useState("itsess7@gmail.com");
     const [sender, setSender] = useState("schang7jcu@gmail.com");
 
-    const submitForm = (e) => {
+    const submitForm = async (e) => {
         e.preventDefault();
+
+        const formData = {
+          "emailSubject": subject,
+          "emailContent": body,
+          "receiver_email": receiver
+        }
+
+        // call backend
+        /*try {
+          const response = await axios.post('/email', formData);
+          console.log('Email added to MongoDB successfully:', response.data);
+        } catch (error) {
+          console.error('Error adding email:', error);
+        }*/
 
         // emailjs
         console.log(form.current)
@@ -113,4 +128,4 @@ function SendMessage() {
     </>
 }
 
-export default SendMessage;
+export default SendEmail;
