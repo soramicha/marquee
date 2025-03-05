@@ -5,7 +5,7 @@ import axios from '@/api/axios';
 import { useAuth } from '@/context/AuthContext';
 
 function SignUp() {
-    const [name, setName] = useState("");
+    const [school, setSchool] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmedPassword, setConfirmedPassword] = useState("");
@@ -25,7 +25,7 @@ function SignUp() {
         setError('');
 
         // Basic validation
-        if (!name || !email || !password || !confirmedPassword) {
+        if (!school || !email || !password || !confirmedPassword) {
             setError('All fields are required.');
             return;
         }
@@ -35,8 +35,15 @@ function SignUp() {
             return;
         }
 
+        /*const formData = {
+          "username": email,
+          "password": password,
+        }*/
+
         try {
             await signup(email, password);
+            //const response = await axios.post('http://localhost:8000/signup', formData);
+            //console.log('User added to MongoDB successfully:', response.data);
         } catch (error) {
             console.error('Error submitting form:', error);
             setError('An error occurred while submitting the form.');
@@ -64,8 +71,8 @@ function SignUp() {
                           mt={8}
                           color="black"
                           placeholder="School"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
+                          value={school}
+                          onChange={(e) => setSchool(e.target.value)}
                           type="text"
                       />
                       <Input
