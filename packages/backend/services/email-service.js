@@ -14,6 +14,11 @@ export async function postEmail(req, res) {
         console.log("calling post email!")
         // search if receiver_email is valid
         const receiver = await getUsersFromDB(req.body.receiver_email)
+        if (receiver.length !== 1) {
+            return res.status(404).json({ 
+                error: `Invalid receiver email: ${req.body.receiver_email}. User not found` 
+            });
+        }
         console.log(req.body)
         const result = await postEmailToDB({
             emailSubject: req.body.emailSubject,

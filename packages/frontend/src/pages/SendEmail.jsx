@@ -3,15 +3,17 @@ import Navbar from "./Navbar";
 import { useState, useRef } from "react"
 import emailjs from "@emailjs/browser";
 import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 
 function SendEmail() {
     // create a ref hook
     const form = useRef();
-
+    const { auth } = useAuth();
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
+    // TODO: hard code receiver to seller
     const [receiver, setReceiver] = useState("sophia@calpoly.edu");
-    const [sender, setSender] = useState(localStorage.getItem("username"));
+    const [sender, setSender] = auth?.username;
 
     const submitForm = async (e) => {
         e.preventDefault();
@@ -22,8 +24,7 @@ function SendEmail() {
           "receiver_email": receiver
         }
 
-        const token = localStorage.getItem("authToken")
-        console.log("trying to send email here is token: ", token)
+        const token = auth?.access_token;
         // call backend
         try {
           const response = await axios.post('http://localhost:8000/email', formData,
