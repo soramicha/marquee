@@ -48,7 +48,7 @@ function App() {
         {/* Use a URL parameter for email id */}
         <Route path="navbar" element={<Navbar />} />
 
-        <Route path="email/:id" element={<IndivEmail />} />
+        <Route path="email/:id" element={<IndivEmail/>} />
         <Route path="profile" element={<Profile />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
