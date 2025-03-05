@@ -19,13 +19,8 @@ const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    listings: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "Listings"
-    },
     favorites: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "Listings"
     }
   },
   { collection: "users" }
