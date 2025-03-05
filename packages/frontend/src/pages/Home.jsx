@@ -1,5 +1,5 @@
 // src/pages/Home.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -8,56 +8,69 @@ import ListingCard from "../components/ui/ListingCard";
 
 function Home() {
   // Example recommended items with category, location, and tags
-  const recommendedItems = [
-    {
-      id: 1,
-      name: "Vintage T-Shirt",
-      price: "$10.00",
-      location: "On Campus",
-      category: "Apparel",
-      tags: ["Apparel", "Vintage"],
-    },
-    {
-      id: 2,
-      name: "iPhone Charger",
-      price: "$5.00",
-      location: "Off Campus",
-      category: "Electronics",
-      tags: ["Electronics"],
-    },
-    {
-      id: 3,
-      name: "Couch",
-      price: "$50.00",
-      location: "Off Campus",
-      category: "Furniture",
-      tags: ["Furniture", "Home"],
-    },
-    {
-      id: 4,
-      name: "Free Old Textbook",
-      price: "$0.00",
-      location: "On Campus",
-      category: "Textbooks",
-      tags: ["Textbooks"],
-    },
-    {
-      id: 5,
-      name: "Pet Toys",
-      price: "$8.00",
-      location: "On Campus",
-      category: "Pet Supplies",
-      tags: ["Pet Supplies", "Toys"],
-    },
-    {
-      id: 6,
-      name: "Used Bike",
-      price: "$100.00",
-      location: "Off Campus",
-      category: "Vehicles",
-      tags: ["Vehicles"],
-    },
-  ];
+  // const recommendedItems = [
+  //   {
+  //     id: 1,
+  //     name: "Vintage T-Shirt",
+  //     price: "$10.00",
+  //     location: "On Campus",
+  //     category: "Apparel",
+  //     tags: ["Apparel", "Vintage"],
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "iPhone Charger",
+  //     price: "$5.00",
+  //     location: "Off Campus",
+  //     category: "Electronics",
+  //     tags: ["Electronics"],
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Couch",
+  //     price: "$50.00",
+  //     location: "Off Campus",
+  //     category: "Furniture",
+  //     tags: ["Furniture", "Home"],
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Free Old Textbook",
+  //     price: "$0.00",
+  //     location: "On Campus",
+  //     category: "Textbooks",
+  //     tags: ["Textbooks"],
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Pet Toys",
+  //     price: "$8.00",
+  //     location: "On Campus",
+  //     category: "Pet Supplies",
+  //     tags: ["Pet Supplies", "Toys"],
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Used Bike",
+  //     price: "$100.00",
+  //     location: "Off Campus",
+  //     category: "Vehicles",
+  //     tags: ["Vehicles"],
+  //   },
+  // ];
+
+  //const recommendedItems = [];
+  const [recommendedItems, setListings] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:8000/listing")
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Fetched Listings:", data);
+      setListings(Object.values(data));
+    })
+    .catch((error) => console.error("Error fetching listings:", error));
+  }, []);
+
 
   // Filter state
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -95,16 +108,17 @@ function Home() {
             Recommended for You
           </Text>
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6}>
-            {filteredItems.map((item) => (
-              <Link key={item.id} to={`/listing/${item.id}`}>
-                <ListingCard
-                  id={item.id}
-                  name={item.name}
-                  price={item.price}
-                  location={item.location}
-                  tags={item.tags}
-                />
-              </Link>
+            {filteredItems.map((item) => ( //LOOK AT THIS FUNCTION NEXT
+              console.log(item._id)
+              // <Link key={item._id} to={`/listing/${item._id}`}>
+              //   <ListingCard
+              //     id={item._id}
+              //     name={item.name}
+              //     price={item.price}
+              //     location={item.location}
+              //     tags={item.tags}
+              //   />
+              // </Link>
             ))}
           </SimpleGrid>
         </Box>
