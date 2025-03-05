@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import { useState, useRef } from "react"
 import emailjs from "@emailjs/browser";
 import axios from "axios";
+import { Link } from "react-router-dom"
 
 function SendEmail() {
     // create a ref hook
@@ -125,6 +126,9 @@ function SendEmail() {
             />
 
             <Button mb={10} type="submit" mt={5} color="white" bg="#2E55C4">Send Email</Button>
+            <Link to="/email">
+              <Button mb={10} ml={5} mt={5} color="white" bg="#F2674A">Cancel</Button>
+            </Link>
             </form>
             </Box>
             </Center>

@@ -36,7 +36,7 @@ function Navbar() {
               Home
             </Text>
           </Link>
-          <Link to="/messages">
+          <Link to="/email">
             <Text fontSize="md" color="white" _hover={{ textDecoration: "underline" }}>
               Messages
             </Text>
