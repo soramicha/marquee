@@ -11,10 +11,10 @@ export async function postEmail(req, res) {
                 error: `Missing required fields: ${missingFields.join(', ')}` 
             });
         }
-
+        console.log("calling post email!")
         // search if receiver_email is valid
         const receiver = await getUsersFromDB(req.body.receiver_email)
-
+        console.log(req.body)
         const result = await postEmailToDB({
             emailSubject: req.body.emailSubject,
             emailContent: req.body.emailContent,

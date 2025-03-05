@@ -10,8 +10,8 @@ function SendEmail() {
 
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
-    const [receiver, setReceiver] = useState("itsess7@gmail.com");
-    const [sender, setSender] = useState("schang7jcu@gmail.com");
+    const [receiver, setReceiver] = useState("sophia@calpoly.edu");
+    const [sender, setSender] = useState(localStorage.getItem("username"));
 
     const submitForm = async (e) => {
         e.preventDefault();
@@ -22,23 +22,27 @@ function SendEmail() {
           "receiver_email": receiver
         }
 
+        const token = localStorage.getItem("authToken")
+        console.log("trying to send email here is token: ", token)
         // call backend
-        /*try {
-          const response = await axios.post('/email', formData);
+        try {
+          const response = await axios.post('http://localhost:8000/email', formData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+          });
           console.log('Email added to MongoDB successfully:', response.data);
         } catch (error) {
           console.error('Error adding email:', error);
-        }*/
+        }
 
         // emailjs
-        console.log(form.current)
-        console.log(receiver)
-        console.log(sender)
         if (subject === "" || body === "" || sender === "" || receiver === "") {
             alert("Unable to submit. Please fill out all parts of the form.");
           } else {
             emailjs
-                // service_id, 
+              // service_id, 
               .sendForm("307_marquee", "307_message_template", form.current, "DJvHoVWDs8dtvq1j4")
               .then(
                 () => {
@@ -74,8 +78,9 @@ function SendEmail() {
                     type="text"
                     required
                 />
-            <Text fontSize="sm" mt={5}>Sender</Text>
+            <Text fontSize="sm" mt={5}>Sender: {sender}</Text>
             <Input
+                hidden
                 name="user_send"
                 onChange={(e) => setSender(e.target.value)}
                 required
