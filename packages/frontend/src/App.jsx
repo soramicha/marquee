@@ -14,10 +14,10 @@ import Profile from "./pages/Profile";
 import EditListing from "./pages/EditListing";
 import Navbar from "./pages/Navbar";
 import IndivEmail from "./pages/IndivEmail";
-import IndivEmailComponent from "./components/ui/IndivEmailComponent";
 import ListingDetail from "./pages/ListingDetail"; 
 import Favorites from "./pages/Favorites"; // we'll create this page below
 import SendEmail from "./pages/SendEmail";
+import ViewAllEmails from "./pages/ViewAllEmails";
 
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Home Page as the root route */}
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
 
         {/* Other routes */}
         <Route path="listing/:id" element={<ListingDetail />} />
@@ -41,14 +41,14 @@ function App() {
         />
         <Route path="email/create" element={<SendEmail />} />
         <Route path="filternavbar" element={<FilterNavbar />} />
-        <Route path="email" element={<IndivEmailComponent />} />
+        <Route path="email" element={<ViewAllEmails/>} />
         <Route path="listing/create" element={<CreateListing />} />
         <Route path="listing/edit" element={<EditListing />} />
         <Route path="/favorites" element={<Favorites />} />
         {/* Use a URL parameter for email id */}
         <Route path="navbar" element={<Navbar />} />
 
-        <Route path="email/:id" element={<IndivEmail />} />
+        <Route path="email/:id" element={<IndivEmail/>} />
         <Route path="profile" element={<Profile />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
