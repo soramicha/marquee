@@ -14,10 +14,10 @@ import Profile from "./pages/Profile";
 import EditListing from "./pages/EditListing";
 import Navbar from "./pages/Navbar";
 import IndivEmail from "./pages/IndivEmail";
-import SendMessage from "./pages/SendMessage";
 import IndivEmailComponent from "./components/ui/IndivEmailComponent";
 import ListingDetail from "./pages/ListingDetail"; 
 import Favorites from "./pages/Favorites"; // we'll create this page below
+import SendEmail from "./pages/SendEmail";
 
 
 function App() {
@@ -39,7 +39,7 @@ function App() {
             />
           }
         />
-        <Route path="message/create" element={<SendMessage />} />
+        <Route path="email/create" element={<SendEmail />} />
         <Route path="filternavbar" element={<FilterNavbar />} />
         <Route path="email" element={<IndivEmailComponent />} />
         <Route path="listing/create" element={<CreateListing />} />
