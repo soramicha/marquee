@@ -52,8 +52,15 @@ async function postEmailToDB(email) {
 // retreive ALL emails
 export async function getEmail(req, res) {
     try {
-        const emails = await getEmailsFromDB(req.user.userID);
-        res.status(200).json(emails); 
+        // get the parameters
+        if (!req.query.id) {
+            const emails = await getEmailsFromDB(req.user.userID);
+            res.status(200).json(emails); 
+        }
+        else {
+            const email = await findEmailFromDB(req.query.id);
+            res.status(200).json(email); 
+        }
     } catch (error) {
         return { success: false, error: error.message};
     }
@@ -63,6 +70,15 @@ async function getEmailsFromDB(user_id) {
     try {
         // return promise
         return await Email.find({$or: [{ receiver_id: `${user_id}`}, {sender_id: `${user_id}`}]});
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function findEmailFromDB(id) {
+    try {
+        // return promise
+        return await Email.find({ _id: `${id}`});
     } catch (error) {
         throw error;
     }

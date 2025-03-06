@@ -1,18 +1,54 @@
 import { Center, Box, Text, Flex, Button, Textarea } from '@chakra-ui/react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from './Navbar';
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
+
+const getIndivEmail = async (id) => {
+    try {
+        const token = localStorage.getItem("authToken")
+        const response = await axios.get('http://localhost:8000/email',
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                id: id,
+            }
+        });
+        console.log('Email retreived from MongoDB successfully:', response.data);
+        return response.data
+    } catch (error) {
+        console.error('Error retreiving emails:', error);
+    }
+}
 
 // TODO: make as a popup instead of a whole page(?)
 function IndivEmail() {
-    {/* once again, the respective information would be passed through the props */}
-    const subject = "Hi There!"
-    const sender = "s@gmail.com"
-    const body = "I wanted to ask how you're doing!"
-    const receiver = "me@gmail.com"
-    const timestamp = "2/28/2025"
+    const [subject, setSubject] = useState("")
+    const [sender, setSender] = useState("")
+    const [body, setBody] = useState("")
+    const [receiver, setReceiver] = useState("")
+    const [timestamp, setTimestamp] = useState("")
     const [show, setShow] = useState(true)
     const [reply_id, setReplyId] = useState(0)
     const [replyText, setReplyText] = useState("")
+
+    let { id } = useParams();
+
+    // retrieve individual email information
+    useEffect (() => {
+        // retreive email from database
+        getIndivEmail(id).then(email => {
+            console.log(email)
+            setSubject(email.emailSubject)
+            setSender(email.sender_id)
+            setReceiver(email.receiver_id)
+            setTimestamp(email.createdAt)
+            setBody(email.emailContent)
+            setShow(email.isRead)
+        })
+    }, []);
 
     const replyEmail = () => {
         console.log("Respond to email!")
