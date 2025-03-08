@@ -46,7 +46,6 @@ const ListingSchema = new mongoose.Schema(
       // array of URLs
       // TODO: AWS S3 to store photos/videos?
       type: [String],
-      required: true,      
     },
     videos: {
       type: [String],

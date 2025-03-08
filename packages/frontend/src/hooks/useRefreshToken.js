@@ -1,14 +1,12 @@
-import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
+import { axiosPrivate } from '@/api/axios';
 
 const useRefreshToken = () => {
     const { setAuth } = useAuth();
 
     const refresh = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/refresh', {
-                withCredentials: true
-            });
+            const response = await axiosPrivate.get('/refresh');
             setAuth((prev) => {
                 return { ...prev, access_token: response.data.access_token};
             });

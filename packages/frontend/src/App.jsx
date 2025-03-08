@@ -42,7 +42,6 @@ function App() {
         <Route path="message/create" element={<SendMessage />} />
         <Route path="filternavbar" element={<FilterNavbar />} />
         <Route path="email" element={<IndivEmailComponent />} />
-        <Route path="listing/create" element={<CreateListing />} />
         <Route path="listing/edit" element={<EditListing />} />
         <Route path="/favorites" element={<Favorites />} />
         {/* Use a URL parameter for email id */}
@@ -59,6 +58,7 @@ function App() {
             {/* Place your protected routes here, e.g.:
                 <Route path="dashboard" element={<Dashboard />} />
             */}
+            <Route path="listing/create" element={<CreateListing />} />
           </Route>
         </Route>
       </Routes>
