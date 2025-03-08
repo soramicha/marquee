@@ -31,7 +31,7 @@ function Navbar() {
 
         {/* Navigation Links */}
         <Flex ml={10} gap={6}>
-          <Link to="/">
+          <Link to="/home">
             <Text fontSize="md" color="white" _hover={{ textDecoration: "underline" }}>
               Home
             </Text>

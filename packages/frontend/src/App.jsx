@@ -25,7 +25,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Home Page as the root route */}
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
 
         {/* Other routes */}
         <Route path="listing/:id" element={<ListingDetail />} />

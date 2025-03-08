@@ -4,10 +4,11 @@ import { Box, Button, Flex } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import axios from "axios"
 import { useEffect, useState } from 'react'
+import { useAuth } from "@/context/AuthContext";
 
-const getAllEmails = async () => {
+const getAllEmails = async (token) => {
     try {
-        const token = localStorage.getItem("authToken")
+        //const token = localStorage.getItem("authToken")
         const response = await axios.get('http://localhost:8000/email',
         {
             headers: {
@@ -22,13 +23,18 @@ const getAllEmails = async () => {
 }
 
 function ViewAllEmails() {
+    const { auth } = useAuth();
+    const token = auth?.access_token
     const [AllEmails, setAllEmails] = useState([])
 
     // runs once when page loads
     useEffect (() => {
         // retreive emails from database
-        getAllEmails().then(emails => {
-            setAllEmails(emails)
+        getAllEmails(token).then(emails => {
+            if (emails) {
+                setAllEmails(emails)
+            }
+            
         })
     }, [])
 
