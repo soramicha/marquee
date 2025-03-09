@@ -4,7 +4,7 @@ function IndivEmailComponent(props) {
     const subject_header = props.subject;
     const sender_email = props.sender_email;
     const timestamp = props.timestamp;
-    const bgColor = "white" ? props.readStatus : "#E0E0E0"
+    const bgColor = props.readStatus ? "#E0E0E0" : "white"
 
     return <>
         <Center>

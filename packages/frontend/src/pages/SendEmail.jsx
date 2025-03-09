@@ -27,7 +27,9 @@ function SendEmail() {
           "receiver_email": receiver
         }
 
-        const token = auth?.access_token;
+        //const token = auth?.access_token;
+        // temporary solution
+        const token = localStorage.getItem('authToken')
         // call backend
         try {
           const response = await axios.post('http://localhost:8000/email', formData,
@@ -41,8 +43,9 @@ function SendEmail() {
           console.error('Error adding email:', error);
         }
 
+        // uncomment later; currently it's commented bc you can only send limited # of messages using emailjs
         // emailjs
-        if (subject === "" || body === "" || sender === "" || receiver === "") {
+        /*if (subject === "" || body === "" || sender === "" || receiver === "") {
             alert("Unable to submit. Please fill out all parts of the form.");
           } else {
             emailjs
@@ -59,7 +62,7 @@ function SendEmail() {
       
             setSubject("");
             setBody("");
-          }
+          }*/
     }
 
     return <>

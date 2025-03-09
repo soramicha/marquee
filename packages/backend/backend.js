@@ -4,10 +4,10 @@ import dotenv from "dotenv";
 import { registerUser, authenticateUser, loginUser, logout, refreshUserTokens } from "./auth.js";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose"
-import { deleteUser, getUsers } from "./services/user-service.js";
+import { deleteUser, getUsers, findUserById } from "./services/user-service.js";
 import userModel from "./models/user-model.js";
 import { deleteListing, getListing, postListing, updateListing } from "./services/listing-service.js";
-import { getEmail, postEmail } from "./services/email-service.js";
+import { getEmail, postEmail, updateReadStatus } from "./services/email-service.js";
 
 dotenv.config();
 
@@ -34,6 +34,7 @@ app.post('/login', loginUser);
 app.get('/logout', logout);
 app.get('/refresh', refreshUserTokens);
 app.get('/users', getUsers);
+app.get('/findUser', findUserById)
 app.delete('/users', authenticateUser, deleteUser);
 // TODO: make a function that verifies the appropriate user with the tokens 
 // TODO: that is making these API calls
@@ -47,6 +48,7 @@ app.patch('/listing', authenticateUser, updateListing);
 // email service
 app.post("/email", authenticateUser, postEmail);
 app.get("/email", authenticateUser, getEmail);
+app.patch("/email", authenticateUser, updateReadStatus);
 
 app.get("/protected", authenticateUser, (req, res) => {
     // this code will only run if authenticateUser calls next()
