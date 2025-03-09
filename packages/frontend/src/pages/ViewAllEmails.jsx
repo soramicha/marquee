@@ -24,7 +24,9 @@ const getAllEmails = async (token) => {
 
 function ViewAllEmails() {
     const { auth } = useAuth();
-    const token = auth?.access_token
+    //const token = auth?.access_token
+    // temporary solution
+    const token = localStorage.getItem("authToken")
     const [AllEmails, setAllEmails] = useState([])
 
     // runs once when page loads
@@ -34,7 +36,6 @@ function ViewAllEmails() {
             if (emails) {
                 setAllEmails(emails)
             }
-            
         })
     }, [])
 
