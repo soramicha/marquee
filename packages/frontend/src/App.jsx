@@ -39,7 +39,6 @@ function App() {
             />
           }
         />
-        <Route path="email/create" element={<SendEmail />} />
         <Route path="filternavbar" element={<FilterNavbar />} />
         <Route path="email" element={<ViewAllEmails/>} />
         <Route path="listing/create" element={<CreateListing />} />
@@ -59,6 +58,8 @@ function App() {
             {/* Place your protected routes here, e.g.:
                 <Route path="dashboard" element={<Dashboard />} />
             */}
+            <Route path="email/create" element={<SendEmail />} />
+
           </Route>
         </Route>
       </Routes>

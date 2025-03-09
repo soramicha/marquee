@@ -23,32 +23,32 @@ const port = 8000;
 
 //TODO: edit origin link 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
   credentials: true
 }));
 app.use(cookieParser());
 app.use(express.json());
 
-app.post('/signup', registerUser);
-app.post('/login', loginUser);
-app.get('/logout', logout);
-app.get('/refresh', refreshUserTokens);
-app.get('/users', getUsers);
-app.delete('/users', authenticateUser, deleteUser);
+app.post('/api/signup', registerUser);
+app.post('/api/login', loginUser);
+app.get('/api/logout', logout);
+app.get('/api/refresh', refreshUserTokens);
+app.get('/api/users', getUsers);
+app.delete('/api/users', authenticateUser, deleteUser);
 // TODO: make a function that verifies the appropriate user with the tokens 
 // TODO: that is making these API calls
 // TODO: since we don't want other people deleting others/posting for others
 // TODO: i.e. decoding jwt token and extracting id and comparing both ids from the req and token
-app.post("/listing", authenticateUser, postListing);
-app.get("/listing", getListing);
-app.delete('/listing', authenticateUser, deleteListing);
-app.patch('/listing', authenticateUser, updateListing);
+app.post("/api/listing", authenticateUser, postListing);
+app.get("/api/listing", getListing);
+app.delete('/api/listing', authenticateUser, deleteListing);
+app.patch('/api/listing', authenticateUser, updateListing);
 
 // email service
-app.post("/email", authenticateUser, postEmail);
-app.get("/email", authenticateUser, getEmail);
+app.post("/api/email", authenticateUser, postEmail);
+app.get("/api/email", authenticateUser, getEmail);
 
-app.get("/protected", authenticateUser, (req, res) => {
+app.get("/api/protected", authenticateUser, (req, res) => {
     // this code will only run if authenticateUser calls next()
     res.status(201).send("Access token verified!");
 });

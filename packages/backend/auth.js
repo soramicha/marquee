@@ -10,8 +10,14 @@ async function setTokensAndRespond(res, username, id) {
   const refresh_token = await generateRefreshToken(username, id);
 
   if (access_token && refresh_token) {
-    res.cookie('refreshToken', refresh_token, { httpOnly: true, secure: false, sameSite: 'lax', path: '/'});
-    return res.status(201).send({ access_token });
+    res.cookie('refreshToken', refresh_token, { 
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax', 
+      path: '/',
+      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
+    });
+    return res.status(201).send({ access_token, username });
   }
 }
 
