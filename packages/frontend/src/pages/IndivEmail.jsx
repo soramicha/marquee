@@ -6,6 +6,7 @@ import axios from 'axios'
 
 const getIndivEmail = async (id) => {
     try {
+        // temporary solution
         const token = localStorage.getItem("authToken")
         const response = await axios.get('http://localhost:8000/email',
         {

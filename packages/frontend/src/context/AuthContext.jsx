@@ -25,6 +25,10 @@ export const AuthProvider = ({ children }) => {
                 password
             });
             setAuth({ username: username, access_token: response.data.access_token });
+            
+            // temporary solution
+            localStorage.setItem("authToken", response.data.access_token)
+            localStorage.setItem("username", username)
         } catch (error) {
             console.error(error);
         }
