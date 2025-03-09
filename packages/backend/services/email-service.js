@@ -83,3 +83,13 @@ async function findEmailFromDB(id) {
         throw error;
     }
 }
+
+export async function updateReadStatus(req, res) {
+    try {
+        const updatedEmail = await Email.findByIdAndUpdate(req.query.id, { isRead: true }, { new: true });
+        console.log("Successfully updated read status from backend!")
+        res.status(200).json(updatedEmail); 
+    } catch (error) {
+        return { success: false, error: error.message};
+    }
+}

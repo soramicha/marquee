@@ -4,10 +4,10 @@ import dotenv from "dotenv";
 import { registerUser, authenticateUser, loginUser, logout, refreshUserTokens } from "./auth.js";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose"
-import { deleteUser, getUsers } from "./services/user-service.js";
+import { deleteUser, getUsers, findUserById } from "./services/user-service.js";
 import userModel from "./models/user-model.js";
 import { deleteListing, getListing, postListing, updateListing } from "./services/listing-service.js";
-import { getEmail, postEmail } from "./services/email-service.js";
+import { getEmail, postEmail, updateReadStatus } from "./services/email-service.js";
 
 dotenv.config();
 
@@ -47,6 +47,7 @@ app.patch('/api/listing', authenticateUser, updateListing);
 // email service
 app.post("/api/email", authenticateUser, postEmail);
 app.get("/api/email", authenticateUser, getEmail);
+app.patch("api/email", authenticateUser, updateReadStatus);
 
 app.get("/api/protected", authenticateUser, (req, res) => {
     // this code will only run if authenticateUser calls next()

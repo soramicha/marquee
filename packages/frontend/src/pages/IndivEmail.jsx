@@ -4,10 +4,8 @@ import Navbar from './Navbar';
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
-const getIndivEmail = async (id) => {
+const getIndivEmail = async (id, token) => {
     try {
-        // temporary solution
-        const token = localStorage.getItem("authToken")
         const response = await axios.get('http://localhost:8000/email',
         {
             headers: {
@@ -24,8 +22,45 @@ const getIndivEmail = async (id) => {
     }
 }
 
+const getUsersById = async (id, token) => {
+    try {
+        const response = await axios.get('http://localhost:8000/findUser',
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                id: id,
+            }
+        });
+        console.log('User retreived from MongoDB successfully:', response.data);
+        return response.data
+    } catch (error) {
+        console.error('Error retreiving user by id:', error);
+    }
+}
+
+const updateReadStatus = async (id, token) => {
+    try {
+        const res = await axios.patch('http://localhost:8000/email', { isRead: true },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                params: {
+                    id: id,
+                }
+            });
+        console.log('Email read status updated from MongoDB successfully:', res);
+    } catch (error) {
+        console.error('Error updating read status of email', error);
+    }
+}
+
 // TODO: make as a popup instead of a whole page(?)
 function IndivEmail() {
+    // temporary solution
+    const token = localStorage.getItem("authToken")
     const [subject, setSubject] = useState("")
     const [sender, setSender] = useState("")
     const [body, setBody] = useState("")
@@ -40,14 +75,22 @@ function IndivEmail() {
     // retrieve individual email information
     useEffect (() => {
         // retreive email from database
-        getIndivEmail(id).then(email => {
-            console.log(email)
-            setSubject(email.emailSubject)
-            setSender(email.sender_id)
-            setReceiver(email.receiver_id)
-            setTimestamp(email.createdAt)
-            setBody(email.emailContent)
-            setShow(email.isRead)
+        getIndivEmail(id, token).then(email => {
+            setSubject(email[0].emailSubject)
+            setTimestamp(email[0].createdAt)
+            setBody(email[0].emailContent)
+
+            // get users by id
+            getUsersById(email[0].sender_id, token).then(email => {
+                setSender(email.username)
+            })
+
+            getUsersById(email[0].receiver_id, token).then(email => {
+                setReceiver(email.username)
+            })
+
+            // update the isRead status of the email!
+            updateReadStatus(email[0]._id, token).then()
         })
     }, []);
 
