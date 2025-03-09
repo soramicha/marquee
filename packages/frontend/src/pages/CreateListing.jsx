@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/context/AuthContext';
 import { Search } from 'lucide-react';
 import FileUpload from '@/components/ui/FileUpload';
-import Navbar from './Navbar';
+import Navbar from "./Navbar";
 
 function CreateListing() {
     const [photos, setPhotos] = useState([]);

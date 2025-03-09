@@ -60,31 +60,38 @@ function Profile() {
           <div style={styles.listingsGrid}>
           <ListingCard
               id="2"
+              name="Gray Hoodie"
+              price="$25.00"
+              location="Listing Location"
+              tags={["vintage", "home"]}
+            />
+            <ListingCard
+              id="3"
+              name="Gray Hoodie"
+              price="$25.00"
+              location="Listing Location"
+              tags={["vintage", "home"]}
+            />
+            <ListingCard
+              id="4"
+              name="Gray Hoodie"
+              price="$25.00"
+              location="Listing Location"
+              tags={["vintage", "home"]}
+            />
+            <ListingCard
+              id="5"
               name="Vintage Lamp"
               price="$25.00"
               location="Listing Location"
               tags={["vintage", "home"]}
             />
             <ListingCard
-              id="2"
-              name="Vintage Lamp"
-              price="$25.00"
-              location="Listing Location"
-              tags={["vintage", "home"]}
-            />
-                        <ListingCard
-              id="2"
-              name="Vintage Lamp"
-              price="$25.00"
-              location="Listing Location"
-              tags={["vintage", "home"]}
-            />
-                        <ListingCard
-              id="2"
-              name="Vintage Lamp"
-              price="$25.00"
-              location="Listing Location"
-              tags={["vintage", "home"]}
+            id="6"
+            name="Vintage Lamp"
+            price="$25.00"
+            location="Listing Location"
+            tags={["vintage", "home"]}
             />
             {/* fix the info and add more cards if needed */}
           </div>
