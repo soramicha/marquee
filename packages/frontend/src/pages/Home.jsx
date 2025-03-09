@@ -86,6 +86,8 @@ function Home() {
       selectedLocations.includes(item.location);
     return matchesCategory && matchesLocation;
   });
+  console.log("filteredItems:", filteredItems)
+
 
   return (
     <Box bg="gray.100" minH="100vh">
@@ -108,18 +110,19 @@ function Home() {
             Recommended for You
           </Text>
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6}>
-            {filteredItems.map((item) => ( //LOOK AT THIS FUNCTION NEXT
-              console.log(item._id)
-              // <Link key={item._id} to={`/listing/${item._id}`}>
-              //   <ListingCard
-              //     id={item._id}
-              //     name={item.name}
-              //     price={item.price}
-              //     location={item.location}
-              //     tags={item.tags}
-              //   />
-              // </Link>
-            ))}
+            {filteredItems.length > 1 &&
+              filteredItems[1].map((item) => (
+                <Link key={item._id} to={`/listing/${item._id}`}>
+                  <ListingCard
+                    id={item._id}
+                    name={item.name}
+                    price={item.price}
+                    location={item.location}
+                    tags={item.tags}
+                  />
+                </Link>
+              ))
+              }
           </SimpleGrid>
         </Box>
       </Flex>
