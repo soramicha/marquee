@@ -3,7 +3,7 @@ import { axiosPrivate } from '@/api/axios';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState({ access_token: null });
+    const [auth, setAuth] = useState({ username: null, access_token: null });
 
     const signup = async (username, password) => {
         try {
@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
                 username,
                 password
             });
-            setAuth({ access_token: response.data.access_token });
+            setAuth({ username: username, access_token: response.data.access_token });
         } catch (error) {
             throw error;
         }
@@ -24,7 +24,11 @@ export const AuthProvider = ({ children }) => {
                 username,
                 password
             });
-            setAuth({ access_token: response.data.access_token });
+            setAuth({ username: username, access_token: response.data.access_token });
+            
+            // temporary solution
+            localStorage.setItem("authToken", response.data.access_token)
+            localStorage.setItem("username", username)
         } catch (error) {
             console.error(error);
         }

@@ -11,7 +11,7 @@ async function setTokensAndRespond(res, username, id) {
 
   if (access_token && refresh_token) {
     res.cookie('refreshToken', refresh_token, { httpOnly: true, secure: false, sameSite: 'lax', path: '/'});
-    return res.status(201).send({ access_token });
+    return res.status(201).send({ access_token, username });
   }
 }
 
