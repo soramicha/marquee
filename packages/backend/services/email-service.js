@@ -93,3 +93,21 @@ export async function updateReadStatus(req, res) {
         return { success: false, error: error.message};
     }
 }
+
+export async function addReplytoEmail(req, res) {
+    try {
+        // add reply to email
+        await Email.findByIdAndUpdate(
+            req.query.id,
+            {
+              $push: { replies: req.body },
+            },
+            { new: true }
+          );
+        // retreive all replies
+        const allReplies = await Email.findById(req.query.id)
+        res.status(200).json(allReplies.replies); 
+    } catch (error) {
+        return { success: false, error: error.message};
+    }
+}

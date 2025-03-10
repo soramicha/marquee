@@ -4,11 +4,12 @@ import { useState, useRef } from "react"
 import emailjs from "@emailjs/browser";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 function SendEmail() {
     // create a ref hook
     const form = useRef();
+    let navigate = useNavigate();
     const { auth } = useAuth();
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
@@ -63,6 +64,9 @@ function SendEmail() {
             setSubject("");
             setBody("");
           }*/
+
+        // navigate back to the emails page
+        navigate('/email');
     }
 
     return <>
@@ -78,7 +82,6 @@ function SendEmail() {
                     onChange={(e) => setSubject(e.target.value)}
                     borderWidth={1}
                     borderRadius="10px"
-                    color="#989898"
                     backgroundColor="white"
                     mt={1}
                     width="100%"
@@ -122,7 +125,6 @@ function SendEmail() {
                 onChange={(e) => setBody(e.target.value)}
                 borderWidth={1}
                 borderRadius="10px"
-                color="#989898"
                 backgroundColor="white"
                 mt={1}
                 width="100%"

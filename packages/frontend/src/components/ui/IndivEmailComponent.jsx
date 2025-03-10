@@ -1,10 +1,36 @@
 import {Box, Flex, Center, Text} from "@chakra-ui/react";
+import axios from 'axios'
+import { useState } from 'react'
+
+// get username from props.sender_id
+const getUsersById = async (id, token) => {
+    try {
+        const response = await axios.get('http://localhost:8000/findUser',
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                id: id,
+            }
+        });
+        console.log('Username retreived from MongoDB successfully:', response.data);
+        return response.data
+    } catch (error) {
+        console.error('Error retreiving username:', error);
+    }
+}
 
 function IndivEmailComponent(props) {
     const subject_header = props.subject;
-    const sender_email = props.sender_email;
     const timestamp = props.timestamp;
     const bgColor = props.readStatus ? "#E0E0E0" : "white"
+    const token = localStorage.getItem('authToken')
+    const [sender_email, setSenderEmail] = useState("")
+    
+    getUsersById(props.sender_id, token).then(email => {
+        setSenderEmail(email.username)
+    })
 
     return <>
         <Center>

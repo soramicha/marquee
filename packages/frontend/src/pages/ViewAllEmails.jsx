@@ -34,7 +34,12 @@ function ViewAllEmails() {
         // retreive emails from database
         getAllEmails(token).then(emails => {
             if (emails) {
-                setAllEmails(emails)
+                const sortedEmails = emails.sort((a, b) => {
+                    let dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+                    let dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+                    return dateB - dateA;
+                  });
+                setAllEmails(sortedEmails)
             }
         })
     }, [])
@@ -48,7 +53,7 @@ function ViewAllEmails() {
                     </Link>
                 </Flex>
             {/* retrieve all emails current user has */}
-            {AllEmails.map(email => <Link key={email._id} to={`/email/${email._id}`}><IndivEmailComponent subject={email.emailSubject} timestamp={email.createdAt} sender_email={email.sender_id} readStatus={email.isRead}/></Link>)}
+            {AllEmails.map(email => <Link key={email._id} to={`/email/${email._id}`}><IndivEmailComponent subject={email.emailSubject} timestamp={email.createdAt} sender_id={email.sender_id} readStatus={email.isRead}/></Link>)}
         </Box>
     </>
 }

@@ -30,7 +30,19 @@ const EmailSchema = new mongoose.Schema(
         type: Date,
         default: Date.now,
         immutable: true
-    }
+    },
+    // create an array of replies
+    replies: [
+        {
+          sender_username: { type: String, required: true },
+          message: { type: String, required: true },
+          createdAt: {
+            type: Date,
+            default: Date.now,
+            immutable: true
+          },
+        },
+    ],
   },
   {
     collection: "emails",

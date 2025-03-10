@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Navbar from './Navbar';
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import ReplyEmail from '@/components/ui/ReplyEmail';
 
 const getIndivEmail = async (id, token) => {
     try {
@@ -57,6 +58,24 @@ const updateReadStatus = async (id, token) => {
     }
 }
 
+const addReply = async (id, username, message, token) => {
+    try {
+        const response = await axios.post('http://localhost:8000/email/reply', { sender_username: username, message: message},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                id: id,
+            }
+        });
+        console.log('Reply added to email into MongoDB successfully:');
+        return response.data
+    } catch (error) {
+        console.error('Error adding reply to email:', error);
+    }
+}
+
 // TODO: make as a popup instead of a whole page(?)
 function IndivEmail() {
     // temporary solution
@@ -67,8 +86,8 @@ function IndivEmail() {
     const [receiver, setReceiver] = useState("")
     const [timestamp, setTimestamp] = useState("")
     const [show, setShow] = useState(true)
-    const [reply_id, setReplyId] = useState(0)
     const [replyText, setReplyText] = useState("")
+    const [AllReplies, setAllReplies] = useState([])
 
     let { id } = useParams();
 
@@ -90,7 +109,9 @@ function IndivEmail() {
             })
 
             // update the isRead status of the email!
-            updateReadStatus(email[0]._id, token).then()
+            updateReadStatus(email[0]._id, token)
+
+            setAllReplies(email[0].replies)
         })
     }, []);
 
@@ -107,26 +128,10 @@ function IndivEmail() {
             alert("Unable to send reply! Please write a message first!")
         }
         else {
-            // create element
-            const replyText = document.createElement("p")
-            // give it a reply id
-            replyText.id = reply_id
-            setReplyId(reply_id + 1)
-            replyText.textContent = replyBody.value
-
-            // style it
-            replyText.style.borderColor = "#D9D9D9";
-            replyText.style.marginTop = "10px";
-            replyText.style.borderRadius = "10px";
-            replyText.style.padding = "5px 20px 5px 20px";
-            replyText.style.display = "inline-block";
-            replyText.style.width = "100%";
-            replyText.style.minWidth = "80%"
-            replyText.style.borderWidth = "2px";
-
-            // append it
-            const div = document.getElementById("replies")
-            div.appendChild(replyText)
+            // call backend
+            addReply(id, sender, replyBody.value, token).then(allReplies => {
+                setAllReplies(allReplies)
+            })
 
             // change necessary statuses
             setShow(!show)
@@ -148,6 +153,7 @@ function IndivEmail() {
                 </Box>
                 {/* insert reply elements here */}
                 <Flex direction="column" id="replies">
+                    {AllReplies.map(reply => <ReplyEmail key={reply._id} username={reply.sender_username} message={reply.message}/>)}
                 </Flex>
                 {!show && (
                     <Textarea
