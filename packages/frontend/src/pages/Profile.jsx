@@ -1,108 +1,18 @@
+// src/pages/Profile.jsx
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext"; // ADDED: Import useAuth to access auth state.
 import Navbar from "./Navbar";
 import ListingCard from "../components/ui/ListingCard.jsx";
-
-function Profile() {
-  const user = {
-    name: "Samantha Smith",
-    email: "ssmith23@calpoly.edu",
-    bio: "Hi! I am a 3rd-year business major with a strong interest in entrepreneurship and marketing. I have lots of items in my apartment that I am looking to get rid of. Feel free to dm me with any offers. Very open to negotiating!",
-    listings: 3,
-    pageViews: 42,
-    pendings: 0,
-    reviews: 0,
-  };
-
-  return (
-    <div style={styles.page}>
-      <Navbar />
-
-      <div style={styles.profileContainer}>
-        <div style={styles.leftColumn}>
-          {/* Profile Header */}
-          <div style={styles.profileHeader}>
-            <div style={styles.profilePic}></div>
-            <div>
-              <h2 style={styles.name}>
-                {user.name}{" "}
-                <span role="img" aria-label="edit">
-                  ✏️
-                </span>
-              </h2>
-              <p style={styles.email}>{user.email}</p>
-            </div>
-          </div>
-
-          {/* Bio Section */}
-          <div style={styles.bioBox}>
-            <p style={styles.bioText}>{user.bio}</p>
-          </div>
-
-          {/* Stats Section */}
-          <div style={styles.statsBox}>
-            <p>
-              <strong style={styles.statNumber}>{user.listings}</strong> Listings
-            </p>
-            <p>
-              <strong style={styles.statNumber}>{user.pageViews}</strong> Page Views
-            </p>
-            <p>
-              <strong style={styles.statNumber}>{user.pendings}</strong> Pendings
-            </p>
-            <p>
-              <strong style={styles.statNumber}>{user.reviews}</strong> Reviews
-            </p>
-          </div>
-        </div>
-
-        {/* RIGHT COLUMN: My Listings */}
-        <div style={styles.rightColumn}>
-          <h3 style={styles.listingsHeading}>My Listings</h3>
-          <div style={styles.listingsGrid}>
-          <ListingCard
-              id="2"
-              name="Vintage Lamp"
-              price="$25.00"
-              location="Listing Location"
-              tags={["vintage", "home"]}
-            />
-            <ListingCard
-              id="2"
-              name="Vintage Lamp"
-              price="$25.00"
-              location="Listing Location"
-              tags={["vintage", "home"]}
-            />
-                        <ListingCard
-              id="2"
-              name="Vintage Lamp"
-              price="$25.00"
-              location="Listing Location"
-              tags={["vintage", "home"]}
-            />
-                        <ListingCard
-              id="2"
-              name="Vintage Lamp"
-              price="$25.00"
-              location="Listing Location"
-              tags={["vintage", "home"]}
-            />
-            {/* fix the info and add more cards if needed */}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import { axiosPrivate } from "@/api/axios";
 
 const styles = {
   page: {
     backgroundColor: "#F5F5F5",
     minHeight: "100vh",
   },
-
   profileContainer: {
     display: "grid",
-    gridTemplateColumns: "450px 1fr", 
+    gridTemplateColumns: "450px 1fr",
     columnGap: "35px",
     width: "100%",
     fontFamily: "Inter, sans-serif",
@@ -110,13 +20,8 @@ const styles = {
     paddingLeft: "40px",
     paddingRight: "40px",
   },
-
-  leftColumn: {
-  },
-
-  rightColumn: {
-  },
-
+  leftColumn: {},
+  rightColumn: {},
   profileHeader: {
     display: "flex",
     alignItems: "center",
@@ -140,7 +45,6 @@ const styles = {
     color: "#666",
     fontSize: "14px",
   },
-
   bioBox: {
     backgroundColor: "#E5E5E5",
     padding: "12px",
@@ -152,7 +56,6 @@ const styles = {
     color: "#000",
     margin: 0,
   },
-
   statsBox: {
     display: "grid",
     gridTemplateColumns: "repeat(2, 1fr)",
@@ -167,19 +70,113 @@ const styles = {
     fontWeight: 700,
     fontSize: "16px",
   },
-
   listingsHeading: {
     margin: 0,
     marginBottom: "15px",
     fontSize: "18px",
     fontWeight: 600,
   },
-
   listingsGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(2, 1fr)",
     gap: "20px",
   },
 };
+
+function Profile() {
+  // Get auth state (access token and user details) from AuthContext.
+  const { auth } = useAuth();
+  const [listings, setListings] = useState([]);
+
+  useEffect(() => {
+    async function fetchListings() {
+      // Only fetch listings if a user is logged in.
+      if (auth?.user?.id) {
+        try {
+          const response = await axiosPrivate.get(`/api/listings/user`, {
+            headers: {
+              Authorization: `Bearer ${auth.access_token}`,
+            },
+            params: {
+              userId: `${auth.user.id}`,
+            }
+          });
+          setListings(response.data.data);
+        } catch (error) {
+          console.error(error);
+        }   
+      }
+    }
+    fetchListings();
+  }, []);
+
+  // If no user is logged in, prompt the user to log in.
+  if (!auth?.user) {
+    return <p>Please log in to see your listings.</p>;
+  }
+
+  return (
+    <div style={styles.page}>
+      <Navbar />
+      <div style={styles.profileContainer}>
+        <div style={styles.leftColumn}>
+          <div style={styles.profileHeader}>
+            <div style={styles.profilePic}></div>
+            <div>
+              <h2 style={styles.name}>
+                {auth.user.username}{" "}
+                <span role="img" aria-label="edit">
+                  ✏️
+                </span>
+              </h2>
+              <p style={styles.email}>{auth.user.username}</p>
+            </div>
+          </div>
+          <div style={styles.bioBox}>
+            <p style={styles.bioText}>Your bio goes here.</p>
+          </div>
+          <div style={styles.statsBox}>
+            <p>
+              <strong style={styles.statNumber}>0</strong> Listings
+            </p>
+            <p>
+              <strong style={styles.statNumber}>0</strong> Page Views
+            </p>
+            <p>
+              <strong style={styles.statNumber}>0</strong> Pendings
+            </p>
+            <p>
+              <strong style={styles.statNumber}>0</strong> Reviews
+            </p>
+          </div>
+        </div>
+        <div style={styles.rightColumn}>
+          <h3 style={styles.listingsHeading}>My Listings</h3>
+          <div style={styles.listingsGrid}>
+            {listings.length > 0 ? (
+              listings.map((listing) => (
+                <ListingCard
+                  key={listing._id}
+                  id={listing._id}
+                  name={listing.name}
+                  price={`$${listing.price.toFixed(2)}`}
+                  location={listing.location}
+                  tags={listing.tags}
+                  imageSrc={
+                    listing.photos && listing.photos.length > 0
+                      ? listing.photos[0]
+                      : undefined
+                  }
+                />
+              ))
+            ) : (
+              <p>No listings found.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default Profile;
