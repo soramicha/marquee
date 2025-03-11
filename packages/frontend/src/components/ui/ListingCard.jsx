@@ -67,7 +67,7 @@ function ListingCard({ id, name, price, location, imageSrc, tags, favorited }) {
     setIsFavorite(!isFavorite)
 
     // if we want to favorite it, we will favorite it
-    if (isFavorite) {
+    if (!isFavorite) {
         addFavorite(token, username, id)
     }
     // otherwise, unfavorite it
