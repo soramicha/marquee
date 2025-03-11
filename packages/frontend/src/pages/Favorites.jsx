@@ -47,8 +47,9 @@ const getUserFavs = async (username) => {
   try {
     const response = await axiosPrivate.get('/users', { 
       params: {
-        username: username }
-  })
+        username: username
+      }
+    })
     console.log("Successfully retrieved user!", response.data)
     const user = response.data
     return user[0].favorites
@@ -65,7 +66,7 @@ const getListings = async (listing_id) => {
         id: listing_id
       }
     })
-    console.log("Successfully retrieved listing!". response.data)
+    console.log("Successfully retrieved listing!", response.data)
     return response.data
   }
   catch (error) {

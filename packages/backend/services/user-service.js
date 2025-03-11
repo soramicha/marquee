@@ -5,7 +5,7 @@ export async function getUsers(req, res) {
     let users;
     console.log(req.query.username)
     if (req.query.username) {
-      users = await getUsersFromDB(req.body.username);
+      users = await getUsersFromDB(req.query.username);
     }
     else {
       console.log('username', req.body.username)
