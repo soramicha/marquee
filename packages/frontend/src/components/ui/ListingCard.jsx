@@ -1,5 +1,13 @@
 // src/components/ui/ListingCard.jsx
-import { Box, Image, IconButton, Text, Wrap, WrapItem, Tag } from "@chakra-ui/react";
+import {
+    Box,
+    Image,
+    IconButton,
+    Text,
+    Wrap,
+    WrapItem,
+    Tag,
+} from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
 import { useState } from "react";
 import productImage from "../../assets/grayhoodie.png";
