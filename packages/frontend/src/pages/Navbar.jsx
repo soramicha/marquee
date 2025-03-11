@@ -41,24 +41,41 @@ function Navbar() {
           left="50%"
           transform="translateX(-50%)"
         >
-          MARQUEE
-        </Text>
+            <Flex align="center" maxW="1200px" mx="auto">
+                {/* Centered Title */}
+                <Text
+                    fontSize="xl"
+                    fontWeight="bold"
+                    position="absolute"
+                    left="50%"
+                    transform="translateX(-50%)"
+                >
+                    MARQUEE
+                </Text>
 
-        {/* Navigation Links */}
-        <Flex ml={10} gap={6}>
-          <Link to="/home">
-            <Text fontSize="md" color="white" _hover={{ textDecoration: "underline" }}>
-              Home
-            </Text>
-          </Link>
-          <Link to="/email">
-            <Text fontSize="md" color="white" _hover={{ textDecoration: "underline" }}>
-              Messages
-            </Text>
-          </Link>
-        </Flex>
+                {/* Navigation Links */}
+                <Flex ml={10} gap={6}>
+                    <Link to="/home">
+                        <Text
+                            fontSize="md"
+                            color="white"
+                            _hover={{ textDecoration: "underline" }}
+                        >
+                            Home
+                        </Text>
+                    </Link>
+                    <Link to="/email">
+                        <Text
+                            fontSize="md"
+                            color="white"
+                            _hover={{ textDecoration: "underline" }}
+                        >
+                            Messages
+                        </Text>
+                    </Link>
+                </Flex>
 
-        <Spacer />
+                <Spacer />
 
         {/* Right Side: Favorites Icon, Create Listing, and Avatar/Sign In */}
         <Flex align="center" gap={4}>
