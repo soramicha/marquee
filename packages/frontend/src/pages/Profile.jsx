@@ -1,5 +1,6 @@
 import Navbar from "./Navbar";
 import ListingCard from "../components/ui/ListingCard.jsx";
+import exitDoor from "../assets/exitDoor.png"
 
 function Profile() {
   const user = {
@@ -18,14 +19,29 @@ function Profile() {
 
       <div style={styles.profileContainer}>
         <div style={styles.leftColumn}>
+
           {/* Profile Header */}
           <div style={styles.profileHeader}>
             <div style={styles.profilePic}></div>
             <div>
-              <h2 style={styles.name}>
-                {user.name}{" "}
+              <h2
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  margin: 0,
+                }}
+              >
+                {user.name}
                 <span role="img" aria-label="edit">
                   ✏️
+                </span>
+                <span role="img" aria-label="logout">
+                  <img
+                    src={exitDoor}
+                    alt="Logout button"
+                    style={{ width: "25px", height: "25px", marginLeft: "195px"}}
+                  />
                 </span>
               </h2>
               <p style={styles.email}>{user.email}</p>
@@ -79,7 +95,7 @@ function Profile() {
               location="Listing Location"
               tags={["vintage", "home"]}
             />
-                        <ListingCard
+              <ListingCard
               id="2"
               name="Vintage Lamp"
               price="$25.00"
@@ -139,6 +155,11 @@ const styles = {
     margin: 0,
     color: "#666",
     fontSize: "14px",
+  },
+
+  logoutButton: {
+    width: "25px",
+    height: "25px",
   },
 
   bioBox: {
