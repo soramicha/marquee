@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { registerUser, authenticateUser, loginUser, logout, refreshUserTokens } from "./auth.js";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose"
-import { deleteUser, getUsers } from "./services/user-service.js";
+import { addFavorite, deleteUser, getUsers, removeFavorite } from "./services/user-service.js";
 import userModel from "./models/user-model.js";
 import { deleteListing, getListing, postListing, updateListing } from "./services/listing-service.js";
 
@@ -42,6 +42,9 @@ app.post("/listing", authenticateUser, postListing);
 app.get("/listing", getListing);
 app.delete('/listing', authenticateUser, deleteListing);
 app.patch('/listing', authenticateUser, updateListing);
+
+app.patch('/addfav', authenticateUser, addFavorite)
+app.patch('/remfav', authenticateUser, removeFavorite)
 
 app.get("/protected", authenticateUser, (req, res) => {
     // this code will only run if authenticateUser calls next()
