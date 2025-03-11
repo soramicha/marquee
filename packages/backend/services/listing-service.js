@@ -54,7 +54,7 @@ export async function getListing(req, res) {
     try {
         const id = req.query.id.toString();
         const result = await getListingFromDB(id);
-
+        console.log("fetched listing!")
         if (!result.success) {
             return res.status(400).json({ error: result.error });
         }

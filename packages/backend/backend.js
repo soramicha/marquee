@@ -9,8 +9,9 @@ import {
     refreshUserTokens,
 } from "./auth.js";
 import cookieParser from "cookie-parser";
-import mongoose from "mongoose";
-import { deleteUser, getUsers, findUserById } from "./services/user-service.js";
+import mongoose from "mongoose"
+import { addFavorite, deleteUser, getUsers, removeFavorite, findUserById } from "./services/user-service.js";
+
 import userModel from "./models/user-model.js";
 import {
     deleteListing,
@@ -68,6 +69,9 @@ app.post("/email", authenticateUser, postEmail);
 app.get("/email", authenticateUser, getEmail);
 app.patch("/email", authenticateUser, updateReadStatus);
 app.post("/email/reply", authenticateUser, addReplytoEmail);
+
+app.patch('/addfav', authenticateUser, addFavorite)
+app.patch('/remfav', authenticateUser, removeFavorite)
 
 app.get("/protected", authenticateUser, (req, res) => {
     // this code will only run if authenticateUser calls next()
