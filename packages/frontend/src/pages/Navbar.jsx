@@ -1,10 +1,25 @@
 // src/pages/Navbar.jsx
 import React from "react";
-import { Box, Flex, Text, Spacer, Image, IconButton } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Text,
+  Spacer,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Image,
+  Button,
+} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext"; // Adjust path as needed
 
 function Navbar() {
+  const { auth, logout } = useAuth();
+
   return (
     <Box
       bg="#2E55C4"
@@ -45,9 +60,8 @@ function Navbar() {
 
         <Spacer />
 
-        {/* Right Side: Favorites Icon, Create Listing, and Avatar */}
+        {/* Right Side: Favorites Icon, Create Listing, and Avatar/Sign In */}
         <Flex align="center" gap={4}>
-          {/* Favorites Icon */}
           <Link to="/favorites">
             <IconButton
               aria-label="Favorites"
@@ -62,13 +76,38 @@ function Navbar() {
               Create Listing
             </Text>
           </Link>
-          <Image
-            src="cat.png"
-            boxSize="50px"
-            borderRadius="full"
-            fit="cover"
-            alt="Cat"
-          />
+
+          {auth?.username ? (
+            <Menu>
+              <MenuButton
+                as={Button}
+                bg="transparent"
+                _hover={{ bg: "transparent" }}
+                _active={{ bg: "transparent" }}
+                p={0}
+              >
+                <Image
+                  src="cat.png"
+                  boxSize="50px"
+                  borderRadius="full"
+                  fit="cover"
+                  alt="Profile"
+                />
+              </MenuButton>
+              <MenuList color="black">
+                <MenuItem as={Link} to="/profile">
+                  My Profile
+                </MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
+              </MenuList>
+            </Menu>
+          ) : (
+            <Link to="/login">
+              <Text fontSize="md" color="white" _hover={{ textDecoration: "underline" }}>
+                Sign In
+              </Text>
+            </Link>
+          )}
         </Flex>
       </Flex>
     </Box>
