@@ -1,12 +1,21 @@
 import UserModel from "../models/user-model.js";
 
 export async function getUsers(req, res) {
-    try {
-        const users = await getUsersFromDB(req.body.username);
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ message: "Error fetching users", error });
+  try {
+    let users;
+    console.log(req.query.username)
+    if (req.query.username) {
+      users = await getUsersFromDB(req.query.username);
     }
+    else {
+      console.log('username', req.body.username)
+      users = await getUsersFromDB(req.body.username);
+    }
+
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching users", error });
+  }
 }
 
 export async function deleteUser(req, res) {
@@ -65,13 +74,47 @@ export async function addUser(user) {
 }
 
 // jessica code here
-export async function addFavorite(username, listing_id) {
-    try {
-        // retrieve user from database
-        const user = await getUsersFromDB(username);
-        // add listing_id inside favorites array
-        // push to database
-    } catch (error) {
-        return { success: false, error: error.message };
+export async function addFavorite(req, res) {
+  try {
+    const username = req.query.username;
+    const listing_id = req.query.listing_id;
+    // retrieve user from database if length of array is
+    const user = await UserModel.findOne({ username });
+    // if user not found
+    if (!user) {
+      return { success: false, error: "User not found" };
     }
+    // add listing_id inside favorites array
+    user.favorites.push(listing_id);
+    // push to database
+    await user.save();
+    console.log("Successfully added listing id to favorites")
+    res.status(200).json("Successfully added listing id to favorites!")
+    return { success: true }
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function removeFavorite(req, res) {
+  try {
+    const username = req.query.username;
+    const listing_id = req.query.listing_id;
+    // retrieve user from database
+    const user = await UserModel.findOne({ username });
+    // if user not found
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+    // remove listing_id from favorites array
+    user.favorites = user.favorites.filter(id => id.toString() !== listing_id);
+    // push to database
+    await user.save();
+    console.log("Successfully removed listing id from favorites")
+    res.status(200).json("Successfully removed listing id from favorites!")
+    return { success: true }
+
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
 }
