@@ -68,7 +68,9 @@ export async function addFavorite(username, listing_id) {
     // retrieve user from database
     const user = await getUsersFromDB(username);
     // add listing_id inside favorites array
+    currentUser.favorites.push(listing_id);
     // push to database
+    await user.save();
 
   } catch (error) {
     return { success: false, error: error.message };
