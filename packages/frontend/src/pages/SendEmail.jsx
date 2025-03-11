@@ -2,9 +2,9 @@ import { Center, Box, Text, Button, Input, Textarea } from "@chakra-ui/react";
 import Navbar from "./Navbar";
 import { useState, useRef } from "react";
 import emailjs from "@emailjs/browser";
-import axios from "axios";
 //import { useAuth } from "@/context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { axiosPrivate } from "@/api/axios";
 
 function SendEmail() {
     // create a ref hook
@@ -33,8 +33,8 @@ function SendEmail() {
         const token = localStorage.getItem("authToken");
         // call backend
         try {
-            const response = await axios.post(
-                "http://localhost:8000/email",
+            const response = await axiosPrivate.post(
+                "/email",
                 formData,
                 {
                     headers: {

@@ -2,14 +2,14 @@ import IndivEmailComponent from "@/components/ui/IndivEmailComponent";
 import Navbar from "./Navbar";
 import { Box, Button, Flex } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { axiosPrivate } from "@/api/axios";
 //import { useAuth } from "@/context/AuthContext";
 
 const getAllEmails = async (token) => {
     try {
         //const token = localStorage.getItem("authToken")
-        const response = await axios.get("http://localhost:8000/email", {
+        const response = await axiosPrivate.get("/email", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

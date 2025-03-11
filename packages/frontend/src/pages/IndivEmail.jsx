@@ -2,12 +2,12 @@ import { Center, Box, Text, Flex, Button, Textarea } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import ReplyEmail from "@/components/ui/ReplyEmail";
+import { axiosPrivate } from "@/api/axios";
 
 const getIndivEmail = async (id, token) => {
     try {
-        const response = await axios.get("http://localhost:8000/email", {
+        const response = await axiosPrivate.get("/email", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -27,7 +27,7 @@ const getIndivEmail = async (id, token) => {
 
 const getUsersById = async (id, token) => {
     try {
-        const response = await axios.get("http://localhost:8000/findUser", {
+        const response = await axiosPrivate.get("/findUser", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -44,8 +44,8 @@ const getUsersById = async (id, token) => {
 
 const updateReadStatus = async (id, token) => {
     try {
-        const res = await axios.patch(
-            "http://localhost:8000/email",
+        const res = await axiosPrivate.patch(
+            "/email",
             { isRead: true },
             {
                 headers: {
@@ -67,8 +67,8 @@ const updateReadStatus = async (id, token) => {
 
 const addReply = async (id, username, message, token) => {
     try {
-        const response = await axios.post(
-            "http://localhost:8000/email/reply",
+        const response = await axiosPrivate.post(
+            "/email/reply",
             { sender_username: username, message: message },
             {
                 headers: {

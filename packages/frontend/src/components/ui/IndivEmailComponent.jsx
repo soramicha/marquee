@@ -1,11 +1,11 @@
 import { Box, Flex, Center, Text } from "@chakra-ui/react";
-import axios from "axios";
 import { useState } from "react";
+import { axiosPrivate } from "@/api/axios";
 
 // get username from props.sender_id
 const getUsersById = async (id, token) => {
     try {
-        const response = await axios.get("http://localhost:8000/findUser", {
+        const response = await axiosPrivate.get("/findUser", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
