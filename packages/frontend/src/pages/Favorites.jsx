@@ -5,44 +5,6 @@ import Navbar from "./Navbar";
 import ListingCard from "../components/ui/ListingCard";
 import { axiosPrivate } from "@/api/axios";
 
-const addFavorite = async (token, username, listing_id) => {
-  try {
-    // call the backend
-    await axiosPrivate.patch("/addFav", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      params: {
-        username: username,
-        listing_id: listing_id
-      }
-    })
-    console.log("Successfully added listing to favorites!")
-  }
-  catch (error) {
-    console.log("Error adding listing to favorites:", error)
-  }
-}
-
-const removeFavorite = async (token, username, listing_id) => {
-  try {
-    // call the backend
-    await axiosPrivate.patch("/remFav", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      params: {
-        username: username,
-        listing_id: listing_id
-      }
-    })
-    console.log("Successfully added listing to favorites!")
-  }
-  catch (error) {
-    console.log("Error removing listing to favorites:", error)
-  }
-}
-
 const getUserFavs = async (username) => {
   try {
     const response = await axiosPrivate.get('/users', {
@@ -82,8 +44,6 @@ function Favorites() {
   const [favorites, setFavorites] = useState([])
 
   const username = localStorage.getItem('username')
-  console.log(username)
-  const token = localStorage.getItem('authToken')
 
   useEffect(() => {
     getUserFavs(username).then(res => {
@@ -115,6 +75,7 @@ function Favorites() {
               location={item.location}
               tags={item.tags}
               imageSrc={item.imageSrc}
+              favorited="true"
             />
             ))}
           </SimpleGrid>

@@ -78,6 +78,7 @@ export async function addFavorite(req, res) {
   try {
     const username = req.query.username;
     const listing_id = req.query.listing_id;
+    console.log(req.query.username, req.query.listing_id, " are the username and listing id")
     // retrieve user from database if length of array is
     const user = await UserModel.findOne({ username });
     // if user not found
@@ -88,6 +89,7 @@ export async function addFavorite(req, res) {
     user.favorites.push(listing_id);
     // push to database
     await user.save();
+    console.log("Succesfully added listing id to favorites")
     res.status(200).json("Successfully added listing id to favorites!"); 
   } catch (error) {
     return { success: false, error: error.message };
@@ -98,6 +100,7 @@ export async function removeFavorite(req, res) {
   try {
     const username = req.query.username;
     const listing_id = req.query.listing_id;
+    console.log(req.query.username, req.query.listing_id, " are the username and listing id")
     // retrieve user from database if length of array is
     const user = await UserModel.findOne({ username });
     // if user not found
@@ -108,6 +111,7 @@ export async function removeFavorite(req, res) {
     user.favorites = user.favorites.filter(id => id.toString() !== listing_id);
     // push to database
     await user.save();
+    console.log("Succesfully removed listing id to favorites")
     res.status(200).json("Successfully removed listing id from favorites!"); 
   } catch (error) {
     return { success: false, error: error.message };

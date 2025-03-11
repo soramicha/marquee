@@ -10,7 +10,7 @@ import {
 } from "./auth.js";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
-import { deleteUser, getUsers, findUserById } from "./services/user-service.js";
+import { deleteUser, getUsers, findUserById, removeFavorite, addFavorite } from "./services/user-service.js";
 import userModel from "./models/user-model.js";
 import {
     deleteListing,
@@ -62,6 +62,9 @@ app.post("/listing", authenticateUser, postListing);
 app.get("/listing", getListing);
 app.delete("/listing", authenticateUser, deleteListing);
 app.patch("/listing", authenticateUser, updateListing);
+
+app.patch("/addFav", authenticateUser, addFavorite);
+app.patch("/remFav", authenticateUser, removeFavorite);
 
 // email service
 app.post("/email", authenticateUser, postEmail);
