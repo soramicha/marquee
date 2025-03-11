@@ -4,6 +4,7 @@ import Listing from "../models/listing-model.js";
 
 // ADDED: Function to fetch listings for a specific user with permission check.
 export async function getListingsByUser(req, res) {
+    // TODO: add objectID to user model, under listings field
   try {
     const { userId } = req.query;
     // ADDED: Check that the requesting user is the same as the one in the token.
