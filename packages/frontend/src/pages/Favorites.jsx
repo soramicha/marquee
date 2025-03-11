@@ -113,6 +113,7 @@ function Favorites() {
                 location={item.location}
                 tags={item.tags}
                 imageSrc={item.imageSrc}
+                favorited="true"
               />
             ))}
           </SimpleGrid>

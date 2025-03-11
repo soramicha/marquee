@@ -3,12 +3,70 @@ import { Box, Image, IconButton, Text, Wrap, WrapItem, Tag } from "@chakra-ui/re
 import { FaHeart } from "react-icons/fa";
 import { useState } from "react";
 import productImage from "../../assets/grayhoodie.png";
+import { axiosPrivate } from "@/api/axios";
 
-function ListingCard({ id, name, price, location, imageSrc, tags }) {
+const addFavorite = async (token, username, listing_id) => {
+  try {
+    // call the backend
+    await axiosPrivate.patch("/addFav", {}, 
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        username: username,
+        listing_id: listing_id
+      }
+    })
+    console.log("Successfully added listing to favorites!")
+  }
+  catch (error) {
+    console.log("Error adding listing to favorites.")
+  }
+}
+
+const removeFavorite = async (token, username, listing_id) => {
+  try {
+    // call the backend
+    await axiosPrivate.patch("/remFav", {}, 
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        username: username,
+        listing_id: listing_id
+      }
+    })
+    console.log("Successfully removed listing from favorites!")
+  }
+  catch (error) {
+    console.log("Error removing listing from favorites.")
+  }
+}
+
+function ListingCard({ id, name, price, location, imageSrc, tags, favorited }) {
   // Local state to toggle heart color (dummy functionality)
-  const [isFavorite, setIsFavorite] = useState(false);
-
+  const [isFavorite, setIsFavorite] = useState(favorited === "true" ? true : false);
+  const token = localStorage.getItem('authToken')
+  const username = localStorage.getItem('username')
+  console.log(username, "this is username")
+  console.log(token, "this is token")
   const displayedImage = imageSrc || productImage;
+
+  const FavoriteStatus = () => {
+    // changing colors of favorite / unfavorite button
+    setIsFavorite(!isFavorite)
+
+    // if we want to favorite it, we will favorite it
+    if (isFavorite) {
+        addFavorite(token, username, id)
+    }
+    // otherwise, unfavorite it
+    else {
+      removeFavorite(token, username, id)
+    }
+  }
 
   return (
     <Box p={4} w="100%">
@@ -22,7 +80,7 @@ function ListingCard({ id, name, price, location, imageSrc, tags }) {
         />
         <IconButton
           icon={<FaHeart />}
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={FavoriteStatus}
           color={isFavorite ? "#2E55C4" : "black"}
           position="absolute"
           top="2"

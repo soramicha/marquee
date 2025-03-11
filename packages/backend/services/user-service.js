@@ -86,6 +86,7 @@ export async function addFavorite(req, res) {
     user.favorites.push(listing_id);
     // push to database
     await user.save();
+    console.log("Successfully added listing id to favorites")
     res.status(200).json("Successfully added listing id to favorites!")
     return { success: true }
   } catch (error) {
@@ -107,6 +108,7 @@ export async function removeFavorite(req, res) {
     user.favorites = user.favorites.filter(id => id.toString() !== listing_id);
     // push to database
     await user.save();
+    console.log("Successfully removed listing id from favorites")
     res.status(200).json("Successfully removed listing id from favorites!")
     return { success: true }
 
