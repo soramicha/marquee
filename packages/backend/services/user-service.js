@@ -42,12 +42,14 @@ export async function getUsersFromDB(username) {
   }
 }
 
-export async function findUserById(id) {
+// used to just be "id" as parameter
+export async function findUserById(req, res) {
   try {
-    return await UserModel.findById(id);
+    const user = await UserModel.findById(req.query.id.toString());
+    return res.status(200).json(user);
   } catch (error) {
     console.error(error);
-    throw error;
+    res.status(500).json({ error: "Internal server error" });
   }
 }
 
