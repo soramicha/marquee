@@ -65,10 +65,32 @@ export async function addUser(user) {
 // jessica code here
 export async function addFavorite(username, listing_id) {
   try {
-    // retrieve user from database
-    const user = await getUsersFromDB(username);
+    // retrieve user from database if length of array is
+    const user = await UserModel.findOne({ username });
+    // if user not found
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
     // add listing_id inside favorites array
-    currentUser.favorites.push(listing_id);
+    user.favorites.push(listing_id);
+    // push to database
+    await user.save();
+
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function removeFavorite(username, listing) {
+  try {
+    // retrieve user from database if length of array is
+    const user = await UserModel.findOne({ username });
+    // if user not found
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+    // remove listing_id from favorites array
+    user.favorites = user.favorites.filter(id => id.toString() !== listing_id);
     // push to database
     await user.save();
 
