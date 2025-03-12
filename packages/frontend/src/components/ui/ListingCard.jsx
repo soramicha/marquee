@@ -4,7 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import { useState } from "react";
 import productImage from "../../assets/grayhoodie.png";
 
-function ListingCard({ id, name, price, location, imageSrc, tags }) {
+function ListingCard({ id, name, price, location, imageSrc, categories }) {
   // Local state to toggle heart color (dummy functionality)
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -38,13 +38,21 @@ function ListingCard({ id, name, price, location, imageSrc, tags }) {
       </Text>
       <Text fontSize="sm">{price}</Text>
       <Text fontSize="sm">{location}</Text>
-      {tags && tags.length > 0 && (
+      {/* {tags && tags.length > 0 && (
         <Wrap spacing={2} mt={2}>
           {tags.map((tag) => (
             <WrapItem key={tag}>
               <Tag size="sm" variant="solid" colorScheme="blue">
                 {tag}
+              </Tag> */}
+      {categories && categories.length > 0 && (
+        <Wrap spacing={2} mt={2}>
+          {categories.map((category) => (
+            <WrapItem key={category}>
+              <Tag size="sm" variant="solid" colorScheme="blue">
+                {category} 
               </Tag>
+             
             </WrapItem>
           ))}
         </Wrap>

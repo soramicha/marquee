@@ -77,16 +77,18 @@ function Home() {
   const [selectedLocations, setSelectedLocations] = useState([]);
 
   // Filter the recommended items based on selected categories and locations.
-  const filteredItems = recommendedItems.filter((item) => {
+  console.log("NEW CONSOLE")
+  console.log("recommendedItems:", recommendedItems)
+  const filteredItems = recommendedItems.filter((item) => { 
     const matchesCategory =
       selectedCategories.length === 0 ||
       selectedCategories.includes(item.category);
     const matchesLocation =
       selectedLocations.length === 0 ||
       selectedLocations.includes(item.location);
+    console.log("matchesCategory:", matchesCategory, "item:", item, "item.category:", item.category)
     return matchesCategory && matchesLocation;
   });
-  console.log("filteredItems:", filteredItems)
 
 
   return (
@@ -118,7 +120,7 @@ function Home() {
                     name={item.name}
                     price={item.price}
                     location={item.location}
-                    tags={item.tags}
+                    categories ={item.category}
                   />
                 </Link>
               ))
