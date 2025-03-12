@@ -1,4 +1,4 @@
-import { Heading, Box, Text, Button, Input, Flex } from "@chakra-ui/react";
+import { Heading, Box, Text, Button, Input, Flex, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -8,10 +8,25 @@ function Login() {
     const [password, setPassword] = useState("");
     const { auth, login } = useAuth();
     let navigate = useNavigate();
+    const toast = useToast();
+    const [isLoading, setIsLoading] = useState(false);
 
     const logUser = async () => {
-        console.log(email, password);
-        await login(email, password);
+        setIsLoading(true);
+        try {
+            await login(email, password);
+            navigate("/home");
+        } catch (error) {
+            toast({
+                title: "Login failed",
+                description: error.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -99,6 +114,8 @@ function Login() {
                             w="100%"
                             borderRadius={10}
                             backgroundColor="#2E55C4"
+                            isLoading={isLoading}
+                            loadingText="Signing In"
                         >
                             <Text color="white">Sign In</Text>
                         </Button>

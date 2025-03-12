@@ -88,8 +88,6 @@ function ListingCard({ id, name, price, location, imageSrc, tags, favorited }) {
     );
     const token = localStorage.getItem("authToken");
     const username = localStorage.getItem("username");
-    console.log(username, "this is username");
-    console.log(token, "this is token");
     const displayedImage = imageSrc || productImage;
 
     const FavoriteStatus = () => {

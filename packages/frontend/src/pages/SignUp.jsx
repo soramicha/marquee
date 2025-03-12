@@ -3,11 +3,10 @@ import {
     Flex,
     Box,
     Text,
-    Center,
     Button,
     Input,
     FormControl,
-    FormErrorMessage,
+    useToast
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,8 +17,9 @@ function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmedPassword, setConfirmedPassword] = useState("");
-    const [error, setError] = useState("");
     const { auth, signup } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
+    const toast = useToast();
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -30,32 +30,43 @@ function SignUp() {
 
     const signUpUser = async (e) => {
         e.preventDefault();
-        // Reset error state
-        setError("");
 
-        // Basic validation
         if (!school || !email || !password || !confirmedPassword) {
-            setError("All fields are required.");
+            toast({
+                title: "Missing fields",
+                description: "Please fill in all required fields",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
             return;
         }
 
         if (password !== confirmedPassword) {
-            setError("Passwords do not match.");
+            toast({
+                title: "Password mismatch",
+                description: "Passwords do not match",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
             return;
         }
 
-        /*const formData = {
-          "username": email,
-          "password": password,
-        }*/
-
+        setIsLoading(true);
         try {
             await signup(email, password);
-            //const response = await axios.post('http://localhost:8000/signup', formData);
-            //console.log('User added to MongoDB successfully:', response.data);
+            navigate("/home");
         } catch (error) {
-            console.error("Error submitting form:", error);
-            setError("An error occurred while submitting the form.");
+            toast({
+                title: "Sign up failed",
+                description: error.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -89,7 +100,7 @@ function SignUp() {
                             </Text>
                         </Flex>
                         <form onSubmit={signUpUser} style={{ width: "100%" }}>
-                            <FormControl isInvalid={!!error} isRequired>
+                            <FormControl isRequired>
                                 <Flex
                                     flexDirection="column"
                                     justify="center"
@@ -147,13 +158,6 @@ function SignUp() {
                                         }
                                         type="password"
                                     />
-                                    {error && (
-                                        <Center>
-                                            <FormErrorMessage>
-                                                {error}
-                                            </FormErrorMessage>
-                                        </Center>
-                                    )}
                                     <Button
                                         type="submit"
                                         borderWidth={0}
@@ -161,6 +165,8 @@ function SignUp() {
                                         w="90%"
                                         borderRadius={10}
                                         backgroundColor="#2E55C4"
+                                        isLoading={isLoading}
+                                        loadingText="Creating Account"
                                     >
                                         <Text color="white">Sign Up</Text>
                                     </Button>
