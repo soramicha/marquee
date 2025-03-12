@@ -39,6 +39,10 @@ jobs:
               with:
                   name: node-app
                   path: ./artifact-folder
+            
+            - name: List files in ./artifact-folder after downloading artifact
+              run: ls -R ./artifact-folder #added this whole part
+                
 
     deploy:
         runs-on: ubuntu-latest
@@ -55,10 +59,10 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   name: node-app
-                  path: ./artifact-folder
+                  path: ./artifact-folder # added path
 
             - name: Unzip artifact for deployment
-              run: unzip release.zip
+              run: unzip node-app/release.zip # changed
 
             - name: Login to Azure
               uses: azure/login@v2
