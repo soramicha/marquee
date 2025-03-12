@@ -34,17 +34,14 @@ jobs:
               run: zip release.zip ./* -r
               working-directory: ./packages/backend
 
-            - name: Create artifact folder
-              run: mkdir -p ./artifact-folder # added this whole part
-
             - name: Upload artifact for deployment job
               uses: actions/upload-artifact@v4
               with:
                   name: node-app
-                  path: ./artifact-folder
+                  path: ./packages/backend
             
-            - name: List files in ./artifact-folder after downloading artifact
-              run: ls -R ./artifact-folder # added this whole part
+            - name: List files in packages/backend/
+              run: ls -R ./packages/backend # added this whole part
                 
 
     deploy:
@@ -62,10 +59,10 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   name: node-app
-                  path: ./artifact-folder # added path
+                  path: ./packages/backend # added path
 
             - name: Unzip artifact for deployment
-              run: unzip node-app/release.zip # changed
+              run: unzip release.zip
 
             - name: Login to Azure
               uses: azure/login@v2
