@@ -25,15 +25,26 @@ import {
 } from "./services/listing-service.js";
 import { initializeApp } from "firebase-admin/app";
 import admin from "firebase-admin";
-import serviceAccount from "./marquee-7b1a9-firebase-adminsdk-fbsvc-e1820b4288.json" assert { type: "json" };
 import {
     getEmail,
     postEmail,
     updateReadStatus,
     addReplytoEmail,
 } from "./services/email-service.js";
+import fs from "fs";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import { join } from "path";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const serviceAccount = JSON.parse(
+    fs.readFileSync(
+        join(__dirname, './marquee-7b1a9-firebase-adminsdk-fbsvc-e1820b4288.json')
+    )
+);
 
 // Firebase initialization
 initializeApp({
