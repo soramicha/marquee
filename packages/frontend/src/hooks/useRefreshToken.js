@@ -9,6 +9,7 @@ const useRefreshToken = () => {
             const response = await axiosPrivate.get('/refresh');
             setAuth(prev => ({
                 ...prev,
+                username,
                 access_token: response.data.access_token,
             }));
             initializeFirebaseAuth(response.data.access_token);

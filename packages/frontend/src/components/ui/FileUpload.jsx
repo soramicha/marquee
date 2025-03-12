@@ -51,7 +51,13 @@ const FileUpload = ({ label, accept, onChange }) => {
     return (
         <Box mb={5} >
             <Text fontSize="sm">{label}</Text>
-            <Box p={4} border="2px dashed" borderColor="gray.300" borderRadius="md" textAlign="center">
+            <Box
+                p={4}
+                border="2px dashed"
+                borderColor="gray.300"
+                borderRadius="md"
+                textAlign="center"
+            >
                 <Input
                     type="file"
                     accept={accept}
@@ -61,7 +67,12 @@ const FileUpload = ({ label, accept, onChange }) => {
                     multiple
                 />
                 <label htmlFor={`${label}-input`}>
-                    <Button as="span" bgColor="#2E55C4" color="white" cursor="pointer">
+                    <Button
+                        as="span"
+                        bgColor="#2E55C4"
+                        color="white"
+                        cursor="pointer"
+                    >
                         Upload {label}
                     </Button>
                 </label>

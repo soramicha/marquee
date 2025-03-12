@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 // FIELDS:
-// STATUS(required) 
+// STATUS(required)
 // NAME(required)
 // PRICE(required)
 // CATEGORY(required)
@@ -12,7 +12,6 @@ import mongoose from "mongoose";
 // LOCATION(required)
 // CONDITION(required)
 // USER/SELLER(required)
-
 
 const ListingSchema = new mongoose.Schema(
   {

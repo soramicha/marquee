@@ -2,10 +2,12 @@ import { createContext, useContext, useState } from 'react';
 import { axiosPrivate } from '@/api/axios';
 import { authenticateWithFirebase } from '@/utils/firebase-auth';
 import { auth as firebaseAuth } from "@/config/firebase-config";
+import { useNavigate } from 'react-router-dom';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState({ access_token: null, firebaseUID: null });
+    const [auth, setAuth] = useState({ access_token: null, firebaseUID: null, username: null });
+    const navigate = useNavigate();
 
     const initializeFirebaseAuth = async (access_token) => {
         try {
@@ -32,9 +34,13 @@ export const AuthProvider = ({ children }) => {
             });
             setAuth(prev => ({
                 ...prev,
+                username,
                 access_token: response.data.access_token
             }));
+            localStorage.setItem("authToken", response.data.access_token);
+            localStorage.setItem("username", username);
             await initializeFirebaseAuth(response.data.access_token);
+            navigate('/home')
         } catch (error) {
             throw error;
         }
@@ -49,22 +55,29 @@ export const AuthProvider = ({ children }) => {
             });
             setAuth(prev => ({
                 ...prev,
+                username,
                 access_token: response.data.access_token
             }));
+
+            localStorage.setItem("authToken", response.data.access_token);
+            localStorage.setItem("username", username);
             await initializeFirebaseAuth(response.data.access_token);
+            navigate('/home');
         } catch (error) {
             console.error(error);
         }
     };
 
     const logout = async () => {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("username");
         setAuth(prev => ({
-            ...prev,
-            access_token: null,
-            firebaseUID: null
+          ...prev,
+          access_token: null,
+          firebaseUID: null
         }));        
         try {
-            const response = await axiosPrivate.get("/logout");
+            await axiosPrivate.get("/logout");
         } catch (error) {
             console.error(error);
         }
@@ -78,9 +91,9 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
-}
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};

@@ -186,7 +186,7 @@ function CreateListing() {
 
     return (
         <Box h="100vh" w="100vw" bg="white" overflow="scroll">
-            <Navbar/>
+            <Navbar />
             <Center>
                 <Box mt={150} w={{ base: "90%", md: "80%", lg: "60%" }}>
                     <form onSubmit={handleSubmit}>
@@ -216,11 +216,15 @@ function CreateListing() {
                                     width="100%"
                                     type="text"
                                     value={itemName}
-                                    onChange={(e) => setItemName(e.target.value)}
+                                    onChange={(e) =>
+                                        setItemName(e.target.value)
+                                    }
                                     required
                                 />
 
-                                <Text fontSize="sm" mt={5}>Category</Text>
+                                <Text fontSize="sm" mt={5}>
+                                    Category
+                                </Text>
                                 <Input
                                     borderWidth={1}
                                     borderRadius="10px"
@@ -230,11 +234,15 @@ function CreateListing() {
                                     width="100%"
                                     type="text"
                                     value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
+                                    onChange={(e) =>
+                                        setCategory(e.target.value)
+                                    }
                                     required
                                 />
 
-                                <Text fontSize="sm" mt={5}>Description</Text>
+                                <Text fontSize="sm" mt={5}>
+                                    Description
+                                </Text>
                                 <Input
                                     borderWidth={1}
                                     borderRadius="10px"
@@ -245,11 +253,16 @@ function CreateListing() {
                                     height="250px"
                                     type="text"
                                     value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
+                                    onChange={(e) =>
+                                        setDescription(e.target.value)
+                                    }
                                     required
                                 />
 
-                                <Flex direction={{ base: "column", md: "row" }} mt={5}>
+                                <Flex
+                                    direction={{ base: "column", md: "row" }}
+                                    mt={5}
+                                >
                                     <Box flex="1">
                                         <Text fontSize="sm">Price</Text>
                                         <Input
@@ -261,31 +274,48 @@ function CreateListing() {
                                             width="100%"
                                             type="text"
                                             value={price}
-                                            onChange={(e) => setPrice(e.target.value)}
+                                            onChange={(e) =>
+                                                setPrice(e.target.value)
+                                            }
                                             required
                                         />
                                     </Box>
-                                    <Box flex="1" mt={{ base: 5, md: 0 }} ml={{ md: 5 }}>
+                                    <Box
+                                        flex="1"
+                                        mt={{ base: 5, md: 0 }}
+                                        ml={{ md: 5 }}
+                                    >
                                         <Text fontSize="sm">Condition</Text>
-                                        <Select 
+                                        <Select
                                             borderWidth={1}
-                                            borderRadius="10px" 
+                                            borderRadius="10px"
                                             color="#989898"
                                             backgroundColor="white"
                                             mt={1}
                                             width="100%"
                                             value={condition}
-                                            onChange={(e) => setCondition(e.target.value)}
+                                            onChange={(e) =>
+                                                setCondition(e.target.value)
+                                            }
                                             required
                                         >
-                                            {conditions.map((condition, index) => (
-                                                <option key={index} value={condition}>{condition}</option>
-                                            ))}    
+                                            {conditions.map(
+                                                (condition, index) => (
+                                                    <option
+                                                        key={index}
+                                                        value={condition}
+                                                    >
+                                                        {condition}
+                                                    </option>
+                                                )
+                                            )}
                                         </Select>
                                     </Box>
                                 </Flex>
 
-                                <Text fontSize="sm" mt={5}>Location</Text>
+                                <Text fontSize="sm" mt={5}>
+                                    Location
+                                </Text>
                                 <Input
                                     borderWidth={1}
                                     borderRadius="10px"
@@ -295,16 +325,35 @@ function CreateListing() {
                                     width="100%"
                                     type="text"
                                     value={location}
-                                    onChange={(e) => setLocation(e.target.value)}
+                                    onChange={(e) =>
+                                        setLocation(e.target.value)
+                                    }
                                     required
                                 />
                             </Box>
-                            <Box flex="1" mt={{ base: 10, md: 0 }} ml={{ md: 10 }}>
-                                <FileUpload label="Photos" accept=".jpg, .png, .jpeg" onChange={setPhotos} />
-                                <FileUpload label="Videos" accept="video/*" onChange={setVideos} />
-                                <Text fontSize="sm">Tags</Text>
+                            <Box
+                                flex="1"
+                                mt={{ base: 10, md: 0 }}
+                                ml={{ md: 10 }}
+                            >
+                                <FileUpload
+                                    label="Photos"
+                                    accept=".jpg, .png, .jpeg"
+                                    onChange={setPhotos}
+                                />
+                                <FileUpload
+                                    label="Videos"
+                                    accept="video/*"
+                                    onChange={setVideos}
+                                />
+                                <Text fontSize="sm" mt={5}>
+                                    Tags
+                                </Text>
                                 <InputGroup width="100%">
-                                    <InputRightElement pointerEvents="none" mt={1}>
+                                    <InputRightElement
+                                        pointerEvents="none"
+                                        mt={1}
+                                    >
                                         <Search color="#989898" />
                                     </InputRightElement>
                                     <Input
@@ -317,7 +366,9 @@ function CreateListing() {
                                         width="100%"
                                         type="text"
                                         value={tags}
-                                        onChange={(e) => setTags(e.target.value)}
+                                        onChange={(e) =>
+                                            setTags(e.target.value)
+                                        }
                                         required
                                     />
                                 </InputGroup>
