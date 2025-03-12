@@ -33,15 +33,11 @@ function SendEmail() {
         const token = localStorage.getItem("authToken");
         // call backend
         try {
-            const response = await axiosPrivate.post(
-                "/email",
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const response = await axiosPrivate.post("/email", formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             console.log("Email added to MongoDB successfully:", response.data);
         } catch (error) {
             console.error("Error adding email:", error);
@@ -51,22 +47,27 @@ function SendEmail() {
         // emailjs
         if (subject === "" || body === "" || sender === "" || receiver === "") {
             alert("Unable to submit. Please fill out all parts of the form.");
-          } else {
+        } else {
             emailjs
-              // service_id, 
-              .sendForm("307_marquee", "307_message_template", form.current, "DJvHoVWDs8dtvq1j4")
-              .then(
-                () => {
-                  alert("Email successfully sent");
-                },
-                (error) => {
-                  alert("Email failed to send. " + error.text);
-                }
-              );
-      
+                // service_id,
+                .sendForm(
+                    "307_marquee",
+                    "307_message_template",
+                    form.current,
+                    "DJvHoVWDs8dtvq1j4"
+                )
+                .then(
+                    () => {
+                        alert("Email successfully sent");
+                    },
+                    (error) => {
+                        alert("Email failed to send. " + error.text);
+                    }
+                );
+
             setSubject("");
             setBody("");
-          }
+        }
 
         // navigate back to the emails page
         navigate("/email");

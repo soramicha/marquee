@@ -15,7 +15,7 @@ import {
     TagLabel,
 } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
-import { useState } from 'react'
+import { useState } from "react";
 import grayHoodie from "../assets/grayhoodie.png";
 import alt1 from "../assets/alt1.webp";
 import alt2 from "../assets/alt2.webp";

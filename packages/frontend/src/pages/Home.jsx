@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import FilterNavbar from "./FilterNavbar";
 import ListingCard from "../components/ui/ListingCard";
-import { useState } from 'react'
+import { useState } from "react";
 
 function Home() {
     // Example recommended items with category, location, and tags
