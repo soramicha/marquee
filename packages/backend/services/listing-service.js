@@ -3,8 +3,6 @@ import Listing from "../models/listing-model.js"
 
 export async function postListing(req, res) {
     try {
-        // Required fields
-        // TODO: add photos for required field after testing
         const requiredFields = ['name', 'price', 'category', 'description', 'location', 'condition'];
         const missingFields = requiredFields.filter(field => !req.body[field]);
         
@@ -25,6 +23,15 @@ export async function postListing(req, res) {
         }
 
         res.status(201).json(result.data);
+    } catch (error) {
+        console.error('Error creating listing:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+export async function addMediaLinksToListing(req, res) {
+    try {
+        
     } catch (error) {
         console.error('Error creating listing:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -118,7 +125,7 @@ export async function updateListing(req, res) {
             return res.status(404).json({ error: result.error });
         }
 
-        res.status(200).json(result);
+        res.status(200).json(result.data);
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
     }
