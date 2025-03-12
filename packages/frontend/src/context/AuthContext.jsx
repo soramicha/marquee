@@ -73,6 +73,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("username");
         setAuth(prev => ({
           ...prev,
+          username: null,
           access_token: null,
           firebaseUID: null
         }));        

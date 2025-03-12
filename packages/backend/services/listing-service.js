@@ -40,24 +40,6 @@ export async function postListing(req, res) {
     }
 }
 
-export async function addMediaLinksToListing(req, res) {
-    try {
-        
-    } catch (error) {
-        console.error("Error creating listing:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-}
-
-export async function addMediaLinksToListing(req, res) {
-    try {
-        
-    } catch (error) {
-        console.error('Error creating listing:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-}
-
 async function postListingToDB(listing) {
     try {
         const listingToAdd = new Listing(listing);
