@@ -30,6 +30,10 @@ jobs:
                   npm run -w backend test --if-present
               working-directory: ./packages/backend
 
+            - name: Remove old release.zip (if exists)
+              run: rm -f release.zip
+              working-directory: ./packages/backend # added this whole part
+
             - name: Zip artifact for deployment
               run: zip -r -o release.zip ./* -x "node_modules/*" #zip release.zip ./* -r
               working-directory: ./packages/backend
