@@ -55,6 +55,7 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   name: node-app
+                  path: release.zip # we manually added
 
             - name: Unzip artifact for deployment
               run: unzip release.zip
