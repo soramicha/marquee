@@ -77,8 +77,6 @@ function Home() {
   const [selectedLocations, setSelectedLocations] = useState([]);
 
   // Filter the recommended items based on selected categories and locations.
-  console.log("NEW CONSOLE")
-  console.log("recommendedItems:", recommendedItems)
   const filteredItems = recommendedItems.filter((item) => { 
     const matchesCategory =
       selectedCategories.length === 0 ||
