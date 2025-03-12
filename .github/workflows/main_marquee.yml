@@ -34,6 +34,9 @@ jobs:
               run: zip release.zip ./* -r
               working-directory: ./packages/backend
 
+            - name: Create artifact folder
+              run: mkdir -p ./artifact-folder # added this whole part
+
             - name: Upload artifact for deployment job
               uses: actions/upload-artifact@v4
               with:
@@ -41,7 +44,7 @@ jobs:
                   path: ./artifact-folder
             
             - name: List files in ./artifact-folder after downloading artifact
-              run: ls -R ./artifact-folder #added this whole part
+              run: ls -R ./artifact-folder # added this whole part
                 
 
     deploy:
