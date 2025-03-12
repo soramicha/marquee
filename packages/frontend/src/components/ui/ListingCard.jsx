@@ -58,32 +58,32 @@ const removeFavorite = async (token, username, listing_id) => {
 };
 
 function ListingCard({ id, name, price, location, imageSrc, tags, favorited }) {
-    // Local state to toggle heart color (dummy functionality)  
+    // Local state to toggle heart color (dummy functionality)
     // EXAMPLE DATA
-  //   {
-  //     "status": true,
-  //     "name": "sony tv",
-  //     "price": 1.99,
-  //     "category": "Electronics",
-  //     "description": "2024 120 inch 16k tv. hard offer. no lowballs",
-  //     "photos": [],
-  //     "videos": [],
-  //     "tags": [
-  //         "laptop",
-  //         "apple",
-  //         "macbook",
-  //         "computer"
-  //     ],
-  //     "location": "Engineering Building Room 205",
-  //     "condition": "Like New",
-  //     "user": "67c5d8c64355adebe8910e76",
-  //     "_id": "67cb2fc6a56a8f08c1ba06d0",
-  //     "createdAt": "2025-03-07T17:41:26.025Z",
-  //     "updatedAt": "2025-03-07T17:41:26.025Z",
-  //     "__v": 0
-  // }
+    //   {
+    //     "status": true,
+    //     "name": "sony tv",
+    //     "price": 1.99,
+    //     "category": "Electronics",
+    //     "description": "2024 120 inch 16k tv. hard offer. no lowballs",
+    //     "photos": [],
+    //     "videos": [],
+    //     "tags": [
+    //         "laptop",
+    //         "apple",
+    //         "macbook",
+    //         "computer"
+    //     ],
+    //     "location": "Engineering Building Room 205",
+    //     "condition": "Like New",
+    //     "user": "67c5d8c64355adebe8910e76",
+    //     "_id": "67cb2fc6a56a8f08c1ba06d0",
+    //     "createdAt": "2025-03-07T17:41:26.025Z",
+    //     "updatedAt": "2025-03-07T17:41:26.025Z",
+    //     "__v": 0
+    // }
 
-  const [isFavorite, setIsFavorite] = useState(
+    const [isFavorite, setIsFavorite] = useState(
         favorited === "true" ? true : false
     );
     const token = localStorage.getItem("authToken");
