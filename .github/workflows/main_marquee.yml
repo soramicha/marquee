@@ -30,6 +30,10 @@ jobs:
                   npm run -w backend test --if-present
               working-directory: ./packages/backend
 
+            - name: Remove old release.zip (if exists)
+              run: rm -f release.zip
+              working-directory: ./packages/backend # added this whole part
+
             - name: Zip artifact for deployment
               run: zip release.zip ./* -r
               working-directory: ./packages/backend
@@ -38,7 +42,11 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: node-app
-                  path: release.zip
+                  path: packages/backend/release.zip #./packages/backend
+            
+            - name: List files in packages/backend/
+              run: ls -R ./packages/backend # added this whole part
+                
 
     deploy:
         runs-on: ubuntu-latest
@@ -55,9 +63,11 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   name: node-app
+                  path: ./packages/backend # added path
 
             - name: Unzip artifact for deployment
-              run: unzip release.zip
+              run: unzip -o release.zip
+              working-directory: ./packages/backend # added working directory
 
             - name: Login to Azure
               uses: azure/login@v2

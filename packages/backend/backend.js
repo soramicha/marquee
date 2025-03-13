@@ -42,7 +42,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const serviceAccount = JSON.parse(
     fs.readFileSync(
-        join(__dirname, './marquee-7b1a9-firebase-adminsdk-fbsvc-e1820b4288.json')
+        join(
+            __dirname,
+            "./marquee-7b1a9-firebase-adminsdk-fbsvc-e1820b4288.json"
+        )
     )
 );
 
@@ -62,7 +65,11 @@ const port = 8000;
 
 app.use(
     cors({
-        origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+        origin: [
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+            "https://happy-sea-0b99f111e.6.azurestaticapps.net",
+        ],
         credentials: true,
     })
 );
