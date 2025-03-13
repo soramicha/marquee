@@ -1,5 +1,9 @@
 # marquee - a project made by 6 happy students
 
+# Project Vision
+### For college students who need a safe and convenient way to buy, sell, and trade dorm essentials, clothes, and other items within their campus), Marquee is a college exclusive marketplace which ensures secure, student-only transactions through .edu email verification and focuses on campus-specific needs. Unlike other similar apps such as Facebook Marketplace, our product eliminates scammers, prioritizes affordability for students, and fosters a trusted, local community for buying and selling.
+
+
 ## Sequence Diagram: https://www.figma.com/board/m09ipWSAiB344xhBuNDznC/TE4%3A-Authentication-and-Access-Contrtol?node-id=0-1&p=f&t=Dq4ZyuCFLlLRc2IT-0
 
 ## How to Contribute
