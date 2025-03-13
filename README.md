@@ -5,9 +5,7 @@
 
 ## UI Prototype: https://www.figma.com/design/MeQ0h13gD7ehkUOBQTG1LN/Marquee%3A-Wireframes?node-id=36-40&p=f&t=vhCeTrkpiQV0WYu0-0
 ## Wireframe: https://www.figma.com/proto/MeQ0h13gD7ehkUOBQTG1LN/Marquee%3A-Wireframes?node-id=110-22&starting-point-node-id=110%3A22
-
-
-## Sequence Diagram: https://www.figma.com/board/m09ipWSAiB344xhBuNDznC/TE4%3A-Authentication-and-Access-Contrtol?node-id=0-1&p=f&t=Dq4ZyuCFLlLRc2IT-0
+## Class & Sequence Diagrams: https://www.figma.com/board/m09ipWSAiB344xhBuNDznC/TE4%3A-Authentication-and-Access-Contrtol?node-id=0-1&p=f&t=Dq4ZyuCFLlLRc2IT-0
 
 ## How to Contribute
 
