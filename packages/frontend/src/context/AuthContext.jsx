@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { axiosPrivate } from "@/api/axios";
+import { axiosPrivate } from "../api/axios";
 
 const AuthContext = createContext();
 
