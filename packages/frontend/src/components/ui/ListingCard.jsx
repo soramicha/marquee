@@ -45,18 +45,19 @@ function ListingCard({ id, name, price, location, imageSrc, categories }) {
               <Tag size="sm" variant="solid" colorScheme="blue">
                 {tag}
               </Tag> */}
-      {categories && categories.length > 0 && (
+      {/*{categories && categories.length > 0 && (
         <Wrap spacing={2} mt={2}>
           {categories.map((category) => (
             <WrapItem key={category}>
               <Tag size="sm" variant="solid" colorScheme="blue">
                 {category} 
               </Tag>
-             
             </WrapItem>
           ))}
         </Wrap>
-      )}
+        
+      )}*/}
+      <Tag size="sm" variant="solid" colorScheme="blue">{categories}</Tag>
     </Box>
   );
 }

@@ -33,7 +33,7 @@ const ListingSchema = new mongoose.Schema(
     },
     // apparell, electronics, free stuff, etc..
     category: {
-      type: Array, //changed this from String to Array
+      type: String, //Array, //changed this from String to Array
       required: true,
       trim: true,
     },
