@@ -1,10 +1,13 @@
 # marquee - a project made by 6 happy students
 
 ## Project Vision
+
 ### For college students who need a safe and convenient way to buy, sell, and trade dorm essentials, clothes, and other items within their campus), Marquee is a college exclusive marketplace which ensures secure, student-only transactions through .edu email verification and focuses on campus-specific needs. Unlike other similar apps such as Facebook Marketplace, our product eliminates scammers, prioritizes affordability for students, and fosters a trusted, local community for buying and selling.
 
 ### UI Prototype: https://www.figma.com/design/MeQ0h13gD7ehkUOBQTG1LN/Marquee%3A-Wireframes?node-id=36-40&p=f&t=vhCeTrkpiQV0WYu0-0
+
 ### Wireframe: https://www.figma.com/proto/MeQ0h13gD7ehkUOBQTG1LN/Marquee%3A-Wireframes?node-id=110-22&starting-point-node-id=110%3A22
+
 ### Class & Sequence Diagrams: https://www.figma.com/board/m09ipWSAiB344xhBuNDznC/TE4%3A-Authentication-and-Access-Contrtol?node-id=0-1&p=f&t=Dq4ZyuCFLlLRc2IT-0
 
 ## Architecture
@@ -16,6 +19,7 @@ We are using the MERN (MongoDB, Express.js, React.js, Node.js) stack for this pr
 - npm install in root directory
 
 Packages to Install (if you don't have already):
+
 - npm i axios
 - npm install --save @emailjs/browser
 
@@ -38,7 +42,6 @@ Using Postman: Postman is a convenient way to test our API's
 To run frontend:
 
 - npm start in the frontend directory
-
 
 ## How to Contribute
 

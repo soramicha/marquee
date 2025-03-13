@@ -43,10 +43,9 @@ jobs:
               with:
                   name: node-app
                   path: packages/backend/release.zip #./packages/backend
-            
+
             - name: List files in packages/backend/
               run: ls -R ./packages/backend # added this whole part
-                
 
     deploy:
         runs-on: ubuntu-latest
