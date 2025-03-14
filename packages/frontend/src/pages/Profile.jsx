@@ -1,105 +1,40 @@
-// src/pages/Profile.jsx
-import React, { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext"; // ADDED: Import useAuth to access auth state.
+import {
+  Box,
+  Container,
+  Grid,
+  Flex,
+  Text,
+  Heading,
+  Avatar,
+  Stack,
+  SimpleGrid,
+  Stat,
+  StatNumber,
+  StatLabel,
+  useColorModeValue
+} from "@chakra-ui/react";
+import { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import ListingCard from "../components/ui/ListingCard.jsx";
+import ListingCard from "../components/ui/ListingCard";
 import { axiosPrivate } from "@/api/axios";
 
-const styles = {
-  page: {
-    backgroundColor: "#F5F5F5",
-    minHeight: "100vh",
-  },
-  profileContainer: {
-    display: "grid",
-    gridTemplateColumns: "450px 1fr",
-    columnGap: "35px",
-    width: "100%",
-    fontFamily: "Inter, sans-serif",
-    paddingTop: "150px",
-    paddingLeft: "40px",
-    paddingRight: "40px",
-  },
-  leftColumn: {},
-  rightColumn: {},
-  profileHeader: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: "15px",
-  },
-  profilePic: {
-    width: "65px",
-    height: "65px",
-    backgroundColor: "#C4C4C4",
-    borderRadius: "50%",
-    marginRight: "10px",
-  },
-  name: {
-    margin: 0,
-    fontSize: "20px",
-    fontWeight: 700,
-    color: "#000",
-  },
-  email: {
-    margin: 0,
-    color: "#666",
-    fontSize: "14px",
-  },
-  bioBox: {
-    backgroundColor: "#E5E5E5",
-    padding: "12px",
-    borderRadius: "8px",
-    marginBottom: "15px",
-  },
-  bioText: {
-    fontSize: "14px",
-    color: "#000",
-    margin: 0,
-  },
-  statsBox: {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "10px",
-    textAlign: "center",
-    backgroundColor: "#E5E5E5",
-    padding: "12px",
-    borderRadius: "8px",
-    color: "#000",
-  },
-  statNumber: {
-    fontWeight: 700,
-    fontSize: "16px",
-  },
-  listingsHeading: {
-    margin: 0,
-    marginBottom: "15px",
-    fontSize: "18px",
-    fontWeight: 600,
-  },
-  listingsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "20px",
-  },
-};
-
 function Profile() {
-  // Get auth state (access token and user details) from AuthContext.
   const { auth } = useAuth();
   const [listings, setListings] = useState([]);
-
+  const bg = useColorModeValue("gray.100", "gray.700");
+  
   useEffect(() => {
     async function fetchListings() {
-      // Only fetch listings if a user is logged in.
-      if (auth?.user?.id) {
+      if (auth.username) {
         try {
-          const response = await axiosPrivate.get(`/api/listings/user`, {
+          const response = await axiosPrivate.get(`/listing/user`, {
             headers: {
               Authorization: `Bearer ${auth.access_token}`,
-            },
-            params: {
-              userId: `${auth.user.id}`,
             }
+            // params: {
+            //   username: auth.username
+            // }
           });
           setListings(response.data.data);
         } catch (error) {
@@ -108,74 +43,85 @@ function Profile() {
       }
     }
     fetchListings();
-  }, []);
+  }, [auth]);
 
-  // If no user is logged in, prompt the user to log in.
-  if (!auth?.user) {
-    return <p>Please log in to see your listings.</p>;
-  }
-
+  console.log(listings);
   return (
-    <div style={styles.page}>
+    <Box minH="100vh" minW="100vw" bg="gray.50">
       <Navbar />
-      <div style={styles.profileContainer}>
-        <div style={styles.leftColumn}>
-          <div style={styles.profileHeader}>
-            <div style={styles.profilePic}></div>
-            <div>
-              <h2 style={styles.name}>
-                {auth.user.username}{" "}
-                <span role="img" aria-label="edit">
-                  ✏️
-                </span>
-              </h2>
-              <p style={styles.email}>{auth.user.username}</p>
-            </div>
-          </div>
-          <div style={styles.bioBox}>
-            <p style={styles.bioText}>Your bio goes here.</p>
-          </div>
-          <div style={styles.statsBox}>
-            <p>
-              <strong style={styles.statNumber}>0</strong> Listings
-            </p>
-            <p>
-              <strong style={styles.statNumber}>0</strong> Page Views
-            </p>
-            <p>
-              <strong style={styles.statNumber}>0</strong> Pendings
-            </p>
-            <p>
-              <strong style={styles.statNumber}>0</strong> Reviews
-            </p>
-          </div>
-        </div>
-        <div style={styles.rightColumn}>
-          <h3 style={styles.listingsHeading}>My Listings</h3>
-          <div style={styles.listingsGrid}>
+      <Container maxW="container.xl" pt="150px">
+        <Grid templateColumns={{ base: "1fr", md: "450px 1fr" }} gap={8}>
+          {/* Left Column */}
+          <Stack spacing={4}>
+            {/* Profile Header */}
+            <Flex align="center">
+              <Avatar
+                size="lg"
+                mr={4}
+                bg="gray.300"
+              />
+              <Box>
+                <Heading size="md">
+                  {auth.username}{" "}
+                  <Text as="span" aria-label="edit">
+                    ✏️
+                  </Text>
+                </Heading>
+                <Text color="gray.600">{auth.username}</Text>
+              </Box>
+            </Flex>
+
+            {/* Bio Section */}
+            <Box p={4} bg={bg} borderRadius="md">
+              <Text>Your bio goes here.</Text>
+            </Box>
+
+            {/* Stats Section */}
+            <SimpleGrid columns={2} spacing={4} p={4} bg={bg} borderRadius="md">
+              <Stat textAlign="center">
+                <StatNumber>0</StatNumber>
+                <StatLabel>Listings</StatLabel>
+              </Stat>
+              <Stat textAlign="center">
+                <StatNumber>0</StatNumber>
+                <StatLabel>Page Views</StatLabel>
+              </Stat>
+              <Stat textAlign="center">
+                <StatNumber>0</StatNumber>
+                <StatLabel>Pendings</StatLabel>
+              </Stat>
+              <Stat textAlign="center">
+                <StatNumber>0</StatNumber>
+                <StatLabel>Reviews</StatLabel>
+              </Stat>
+            </SimpleGrid>
+          </Stack>
+
+          {/* Right Column */}
+          <Box>
+            <Heading size="md" mb={4}>My Listings</Heading>
             {listings.length > 0 ? (
-              listings.map((listing) => (
-                <ListingCard
-                  key={listing._id}
-                  id={listing._id}
-                  name={listing.name}
-                  price={`$${listing.price.toFixed(2)}`}
-                  location={listing.location}
-                  tags={listing.tags}
-                  imageSrc={
-                    listing.photos && listing.photos.length > 0
-                      ? listing.photos[0]
-                      : undefined
-                  }
-                />
-              ))
+              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+                {listings.map((listing) => (
+                  <ListingCard
+                    key={listing._id}
+                    id={listing._id}
+                    name={listing.name}
+                    category={listing.category}
+                    price={`${listing.price.toFixed(2)}`}
+                    location={listing.location}
+                    tags={listing.tags}
+                    imageSrc={listing.photos?.[0]}
+                  />
+                ))}
+              </SimpleGrid>
             ) : (
-              <p>No listings found.</p>
+              <Text>No listings found.</Text>
             )}
-          </div>
-        </div>
-      </div>
-    </div>
+          </Box>
+        </Grid>
+      </Container>
+    </Box>
   );
 }
 
