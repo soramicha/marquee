@@ -23,7 +23,7 @@ export async function postListing(req, res) {
             });
         }
 
-        const result = await ListingToDB({
+        const result = await postListingToDB({
             ...req.body,
             status: true,
             user: req.user.userID,
