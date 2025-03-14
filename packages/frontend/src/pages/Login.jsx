@@ -69,6 +69,7 @@ function Login() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 type="email"
+                                data-testid = "email-input"
                             />
                             <Input
                                 borderWidth={0}
@@ -80,6 +81,7 @@ function Login() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 type="password"
+                                data-testid = "password-input"
                             />
                             <Box
                                 fontWeight={400}
@@ -99,6 +101,7 @@ function Login() {
                             w="100%"
                             borderRadius={10}
                             backgroundColor="#2E55C4"
+                            data-testid = "sign-in-button"
                         >
                             <Text color="white">Sign In</Text>
                         </Button>
