@@ -1,15 +1,10 @@
 // src/components/ui/ListingCard.jsx
-import {
-    Box,
-    Image,
-    IconButton,
-    Text,
-    Tag,
-} from "@chakra-ui/react";
+import { Box, Image, IconButton, Text, Tag } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import productImage from "../../assets/grayhoodie.png";
 import { axiosPrivate } from "@/api/axios";
+import { useNavigate } from "react-router-dom";
 
 const addFavorite = async (token, username, listing_id) => {
     try {
@@ -55,38 +50,35 @@ const removeFavorite = async (token, username, listing_id) => {
     }
 };
 
-function ListingCard({ id, name, price, location, imageSrc, category, favorited }) {
-    // Local state to toggle heart color (dummy functionality)
-    // EXAMPLE DATA
-    //   {
-    //     "status": true,
-    //     "name": "sony tv",
-    //     "price": 1.99,
-    //     "category": "Electronics",
-    //     "description": "2024 120 inch 16k tv. hard offer. no lowballs",
-    //     "photos": [],
-    //     "videos": [],
-    //     "tags": [
-    //         "laptop",
-    //         "apple",
-    //         "macbook",
-    //         "computer"
-    //     ],
-    //     "location": "Engineering Building Room 205",
-    //     "condition": "Like New",
-    //     "user": "67c5d8c64355adebe8910e76",
-    //     "_id": "67cb2fc6a56a8f08c1ba06d0",
-    //     "createdAt": "2025-03-07T17:41:26.025Z",
-    //     "updatedAt": "2025-03-07T17:41:26.025Z",
-    //     "__v": 0
-    // }
+const getUserFavs = async (username) => {
+    try {
+        const response = await axiosPrivate.get("/users", {
+            params: {
+                username: username,
+            },
+        });
+        console.log("Successfully retrieved user!", response.data);
+        const user = response.data;
+        return user[0].favorites;
+    } catch (error) {
+        console.log("Unable to successfully retriever user favs:", error);
+    }
+};
 
-    const [isFavorite, setIsFavorite] = useState(
-        favorited === "true" ? true : false
-    );
+function ListingCard({ id, name, price, location, photos, category }) {
+    let navigate = useNavigate();
+    const [isFavorite, setIsFavorite] = useState(false);
     const token = localStorage.getItem("authToken");
     const username = localStorage.getItem("username");
-    const displayedImage = imageSrc || productImage;
+    const displayedImage = photos ? photos[0] : productImage;
+
+    useEffect(() => {
+        getUserFavs(username).then((res) => {
+            if (res.includes(id)) {
+                setIsFavorite(true);
+            }
+        });
+    }, []);
 
     const FavoriteStatus = () => {
         // changing colors of favorite / unfavorite button
@@ -102,6 +94,11 @@ function ListingCard({ id, name, price, location, imageSrc, category, favorited 
         }
     };
 
+    const goToParticularListingPage = (e) => {
+        e.stopPropagation();
+        navigate(`/listing/${id}`);
+    };
+
     return (
         <Box p={4} w="100%">
             <Box position="relative">
@@ -111,6 +108,7 @@ function ListingCard({ id, name, price, location, imageSrc, category, favorited 
                     w="100%"
                     h="auto"
                     objectFit="cover"
+                    onClick={goToParticularListingPage}
                 />
                 <IconButton
                     icon={<FaHeart />}
@@ -125,13 +123,28 @@ function ListingCard({ id, name, price, location, imageSrc, category, favorited 
                     aria-label="favorite"
                 />
             </Box>
-            <Text fontSize="lg" fontWeight="bold" mt={3}>
+            <Text
+                fontSize="lg"
+                fontWeight="bold"
+                mt={3}
+                onClick={goToParticularListingPage}
+            >
                 {name}
             </Text>
-            <Text fontSize="sm">{price}</Text>
-            <Text fontSize="sm">{location}</Text>
-            <Tag size="sm" variant="solid" colorScheme="blue">{category}</Tag>
-
+            <Text fontSize="sm" onClick={goToParticularListingPage}>
+                {price}
+            </Text>
+            <Text fontSize="sm" onClick={goToParticularListingPage}>
+                {location}
+            </Text>
+            <Tag
+                onClick={goToParticularListingPage}
+                size="sm"
+                variant="solid"
+                colorScheme="blue"
+            >
+                {category}
+            </Tag>
         </Box>
     );
 }

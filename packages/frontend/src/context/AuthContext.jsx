@@ -30,32 +30,36 @@ export const AuthProvider = ({ children }) => {
 
     const signup = async (username, password) => {
         try {
-            const response = await axiosPrivate.post("/signup", {
-                username,
-                password,
-            }, {});
-            
+            const response = await axiosPrivate.post(
+                "/signup",
+                {
+                    username,
+                    password,
+                },
+                {}
+            );
+
             await initializeFirebaseAuth(response.data.access_token);
-            
-            setAuth(prev => ({
+
+            setAuth((prev) => ({
                 ...prev,
                 username,
                 access_token: response.data.access_token,
             }));
-    
+
             localStorage.setItem("authToken", response.data.access_token);
             localStorage.setItem("username", username);
         } catch (error) {
-            setAuth(prev => ({
+            setAuth((prev) => ({
                 ...prev,
                 username: null,
                 access_token: null,
-                firebaseUID: null
+                firebaseUID: null,
             }));
-            
+
             localStorage.removeItem("authToken");
             localStorage.removeItem("username");
-            
+
             if (error.response?.data?.message) {
                 throw new Error(error.response.data.message);
             }
@@ -69,34 +73,34 @@ export const AuthProvider = ({ children }) => {
                 username,
                 password,
             });
-            
+
             await initializeFirebaseAuth(response.data.access_token);
-            
-            setAuth(prev => ({
+
+            setAuth((prev) => ({
                 ...prev,
                 username,
                 access_token: response.data.access_token,
             }));
-    
+
             localStorage.setItem("authToken", response.data.access_token);
             localStorage.setItem("username", username);
         } catch (error) {
-            setAuth(prev => ({
+            setAuth((prev) => ({
                 ...prev,
                 username: null,
                 access_token: null,
-                firebaseUID: null
+                firebaseUID: null,
             }));
-            
+
             localStorage.removeItem("authToken");
             localStorage.removeItem("username");
-            
+
             if (error.response?.data?.message) {
                 throw new Error(error.response.data.message);
             }
             throw new Error("Failed to log in. Please try again.");
         }
-    }
+    };
 
     const logout = async () => {
         try {
