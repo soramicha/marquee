@@ -1,23 +1,26 @@
-import { useAuth } from "@/context/AuthContext";
-import { axiosPrivate } from "@/api/axios";
+import { useAuth } from '@/context/AuthContext';
+import { axiosPrivate } from '@/api/axios';
 
 const useRefreshToken = () => {
-    const { setAuth } = useAuth();
+    const { setAuth, initializeFirebaseAuth } = useAuth();
 
     const refresh = async () => {
-        const response = await axiosPrivate.get("/refresh", {
-            withCredentials: true,
-        });
-        setAuth((prev) => {
-            return {
+        try {
+            const response = await axiosPrivate.get('/refresh');
+            setAuth(prev => ({
                 ...prev,
-                username: response.data.username,
+                username,
                 access_token: response.data.access_token,
-            };
-        });
-        return response.data.access_token;
+            }));
+            initializeFirebaseAuth(response.data.access_token);
+            return response.data.access_token;            
+        } catch (error) {
+            console.error('Token refresh failed:', error);
+            setAuth({}); // Clear auth state
+            throw new Error('Failed to refresh token'); // Transform error
+        }
     };
-
+    
     return refresh;
 };
 

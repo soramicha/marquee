@@ -23,7 +23,7 @@ export async function postListing(req, res) {
             });
         }
 
-        const result = await ListingToDB({
+        const result = await postListingToDB({
             ...req.body,
             status: true,
             user: req.user.userID,
@@ -133,7 +133,7 @@ export async function updateListing(req, res) {
             return res.status(404).json({ error: result.error });
         }
 
-        res.status(200).json(result);
+        res.status(200).json(result.data);
     } catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }

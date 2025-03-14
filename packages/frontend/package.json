@@ -4,11 +4,11 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "start": "vite",
-        "dev": "vite",
-        "build": "vite build",
+        "start": "vite --mode development",
+        "dev": "vite --mode development",
+        "build": "vite build --mode production",
         "lint": "eslint .",
-        "preview": "vite preview"
+        "preview": "vite preview --mode production"
     },
     "dependencies": {
         "@chakra-ui/react": "^2.10.6",
@@ -16,12 +16,14 @@
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
         "axios": "^1.7.9",
+        "firebase": "^11.4.0",
         "framer-motion": "^12.4.7",
         "lucide-react": "^0.479.0",
         "next-themes": "^0.4.4",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "react-icons": "^5.4.0"
+        "react-icons": "^5.4.0",
+        "uuid": "^11.1.0"
     },
     "devDependencies": {
         "@eslint/compat": "^1.2.6",

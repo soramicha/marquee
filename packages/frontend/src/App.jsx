@@ -56,8 +56,12 @@ function App() {
                 <Route element={<PersistLogin />}>
                     <Route element={<RequireAuth />}>
                         {/* Place your protected routes here, e.g.:
-                <Route path="dashboard" element={<Dashboard />} />
-                */}
+                            <Route path="dashboard" element={<Dashboard />} />
+                        */}
+                        <Route
+                            path="listing/create"
+                            element={<CreateListing />}
+                        />
                     </Route>
                 </Route>
             </Routes>

@@ -1,29 +1,66 @@
 import { createContext, useContext, useState } from "react";
-import { axiosPrivate } from "../api/axios";
-
+import { axiosPrivate } from "@/api/axios";
+import { authenticateWithFirebase } from "@/utils/firebase-auth";
+import { auth as firebaseAuth } from "@/config/firebase-config";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState({ username: null, access_token: null });
+    const [auth, setAuth] = useState({
+        access_token: null,
+        firebaseUID: null,
+        username: null,
+    });
+
+    const initializeFirebaseAuth = async (access_token) => {
+        try {
+            const response = await axiosPrivate.get("/get-firebase-token", {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            await authenticateWithFirebase(response.data.firebaseToken);
+            setAuth((prev) => ({
+                ...prev,
+                firebaseUID: firebaseAuth.currentUser.uid,
+            }));
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const signup = async (username, password) => {
-        /*try {
-      const response = await axiosPrivate.post("/signup", { username, password });
-      setAuth({
-        username,
-        access_token: response.data.access_token,
-      });
-    } catch (error) {
-      throw error;
-    }*/
-        const response = await axiosPrivate.post("/signup", {
-            username,
-            password,
-        });
-        setAuth({
-            username,
-            access_token: response.data.access_token,
-        });
+        try {
+            const response = await axiosPrivate.post("/signup", {
+                username,
+                password,
+            }, {});
+            
+            await initializeFirebaseAuth(response.data.access_token);
+            
+            setAuth(prev => ({
+                ...prev,
+                username,
+                access_token: response.data.access_token,
+            }));
+    
+            localStorage.setItem("authToken", response.data.access_token);
+            localStorage.setItem("username", username);
+        } catch (error) {
+            setAuth(prev => ({
+                ...prev,
+                username: null,
+                access_token: null,
+                firebaseUID: null
+            }));
+            
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("username");
+            
+            if (error.response?.data?.message) {
+                throw new Error(error.response.data.message);
+            }
+            throw new Error("Failed to create account. Please try again.");
+        }
     };
 
     const login = async (username, password) => {
@@ -32,38 +69,62 @@ export const AuthProvider = ({ children }) => {
                 username,
                 password,
             });
-            setAuth({
+            
+            await initializeFirebaseAuth(response.data.access_token);
+            
+            setAuth(prev => ({
+                ...prev,
                 username,
                 access_token: response.data.access_token,
-            });
-
-            // Temporary solution: store token and username in localStorage
+            }));
+    
             localStorage.setItem("authToken", response.data.access_token);
             localStorage.setItem("username", username);
         } catch (error) {
-            console.error(error);
-        }
-    };
-
-    // UPDATED LOGOUT:
-    const logout = async () => {
-        try {
-            // If we have a username, send it to the server's /logout endpoint
-            if (auth?.username) {
-                await axiosPrivate.post("/logout", { username: auth.username });
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            // Remove items from localStorage and reset auth state
+            setAuth(prev => ({
+                ...prev,
+                username: null,
+                access_token: null,
+                firebaseUID: null
+            }));
+            
             localStorage.removeItem("authToken");
             localStorage.removeItem("username");
-            setAuth({ username: null, access_token: null });
+            
+            if (error.response?.data?.message) {
+                throw new Error(error.response.data.message);
+            }
+            throw new Error("Failed to log in. Please try again.");
+        }
+    }
+
+    const logout = async () => {
+        try {
+            await axiosPrivate.get("/logout");
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("username");
+            setAuth((prev) => ({
+                ...prev,
+                username: null,
+                access_token: null,
+                firebaseUID: null,
+            }));
+        } catch (error) {
+            console.error(error);
         }
     };
 
     return (
-        <AuthContext.Provider value={{ auth, setAuth, signup, login, logout }}>
+        <AuthContext.Provider
+            value={{
+                auth,
+                setAuth,
+                signup,
+                login,
+                logout,
+                initializeFirebaseAuth,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
