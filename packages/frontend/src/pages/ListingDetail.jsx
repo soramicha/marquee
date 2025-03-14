@@ -96,7 +96,7 @@ function ListingDetail() {
                 setIsFavorite(true)
             }
         })
-    }, [])
+    }, [id]);
 
     /*const similarListings = [
         { id: 1, name: "Gray Hoodie", price: "$15", location: "Yosemite Hall", category: "Clothing" },
