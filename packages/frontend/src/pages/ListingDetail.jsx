@@ -34,16 +34,16 @@ const getListingDetail = async (listing_id) => {
 };
 
 
-const getUserInfo = async (username) => {
+const getUserInfo = async (id) => {
     try {
-        const response = await axiosPrivate.get("/users", {
+        const response = await axiosPrivate.get("/findUser", {
             params: {
-                username: username,
+                id: id,
             },
         });
         console.log("Successfully retrieved user!", response.data);
         const user = response.data;
-        return user[0];
+        return user;
     } catch (error) {
         console.log("Unable to successfully retriever user info:", error);
     }
@@ -74,27 +74,26 @@ function ListingDetail() {
     useEffect(() => {
         // get listing info
         getListingDetail(id).then(res => {
-            console.log("retrived listing info!", res.data[0])
-            setProductData(res.data[0])
-            setSelectedImage(res.data[0].photos[0])
-
+            console.log("retrived listing info!", res.data[0]);
+            setProductData(res.data[0]);
+            setSelectedImage(res.data[0].photos[0]);
             getAllListings().then(listing => {
                 console.log("category", res.data[0].category, "LISTING DATA", listing.data);
                 const similar = listing.data.filter((item) => {
-                    return (res.data[0].category.includes(item.category) && (id != item._id))
+                    return (res.data[0].category.includes(item.category) && (id != item._id));
                 })
-                console.log('SIMILAR:', similar)
-                setSimilarListings(similar)
+                console.log('SIMILAR:', similar);
+                setSimilarListings(similar);
             });
-        })
-
-        // get user info
-        getUserInfo(username).then(res => {
-            console.log(res.favorites, " is the user info!")
-            setSellerUsername(res.username)
-            if (res.favorites.includes(id)) {
-                setIsFavorite(true)
-            }
+            console.log("test", res.data[0].user);
+            // get user info
+            getUserInfo(res.data[0].user).then(seller => {
+                console.log(seller?.favorites, " is the user info!")
+                setSellerUsername(seller.username);
+                if (seller?.favorites.includes(id)) {
+                    setIsFavorite(true);
+                }
+            });
         })
     }, [id]);
 
@@ -139,24 +138,29 @@ function ListingDetail() {
                                 _hover={{ borderColor: "#2E55C4" }}
                             />
                         ))}
-                        {productData.videos?.map((img, idx) => (
-                            <Image
-                                key={idx}
-                                src={img}
-                                alt={`Thumbnail ${idx + 1}`}
-                                boxSize="90px"
-                                objectFit="cover"
-                                borderRadius="md"
-                                cursor="pointer"
-                                onClick={() => setSelectedImage(img)}
-                                _hover={{ borderColor: "#2E55C4" }}
-                            />
+                        {productData.videos?.map((video, idx) => (
+                            <Box key={idx} position="relative" boxSize="90px">
+                                <video
+                                    width="100%"
+                                    height="100%"
+                                    onClick={() => setSelectedImage(video)}
+                                    style={{
+                                        borderRadius: 'md',
+                                        cursor: 'pointer',
+                                        objectFit: 'cover'
+                                    }}
+                                >
+                                    <source src={video} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            </Box>
                         ))}
                     </Box>
 
                     {/* CENTER: Main image */}
                     <Box flex="1" display="flex" justifyContent="center">
                         <Box position="relative">
+                            {/* TODO: play video vs image */}
                             <Image
                                 src={selectedImage}
                                 alt={productData.name}
@@ -208,20 +212,6 @@ function ListingDetail() {
                                     {productData.location}
                                 </Text>
                             </Box>
-                            {/* Tags */}
-                            {/*<Wrap mt={6}>
-                                {productData.tags?.map((tag) => (
-                                    <WrapItem key={tag}>
-                                        <Tag
-                                            size="md"
-                                            variant="solid"
-                                            colorScheme="blue"
-                                        >
-                                            <TagLabel>{tag}</TagLabel>
-                                        </Tag>
-                                    </WrapItem>
-                                ))}
-                            </Wrap>*/}
                             <Tag size="md" mt={5} variant="solid" colorScheme="blue"><TagLabel>{productData.category}</TagLabel></Tag>
                             <Flex align="center" mt={6}>
                                 <Avatar
