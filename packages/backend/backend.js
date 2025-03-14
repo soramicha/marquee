@@ -47,7 +47,7 @@ const port = 8000;
 //TODO: edit origin link
 app.use(
     cors({
-        origin: "https://thankful-water-009b12010.6.azurestaticapps.net", //"http://localhost:5173",
+        origin: "https://happy-sea-0b99f111e.6.azurestaticapps.net", //"http://localhost:5173", //
         credentials: true,
     })
 );
