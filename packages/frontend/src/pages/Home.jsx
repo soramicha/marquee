@@ -33,39 +33,17 @@ function Home() {
     })
       
   }, []);
-  
-
-  // Filter the recommended items based on selected categories and locations.
-  /*const filteredItems = recommendedItems.filter((item) => { 
-    const matchesCategory =
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(item.category);
-    const matchesLocation =
-      selectedLocations.length === 0 ||
-      selectedLocations.includes(item.location);
-    console.log("matchesCategory:", matchesCategory, "item:", item, "item.category:", item.category)
-    return matchesCategory && matchesLocation;
-  });*/
 
   useEffect(() => {
     // If no filters are applied, reset to all listings
-    if (selectedCategories.length === 0 && selectedLocations.length === 0) {
-      console.log("get all listings again, no filters used", allListings);
-      setFilteredItems(allListings);
-    } else {
-      console.log("selected locations", selectedLocations)
-      console.log("selected categories", selectedCategories)
-
-      const s = allListings.filter((item) => {
-        console.log(item.category)
-        return selectedLocations.map(loc => loc.includes(item.location)) &&
-               selectedCategories.map(cat => cat.includes(item.category))
-      });
-      
-      console.log(s)
-    }
+    const filteredListings = allListings.filter((item) => { 
+      return ((selectedLocations.length === 0 || selectedLocations.includes(item.location)) &&
+              (selectedCategories.length === 0 || selectedCategories.includes(item.category)))
+    });
+    console.log("Filtered Listings:", filteredListings)
+    setFilteredItems(filteredListings);
   }, [selectedCategories, selectedLocations, allListings]);
-
+  
 
   return (
     <Box bg="gray.100" minH="100vh">

@@ -1,7 +1,7 @@
 
 // src/App.jsx
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import FilterNavbar from "./pages/FilterNavbar";
@@ -24,6 +24,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Navigate to="/home" />} />
         {/* Home Page as the root route */}
         <Route path="/home" element={<Home />} />
 
