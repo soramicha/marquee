@@ -1,5 +1,40 @@
+import { StarIcon } from "@chakra-ui/icons";
 import Navbar from "./Navbar";
 import ListingCard from "../components/ui/ListingCard.jsx";
+
+// Sample reviews data (replace with your real data or API call)
+const reviewsData = [
+    {
+        reviewerName: "John Doe",
+        date: "March 1, 2025",
+        rating: 5,
+        comment: "Great user to do business with!",
+    },
+    {
+        reviewerName: "Jane Smith",
+        date: "March 3, 2025",
+        rating: 4,
+        comment: "Friendly and quick responses, recommended!",
+    },
+    {
+        reviewerName: "Alice Brown",
+        date: "March 5, 2025",
+        rating: 5,
+        comment: "Excellent communication and fast shipping!",
+    },
+    {
+        reviewerName: "Bob Martin",
+        date: "March 7, 2025",
+        rating: 5,
+        comment: "Item was exactly as described.",
+    },
+    {
+        reviewerName: "Chris Green",
+        date: "March 9, 2025",
+        rating: 4,
+        comment: "Overall good experience.",
+    },
+];
 
 function Profile() {
     const user = {
@@ -9,7 +44,32 @@ function Profile() {
         listings: 3,
         pageViews: 42,
         pendings: 0,
-        reviews: 0,
+        reviews: 0, // Not currently used for the average, but you can update if desired
+    };
+
+    // Compute the average rating from reviewsData
+    const averageRating = reviewsData.length
+        ? (
+              reviewsData.reduce((sum, r) => sum + r.rating, 0) /
+              reviewsData.length
+          ).toFixed(1)
+        : 0;
+
+    // Renders a row of star icons for a given numeric rating (integer only)
+    // If you want to handle half-stars, you'll need a custom icon or approach.
+    const renderStars = (rating) => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            stars.push(
+                <StarIcon
+                    key={i}
+                    color={i <= rating ? "#2E55C4" : "gray"}
+                    boxSize={4}
+                    style={{ marginRight: "2px" }}
+                />
+            );
+        }
+        return <div style={{ display: "flex" }}>{stars}</div>;
     };
 
     return (
@@ -63,6 +123,46 @@ function Profile() {
                             </strong>{" "}
                             Reviews
                         </p>
+                    </div>
+
+                    {/* Reviews Section */}
+                    <div style={styles.reviewsSection}>
+                        <div style={styles.reviewsHeader}>
+                            <h3 style={styles.reviewsHeading}>Reviews</h3>
+                            {reviewsData.length > 0 && (
+                                <div style={styles.averageRatingBox}>
+                                    <span style={styles.averageRating}>
+                                        {averageRating} / 5
+                                    </span>
+                                    <div style={{ marginLeft: "8px" }}>
+                                        {renderStars(Math.round(averageRating))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {reviewsData.length === 0 ? (
+                            <p style={styles.noReviews}>No reviews yet.</p>
+                        ) : (
+                            reviewsData.map((review, idx) => (
+                                <div style={styles.reviewBox} key={idx}>
+                                    <div style={styles.reviewHeader}>
+                                        <h4 style={styles.reviewTitle}>
+                                            {review.reviewerName}
+                                        </h4>
+                                        <span style={styles.reviewDate}>
+                                            {review.date}
+                                        </span>
+                                    </div>
+                                    <div style={styles.reviewStars}>
+                                        {renderStars(review.rating)}
+                                    </div>
+                                    <p style={styles.reviewText}>
+                                        {review.comment}
+                                    </p>
+                                </div>
+                            ))
+                        )}
                     </div>
                 </div>
 
@@ -183,6 +283,70 @@ const styles = {
     statNumber: {
         fontWeight: 700,
         fontSize: "16px",
+    },
+
+    // Reviews
+    reviewsSection: {
+        backgroundColor: "#E5E5E5",
+        padding: "12px",
+        borderRadius: "8px",
+        marginTop: "15px",
+    },
+    reviewsHeader: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: "10px",
+    },
+    reviewsHeading: {
+        margin: 0,
+        fontSize: "16px",
+        fontWeight: 600,
+        color: "#2E55C4",
+    },
+    averageRatingBox: {
+        display: "flex",
+        alignItems: "center",
+    },
+    averageRating: {
+        fontWeight: 600,
+        fontSize: "14px",
+        color: "#000",
+    },
+    noReviews: {
+        fontSize: "14px",
+        color: "#666",
+        margin: 0,
+    },
+    reviewBox: {
+        backgroundColor: "#fff",
+        borderRadius: "8px",
+        padding: "10px",
+        marginBottom: "10px",
+    },
+    reviewHeader: {
+        display: "flex",
+        justifyContent: "space-between",
+        marginBottom: "5px",
+    },
+    reviewTitle: {
+        margin: 0,
+        fontWeight: 600,
+        fontSize: "14px",
+        color: "#000",
+    },
+    reviewDate: {
+        margin: 0,
+        fontSize: "12px",
+        color: "#666",
+    },
+    reviewStars: {
+        marginBottom: "5px",
+    },
+    reviewText: {
+        margin: 0,
+        fontSize: "14px",
+        color: "#000",
     },
 
     listingsHeading: {
