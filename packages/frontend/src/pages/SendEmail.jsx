@@ -14,7 +14,7 @@ function SendEmail() {
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
     // TODO: hard code receiver to seller
-    const [receiver, setReceiver] = useState("sophia@calpoly.edu");
+    const [receiver, setReceiver] = useState("");
     //const [sender, setSender] = auth?.username;
     // temporary solution
     const [sender, setSender] = useState(localStorage.getItem("username"));
