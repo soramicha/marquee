@@ -46,7 +46,7 @@ function Home() {
   
 
   return (
-    <Box bg="gray.100" minH="100vh">
+    <Box bg="gray.100" minH="100vh" minW = "100vw">
       {/* Top Navbar */}
       <Navbar />
 
