@@ -78,9 +78,8 @@ function Favorites() {
                                 name={item.name}
                                 price={item.price}
                                 location={item.location}
-                                tags={item.tags}
+                                category={item.category}
                                 imageSrc={item.imageSrc}
-                                favorited="true"
                             />
                         ))}
                     </SimpleGrid>
