@@ -115,6 +115,7 @@ export const AuthProvider = ({ children }) => {
                 access_token: null,
                 firebaseUID: null,
             }));
+            
         } catch (error) {
             console.error(error);
         }
