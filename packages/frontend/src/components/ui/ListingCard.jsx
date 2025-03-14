@@ -65,12 +65,12 @@ const getUserFavs = async (username) => {
     }
 };
 
-function ListingCard({ id, name, price, location, imageSrc, category }) {
+function ListingCard({ id, name, price, location, photos, category }) {
     let navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState(false);
     const token = localStorage.getItem("authToken");
     const username = localStorage.getItem("username");
-    const displayedImage = imageSrc || productImage;
+    const displayedImage = photos ? photos[0] : productImage;
 
     useEffect(() => {
         getUserFavs(username).then((res) => {

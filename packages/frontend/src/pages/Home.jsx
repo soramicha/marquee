@@ -79,6 +79,7 @@ function Home() {
                                     price={item.price}
                                     location={item.location}
                                     category={item.category}
+                                    photos={item.photos}
                                 />
                             ))}
                     </SimpleGrid>
