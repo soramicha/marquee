@@ -69,7 +69,7 @@ app.use(
         origin: [
             "http://localhost:5173",
             "http://127.0.0.1:5173",
-            "https://happy-sea-0b99f111e.6.azurestaticapps.net",
+            "https://thankful-water-009b12010.6.azurestaticapps.net",
         ],
         credentials: true,
     })
