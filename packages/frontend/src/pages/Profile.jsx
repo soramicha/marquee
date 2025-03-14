@@ -202,8 +202,7 @@ function Profile() {
                     category={listing.category}
                     price={`${listing.price.toFixed(2)}`}
                     location={listing.location}
-                    tags={listing.tags}
-                    imageSrc={listing.photos?.[0]}
+                    photos={listing.photos}
                   />
                 ))}
               </SimpleGrid>

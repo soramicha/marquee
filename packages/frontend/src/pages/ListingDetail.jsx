@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { axiosPrivate } from "@/api/axios";
 import Navbar from "./Navbar";
 import ListingCard from "../components/ui/ListingCard";
@@ -70,6 +70,7 @@ function ListingDetail() {
     const [sellerUsername, setSellerUsername] = useState("");
     const username = localStorage.getItem('username');
     const [similarListings, setSimilarListings] = useState([])
+    const navigate = useNavigate();
 
     useEffect(() => {
         // get listing info
@@ -235,7 +236,7 @@ function ListingDetail() {
                                 _hover={{ opacity: 0.8 }}
                             >
                                 {interested
-                                    ? sellerUsername
+                                    ? navigate('/email')
                                     : "I'm Interested"}
                             </Button>
                         </Box>
