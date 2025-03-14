@@ -23,7 +23,8 @@ export async function postListing(req, res) {
             });
         }
 
-        const result = await postListingToDB({
+        const result = await 
+        ListingToDB({
             ...req.body,
             status: true,
             user: req.user.userID,
@@ -52,7 +53,7 @@ async function postListingToDB(listing) {
 
 export async function getListing(req, res) {
     try {
-        const id = req.query.id.toString();
+        const id = req.query.id;
         const result = await getListingFromDB(id);
         console.log("fetched listing!");
         if (!result.success) {
@@ -61,14 +62,22 @@ export async function getListing(req, res) {
 
         res.status(200).json(result);
     } catch (error) {
+        console.error("Error fetching listing (listing-service.js) :", error);
         res.status(500).json({ message: "Error fetching listing", error });
     }
 }
 
+
 async function getListingFromDB(id) {
     try {
-        const objectID = new mongoose.Types.ObjectId(id);
-        const listing = await Listing.find({ _id: objectID });
+        let listing;
+        if (id) {
+            const objectID = new mongoose.Types.ObjectId(id.toString());
+            listing = await Listing.find({ _id: objectID});
+        }
+        else {
+            listing = await Listing.find();
+        }
 
         if (listing.length === 0) {
             return { success: false, error: "No listing found" };
@@ -78,7 +87,7 @@ async function getListingFromDB(id) {
     } catch (error) {
         // This catch block will only handle actual errors like:
         // - Invalid ObjectID format
-        // - Database connection issues
+        // - Database connection issue
         // - etc.
         return { success: false, error: error.message };
     }
