@@ -1,10 +1,9 @@
+// src/services/listing-service.js
 import mongoose from "mongoose";
 import Listing from "../models/listing-model.js";
 
 export async function postListing(req, res) {
     try {
-        // Required fields
-        // TODO: add photos for required field after testing
         const requiredFields = [
             "name",
             "price",
@@ -54,7 +53,6 @@ export async function getListing(req, res) {
     try {
         const id = req.query.id;
         const result = await getListingFromDB(id);
-        console.log("fetched listing!");
         if (!result.success) {
             return res.status(400).json({ error: result.error });
         }

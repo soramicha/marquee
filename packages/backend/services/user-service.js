@@ -1,4 +1,5 @@
 import UserModel from "../models/user-model.js";
+import Listing from "../models/listing-model.js";
 
 export async function getUsers(req, res) {
     try {
@@ -77,19 +78,34 @@ export async function addFavorite(req, res) {
     try {
         const username = req.query.username;
         const listing_id = req.query.listing_id;
-        // retrieve user from database if length of array is
+
+        if (!username) {
+            return res.status(400).json({
+                success: false,
+                error: "Username is required",
+            });
+        }
+
+        if (!listing_id) {
+            return res.status(400).json({
+                success: false,
+                error: "Listing ID is required",
+            });
+        }
+
         const user = await UserModel.findOne({ username });
-        // if user not found
         if (!user) {
             return { success: false, error: "User not found" };
         }
         // add listing_id inside favorites array
         user.favorites.push(listing_id);
-        // push to database
         await user.save();
         console.log("Successfully added listing id to favorites");
-        res.status(200).json("Successfully added listing id to favorites!");
-        return { success: true };
+        
+        return res.status(200).json({
+            success: true,
+            message: "Successfully added listing id to favorites",
+        });
     } catch (error) {
         return { success: false, error: error.message };
     }
@@ -97,24 +113,73 @@ export async function addFavorite(req, res) {
 
 export async function removeFavorite(req, res) {
     try {
-        const username = req.query.username;
-        const listing_id = req.query.listing_id;
+        const { username, listing_id } = req.query;
+
+        if (!username) {
+            return res.status(400).json({
+                success: false,
+                error: "Username is required",
+            });
+        }
+
+        if (!listing_id) {
+            return res.status(400).json({
+                success: false,
+                error: "Listing ID is required",
+            });
+        }
+
         // retrieve user from database
         const user = await UserModel.findOne({ username });
+
         // if user not found
         if (!user) {
-            return { success: false, error: "User not found" };
+            return res.status(404).json({
+                success: false,
+                error: "User not found",
+            });
         }
+
         // remove listing_id from favorites array
         user.favorites = user.favorites.filter(
             (id) => id.toString() !== listing_id
         );
-        // push to database
         await user.save();
-        console.log("Successfully removed listing id from favorites");
-        res.status(200).json("Successfully removed listing id from favorites!");
-        return { success: true };
+        return res.status(200).json({
+            success: true,
+            message: "Successfully removed listing from favorites",
+        });
     } catch (error) {
-        return { success: false, error: error.message };
+        console.error("Error removing favorite:", error);
+        return res.status(500).json({
+            success: false,
+            error: "Failed to remove favorite",
+        });
+    }
+}
+
+// ADDED: Function to fetch listings for a specific user with permission check.
+export async function getUserListings(req, res) {
+    try {
+        // TODO: edit to req.params
+        // TODO: params is used for identifiers, and query is used for optional, sorting, etc
+        const id = req.user.userID;
+        const listings = await Listing.find({
+            user: id,
+            status: true,
+        })
+            .sort({ createdAt: -1 });
+
+        if (listings.length === 0) {
+            return res.status(404).json({ error: "No listings found" });
+        }
+
+        return res.status(200).json({ success: true, data: listings });
+    } catch (error) {
+        console.error("Error fetching listings for user:", error);
+        return res.status(500).json({
+            success: false,
+            error: error.message,
+        });
     }
 }

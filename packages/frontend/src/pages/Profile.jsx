@@ -1,6 +1,27 @@
+import {
+  Box,
+  Container,
+  Grid,
+  Flex,
+  Text,
+  Heading,
+  Avatar,
+  Stack,
+  SimpleGrid,
+  Stat,
+  StatNumber,
+  StatLabel,
+  useColorModeValue,
+  VStack,
+  HStack,
+  Divider
+} from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
+import { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import ListingCard from "../components/ui/ListingCard.jsx";
+import ListingCard from "../components/ui/ListingCard";
+import { axiosPrivate } from "@/api/axios";
 
 // Sample reviews data (replace with your real data or API call)
 const reviewsData = [
@@ -37,15 +58,30 @@ const reviewsData = [
 ];
 
 function Profile() {
-    const user = {
-        name: "Samantha Smith",
-        email: "ssmith23@calpoly.edu",
-        bio: "Hi! I am a 3rd-year business major with a strong interest in entrepreneurship and marketing. I have lots of items in my apartment that I am looking to get rid of. Feel free to dm me with any offers. Very open to negotiating!",
-        listings: 3,
-        pageViews: 42,
-        pendings: 0,
-        reviews: 0, // Not currently used for the average, but you can update if desired
-    };
+  const { auth } = useAuth();
+  const [listings, setListings] = useState([]);
+  const bg = useColorModeValue("gray.100", "gray.700");
+  
+  useEffect(() => {
+    async function fetchListings() {
+      if (auth.username) {
+        try {
+          const response = await axiosPrivate.get(`/listing/user`, {
+            headers: {
+              Authorization: `Bearer ${auth.access_token}`,
+            }
+            // params: {
+            //   username: auth.username
+            // }
+          });
+          setListings(response.data.data);
+        } catch (error) {
+          console.error(error);
+        }   
+      }
+    }
+    fetchListings();
+  }, [auth]);
 
     // Compute the average rating from reviewsData
     const averageRating = reviewsData.length
@@ -72,295 +108,113 @@ function Profile() {
         return <div style={{ display: "flex" }}>{stars}</div>;
     };
 
-    return (
-        <div style={styles.page}>
-            <Navbar />
+  return (
+    <Box minH="100vh" minW="100vw" bg="gray.50">
+      <Navbar />
+      <Container maxW="container.xl" pt="150px">
+        <Grid templateColumns={{ base: "1fr", md: "450px 1fr" }} gap={8}>
+          {/* Left Column */}
+          <Stack spacing={4}>
+            {/* Profile Header and Bio sections remain the same */}
+            <Flex align="center">
+              <Avatar
+                size="lg"
+                mr={4}
+                bg="gray.300"
+              />
+              <Box>
+                <Heading size="md">
+                  {auth.username}{" "}
+                  <Text as="span" aria-label="edit">
+                    ✏️
+                  </Text>
+                </Heading>
+                <Text color="gray.600">{auth.username}</Text>
+              </Box>
+            </Flex>
 
-            <div style={styles.profileContainer}>
-                <div style={styles.leftColumn}>
-                    {/* Profile Header */}
-                    <div style={styles.profileHeader}>
-                        <div style={styles.profilePic}></div>
-                        <div>
-                            <h2 style={styles.name}>
-                                {user.name}{" "}
-                                <span role="img" aria-label="edit">
-                                    ✏️
-                                </span>
-                            </h2>
-                            <p style={styles.email}>{user.email}</p>
-                        </div>
-                    </div>
+            {/* Bio Section */}
+            <Box p={4} bg={bg} borderRadius="md">
+              <Text>Your bio goes here.</Text>
+            </Box>
+            
+            {/* Stats Section */}
+            <SimpleGrid columns={2} spacing={4} p={4} bg={bg} borderRadius="md">
+              <Stat textAlign="center">
+                <StatNumber>{auth?.listings || 0}</StatNumber>
+                <StatLabel>Listings</StatLabel>
+              </Stat>
+              <Stat textAlign="center">
+                <StatNumber>{auth?.pageViews || 0}</StatNumber>
+                <StatLabel>Page Views</StatLabel>
+              </Stat>
+              <Stat textAlign="center">
+                <StatNumber>{auth?.pendings || 0}</StatNumber>
+                <StatLabel>Pendings</StatLabel>
+              </Stat>
+              <Stat textAlign="center">
+                <StatNumber>{reviewsData.length}</StatNumber>
+                <StatLabel>Reviews</StatLabel>
+              </Stat>
+            </SimpleGrid>
 
-                    {/* Bio Section */}
-                    <div style={styles.bioBox}>
-                        <p style={styles.bioText}>{user.bio}</p>
-                    </div>
+            {/* Reviews Section */}
+            <Box p={4} bg={bg} borderRadius="md">
+              <Flex justify="space-between" align="center" mb={4}>
+                <Heading size="md" color="blue.600">Reviews</Heading>
+                {reviewsData.length > 0 && (
+                  <HStack spacing={2}>
+                    <Text fontWeight="bold">{averageRating} / 5</Text>
+                    <Flex>{renderStars(Math.round(averageRating))}</Flex>
+                  </HStack>
+                )}
+              </Flex>
 
-                    {/* Stats Section */}
-                    <div style={styles.statsBox}>
-                        <p>
-                            <strong style={styles.statNumber}>
-                                {user.listings}
-                            </strong>{" "}
-                            Listings
-                        </p>
-                        <p>
-                            <strong style={styles.statNumber}>
-                                {user.pageViews}
-                            </strong>{" "}
-                            Page Views
-                        </p>
-                        <p>
-                            <strong style={styles.statNumber}>
-                                {user.pendings}
-                            </strong>{" "}
-                            Pendings
-                        </p>
-                        <p>
-                            <strong style={styles.statNumber}>
-                                {user.reviews}
-                            </strong>{" "}
-                            Reviews
-                        </p>
-                    </div>
+              <VStack spacing={3} align="stretch">
+                {reviewsData.length === 0 ? (
+                  <Text color="gray.500">No reviews yet.</Text>
+                ) : (
+                  reviewsData.map((review, idx) => (
+                    <Box key={idx} p={3} bg="white" borderRadius="md" shadow="sm">
+                      <Flex justify="space-between" mb={2}>
+                        <Text fontWeight="bold">{review.reviewerName}</Text>
+                        <Text color="gray.500" fontSize="sm">{review.date}</Text>
+                      </Flex>
+                      <Flex mb={2}>{renderStars(review.rating)}</Flex>
+                      <Text>{review.comment}</Text>
+                    </Box>
+                  ))
+                )}
+              </VStack>
+            </Box>
+          </Stack>
 
-                    {/* Reviews Section */}
-                    <div style={styles.reviewsSection}>
-                        <div style={styles.reviewsHeader}>
-                            <h3 style={styles.reviewsHeading}>Reviews</h3>
-                            {reviewsData.length > 0 && (
-                                <div style={styles.averageRatingBox}>
-                                    <span style={styles.averageRating}>
-                                        {averageRating} / 5
-                                    </span>
-                                    <div style={{ marginLeft: "8px" }}>
-                                        {renderStars(Math.round(averageRating))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        {reviewsData.length === 0 ? (
-                            <p style={styles.noReviews}>No reviews yet.</p>
-                        ) : (
-                            reviewsData.map((review, idx) => (
-                                <div style={styles.reviewBox} key={idx}>
-                                    <div style={styles.reviewHeader}>
-                                        <h4 style={styles.reviewTitle}>
-                                            {review.reviewerName}
-                                        </h4>
-                                        <span style={styles.reviewDate}>
-                                            {review.date}
-                                        </span>
-                                    </div>
-                                    <div style={styles.reviewStars}>
-                                        {renderStars(review.rating)}
-                                    </div>
-                                    <p style={styles.reviewText}>
-                                        {review.comment}
-                                    </p>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                </div>
-
-                {/* RIGHT COLUMN: My Listings */}
-                <div style={styles.rightColumn}>
-                    <h3 style={styles.listingsHeading}>My Listings</h3>
-                    <div style={styles.listingsGrid}>
-                        <ListingCard
-                            id="2"
-                            name="Gray Hoodie"
-                            price="$25.00"
-                            location="Listing Location"
-                            tags={["vintage", "home"]}
-                        />
-                        <ListingCard
-                            id="3"
-                            name="Gray Hoodie"
-                            price="$25.00"
-                            location="Listing Location"
-                            tags={["vintage", "home"]}
-                        />
-                        <ListingCard
-                            id="4"
-                            name="Gray Hoodie"
-                            price="$25.00"
-                            location="Listing Location"
-                            tags={["vintage", "home"]}
-                        />
-                        <ListingCard
-                            id="5"
-                            name="Vintage Lamp"
-                            price="$25.00"
-                            location="Listing Location"
-                            tags={["vintage", "home"]}
-                        />
-                        <ListingCard
-                            id="6"
-                            name="Vintage Lamp"
-                            price="$25.00"
-                            location="Listing Location"
-                            tags={["vintage", "home"]}
-                        />
-                        {/* fix the info and add more cards if needed */}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+          {/* Right Column */}
+          <Box>
+            <Heading size="md" mb={4}>My Listings</Heading>
+            {listings.length > 0 ? (
+              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+                {listings.map((listing) => (
+                  <ListingCard
+                    key={listing._id}
+                    id={listing._id}
+                    name={listing.name}
+                    category={listing.category}
+                    price={`${listing.price.toFixed(2)}`}
+                    location={listing.location}
+                    tags={listing.tags}
+                    imageSrc={listing.photos?.[0]}
+                  />
+                ))}
+              </SimpleGrid>
+            ) : (
+              <Text>No listings found.</Text>
+            )}
+          </Box>
+        </Grid>
+      </Container>
+    </Box>
+  );
 }
-
-const styles = {
-    page: {
-        backgroundColor: "#F5F5F5",
-        minHeight: "100vh",
-    },
-
-    profileContainer: {
-        display: "grid",
-        gridTemplateColumns: "450px 1fr",
-        columnGap: "35px",
-        width: "100%",
-        fontFamily: "Inter, sans-serif",
-        paddingTop: "150px",
-        paddingLeft: "40px",
-        paddingRight: "40px",
-    },
-
-    leftColumn: {},
-
-    rightColumn: {},
-
-    profileHeader: {
-        display: "flex",
-        alignItems: "center",
-        marginBottom: "15px",
-    },
-    profilePic: {
-        width: "65px",
-        height: "65px",
-        backgroundColor: "#C4C4C4",
-        borderRadius: "50%",
-        marginRight: "10px",
-    },
-    name: {
-        margin: 0,
-        fontSize: "20px",
-        fontWeight: 700,
-        color: "#000",
-    },
-    email: {
-        margin: 0,
-        color: "#666",
-        fontSize: "14px",
-    },
-
-    bioBox: {
-        backgroundColor: "#E5E5E5",
-        padding: "12px",
-        borderRadius: "8px",
-        marginBottom: "15px",
-    },
-    bioText: {
-        fontSize: "14px",
-        color: "#000",
-        margin: 0,
-    },
-
-    statsBox: {
-        display: "grid",
-        gridTemplateColumns: "repeat(2, 1fr)",
-        gap: "10px",
-        textAlign: "center",
-        backgroundColor: "#E5E5E5",
-        padding: "12px",
-        borderRadius: "8px",
-        color: "#000",
-    },
-    statNumber: {
-        fontWeight: 700,
-        fontSize: "16px",
-    },
-
-    // Reviews
-    reviewsSection: {
-        backgroundColor: "#E5E5E5",
-        padding: "12px",
-        borderRadius: "8px",
-        marginTop: "15px",
-    },
-    reviewsHeader: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginBottom: "10px",
-    },
-    reviewsHeading: {
-        margin: 0,
-        fontSize: "16px",
-        fontWeight: 600,
-        color: "#2E55C4",
-    },
-    averageRatingBox: {
-        display: "flex",
-        alignItems: "center",
-    },
-    averageRating: {
-        fontWeight: 600,
-        fontSize: "14px",
-        color: "#000",
-    },
-    noReviews: {
-        fontSize: "14px",
-        color: "#666",
-        margin: 0,
-    },
-    reviewBox: {
-        backgroundColor: "#fff",
-        borderRadius: "8px",
-        padding: "10px",
-        marginBottom: "10px",
-    },
-    reviewHeader: {
-        display: "flex",
-        justifyContent: "space-between",
-        marginBottom: "5px",
-    },
-    reviewTitle: {
-        margin: 0,
-        fontWeight: 600,
-        fontSize: "14px",
-        color: "#000",
-    },
-    reviewDate: {
-        margin: 0,
-        fontSize: "12px",
-        color: "#666",
-    },
-    reviewStars: {
-        marginBottom: "5px",
-    },
-    reviewText: {
-        margin: 0,
-        fontSize: "14px",
-        color: "#000",
-    },
-
-    listingsHeading: {
-        margin: 0,
-        marginBottom: "15px",
-        fontSize: "18px",
-        fontWeight: 600,
-    },
-
-    listingsGrid: {
-        display: "grid",
-        gridTemplateColumns: "repeat(2, 1fr)",
-        gap: "20px",
-    },
-};
 
 export default Profile;

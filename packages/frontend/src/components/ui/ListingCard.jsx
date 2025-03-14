@@ -132,7 +132,7 @@ function ListingCard({ id, name, price, location, photos, category }) {
                 {name}
             </Text>
             <Text fontSize="sm" onClick={goToParticularListingPage}>
-                {price}
+                {`$${price} USD`}
             </Text>
             <Text fontSize="sm" onClick={goToParticularListingPage}>
                 {location}

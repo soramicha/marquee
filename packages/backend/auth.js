@@ -1,9 +1,9 @@
+// auth.js
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getUsersFromDB, addUser } from "./services/user-service.js";
-
 //TODO: when not testing on localhost, set cookies' secure flags to true
-
+// Generates tokens, sets cookies, and sends a response with added user details.
 async function setTokensAndRespond(res, username, id) {
     const access_token = await generateAccessToken(username, id);
     const refresh_token = await generateRefreshToken(username, id);
@@ -16,7 +16,8 @@ async function setTokensAndRespond(res, username, id) {
             path: "/",
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
         });
-        return res.status(201).send({ access_token });
+        // ADDED: Return access token along with user details for client-side storage
+        return res.status(201).json({ access_token, username });
     }
 }
 
@@ -53,7 +54,7 @@ export function logout(req, res) {
     return res.status(204).send("Logged out successfully");
 }
 
-// verifies the user JWT tokens
+// ADDED: Middleware to verify JWT and set req.user with decoded token info
 export function authenticateUser(req, res, next) {
     const authHeader = req.headers["authorization"];
     if (!authHeader?.startsWith("Bearer ")) {

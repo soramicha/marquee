@@ -1,7 +1,9 @@
+// src/context/AuthContext.jsx
 import { createContext, useContext, useState } from "react";
 import { axiosPrivate } from "@/api/axios";
 import { authenticateWithFirebase } from "@/utils/firebase-auth";
 import { auth as firebaseAuth } from "@/config/firebase-config";
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -134,6 +136,7 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
+// Custom hook to use the AuthContext.
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) {

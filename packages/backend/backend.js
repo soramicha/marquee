@@ -16,6 +16,7 @@ import {
     getUsers,
     removeFavorite,
     findUserById,
+    getUserListings
 } from "./services/user-service.js";
 import {
     deleteListing,
@@ -89,6 +90,7 @@ app.delete("/api/users", authenticateUser, deleteUser);
 // TODO: i.e. decoding jwt token and extracting id and comparing both ids from the req and token
 app.post("/api/listing", authenticateUser, postListing);
 app.get("/api/listing", getListing);
+app.get("/api/listing/user", authenticateUser, getUserListings)
 app.delete("/api/listing", authenticateUser, deleteListing);
 app.patch("/api/listing", authenticateUser, updateListing);
 app.get("/api/get-firebase-token", authenticateUser, async (req, res) => {

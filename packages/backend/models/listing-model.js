@@ -13,6 +13,7 @@ import mongoose from "mongoose";
 // CONDITION(required)
 // USER/SELLER(required)
 
+// Define the Listing schema
 const ListingSchema = new mongoose.Schema(
     {
         // for sale/sold
@@ -75,6 +76,7 @@ const ListingSchema = new mongoose.Schema(
     { collection: "listings", timestamps: true }
 );
 
+// Declare the Listing model only once.
 const Listing = mongoose.model("Listings", ListingSchema);
 
 export default Listing;
