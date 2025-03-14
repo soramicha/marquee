@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 describe("Login Test", () => {
     it("Logs in successfully", () => {
         cy.visit("http://localhost:5173/login");

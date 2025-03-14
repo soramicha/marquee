@@ -8,16 +8,16 @@ async function setTokensAndRespond(res, username, id) {
     const access_token = await generateAccessToken(username, id);
     const refresh_token = await generateRefreshToken(username, id);
 
-  if (access_token && refresh_token) {
-    res.cookie('refreshToken', refresh_token, { 
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax', 
-      path: '/',
-      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
-    });
-    return res.status(201).send({ access_token });
-  }
+    if (access_token && refresh_token) {
+        res.cookie("refreshToken", refresh_token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
+        });
+        return res.status(201).send({ access_token });
+    }
 }
 
 export async function loginUser(req, res) {
@@ -46,12 +46,12 @@ export async function loginUser(req, res) {
 }
 
 export function logout(req, res) {
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    secure: false
-  });
-  return res.status(204).send("Logged out successfully");
-};
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: false,
+    });
+    return res.status(204).send("Logged out successfully");
+}
 
 // verifies the user JWT tokens
 export function authenticateUser(req, res, next) {
