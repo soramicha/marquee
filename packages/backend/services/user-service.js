@@ -101,7 +101,7 @@ export async function addFavorite(req, res) {
         user.favorites.push(listing_id);
         await user.save();
         console.log("Successfully added listing id to favorites");
-        
+
         return res.status(200).json({
             success: true,
             message: "Successfully added listing id to favorites",
@@ -167,8 +167,7 @@ export async function getUserListings(req, res) {
         const listings = await Listing.find({
             user: id,
             status: true,
-        })
-            .sort({ createdAt: -1 });
+        }).sort({ createdAt: -1 });
 
         if (listings.length === 0) {
             return res.status(404).json({ error: "No listings found" });

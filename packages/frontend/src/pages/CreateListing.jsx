@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import {
     Center,
     Box,
@@ -7,12 +8,10 @@ import {
     Input,
     InputGroup,
     InputLeftElement,
-    InputRightElement,
     Flex,
     useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { Search } from "lucide-react";
 import FileUpload from "@/components/ui/FileUpload";
 import Navbar from "./Navbar";
 import { useAuth } from "@/context/AuthContext";
@@ -41,6 +40,7 @@ function CreateListing() {
     const [locationType, setLocationType] = useState(""); // "On Campus" or "Off Campus"
     const [residenceArea, setResidenceArea] = useState("");
     const [specificBuilding, setSpecificBuilding] = useState("");
+    // eslint-disable-next-line no-unused-vars
     const [tags, setTags] = useState("");
     const { auth, initializeFirebaseAuth } = useAuth();
     const toast = useToast();

@@ -68,7 +68,6 @@ function ListingDetail() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [productData, setProductData] = useState({})
     const [sellerUsername, setSellerUsername] = useState("");
-    const username = localStorage.getItem('username');
     const [similarListings, setSimilarListings] = useState([])
     const navigate = useNavigate();
 

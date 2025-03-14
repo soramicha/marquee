@@ -14,7 +14,6 @@ import {
   useColorModeValue,
   VStack,
   HStack,
-  Divider
 } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import { useAuth } from "../context/AuthContext";
