@@ -70,6 +70,7 @@ function Home() {
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6}>
             {filteredItems && filteredItems.map((item) => (
                 <Link key={item._id} to={`/listing/${item._id}`}>
+                  {/* TODO add pictures */}
                   <ListingCard
                     key={item._id}
                     id={item._id}

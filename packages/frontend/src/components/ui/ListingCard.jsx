@@ -125,11 +125,11 @@ function ListingCard({ id, name, price, location, imageSrc, category, favorited 
                     aria-label="favorite"
                 />
             </Box>
-            <Text fontSize="lg" fontWeight="bold" mt={3}>
+            <Text fontSize="xl" fontWeight="bold" mt={3}>
                 {name}
             </Text>
-            <Text fontSize="sm">{price}</Text>
-            <Text fontSize="sm">{location}</Text>
+            <Text fontSize="sm" fontWeight="bold">{`$${price} USD`}</Text>
+            <Text fontSize="sm" fontWeight="bold">{location}</Text>
             <Tag size="sm" variant="solid" colorScheme="blue">{category}</Tag>
 
         </Box>

@@ -4,7 +4,6 @@ import { axiosPrivate } from "@/api/axios";
 import { authenticateWithFirebase } from "@/utils/firebase-auth";
 import { auth as firebaseAuth } from "@/config/firebase-config";
 
-// ADDED: Create the AuthContext to store global authentication state.
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {

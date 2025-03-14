@@ -18,7 +18,7 @@ async function setTokensAndRespond(res, username, id) {
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
         });
         // ADDED: Return access token along with user details for client-side storage
-        return res.status(201).json({ access_token, userID: id, username });
+        return res.status(201).json({ access_token, username });
     }
 }
 
