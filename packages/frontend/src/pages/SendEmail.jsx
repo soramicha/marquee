@@ -4,11 +4,11 @@ import { useState, useRef } from "react";
 import emailjs from "@emailjs/browser";
 //import { useAuth } from "@/context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import { axiosPrivate } from "@/api/axios";
+import { axiosPrivate } from "../api/axios";
 
 function SendEmail() {
     // create a ref hook
-    const form = useRef();
+    const form = useRef(null);
     let navigate = useNavigate();
     //const { auth } = useAuth();
     const [subject, setSubject] = useState("");

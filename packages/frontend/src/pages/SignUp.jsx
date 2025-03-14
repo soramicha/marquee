@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 function SignUp() {
     const [school, setSchool] = useState("");
