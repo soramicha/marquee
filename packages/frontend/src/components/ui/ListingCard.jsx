@@ -94,8 +94,8 @@ function ListingCard({ id, name, price, location, photos, category }) {
         }
     };
 
-    const goToParticularListingPage = (e) => {
-        e.stopPropagation();
+    const goToParticularListingPage = () => {
+        console.log("clicked to go to listing detail page!")
         navigate(`/listing/${id}`);
     };
 
@@ -142,6 +142,7 @@ function ListingCard({ id, name, price, location, photos, category }) {
                 size="sm"
                 variant="solid"
                 colorScheme="blue"
+                mt={3}
             >
                 {category}
             </Tag>
