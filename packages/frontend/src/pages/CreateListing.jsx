@@ -6,6 +6,7 @@ import {
     Select,
     Input,
     InputGroup,
+    InputLeftElement,
     InputRightElement,
     Flex,
     useToast,
@@ -31,11 +32,15 @@ function CreateListing() {
     const [photos, setPhotos] = useState([]);
     const [videos, setVideos] = useState([]);
     const [itemName, setItemName] = useState("");
+    // Replace the free-text category with a dropdown selection.
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [condition, setCondition] = useState("Brand New");
-    const [location, setLocation] = useState("");
+    // Remove the old "location" state and add new states for location type, residence area, and building.
+    const [locationType, setLocationType] = useState(""); // "On Campus" or "Off Campus"
+    const [residenceArea, setResidenceArea] = useState("");
+    const [specificBuilding, setSpecificBuilding] = useState("");
     const [tags, setTags] = useState("");
     const { auth, initializeFirebaseAuth } = useAuth();
     const toast = useToast();
@@ -48,6 +53,79 @@ function CreateListing() {
         "Needs Repair",
     ];
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Category options for dropdown
+    const categoryOptions = [
+        "Apparel",
+        "Electronics",
+        "Free Stuff",
+        "Furniture",
+        "Housing",
+        "Pet Supplies",
+        "Textbooks",
+        "Vehicles",
+    ];
+
+    // On-campus residence areas and their buildings
+    const residenceAreasData = {
+        "Yakʔitʸutʸu Halls": [
+            "Tsɨtkawayu (Redwood Hall)",
+            "Elewexe (Black Bear Hall)",
+            "Tumił Sloʔow (Rattlesnake Hall)",
+            "Tiłhini (Eagle Hall)",
+            "Tsʰɨtqawɨ (Bobcat Hall)",
+            "Nipumuʔ (Hummingbird Hall)",
+            "Chekwaka (Tule Elk Hall)",
+        ],
+        "South Mountain Halls": [
+            "Santa Lucia Hall",
+            "Trinity Hall",
+            "Muir Hall",
+            "Sequoia Hall",
+        ],
+        "North Mountain Halls": [
+            "Fremont Hall",
+            "Tenaya Hall",
+            "Shasta Hall",
+            "Whitney Hall",
+            "Palomar Hall",
+        ],
+        "Sierra Madre Halls": [
+            "Buena Vista",
+            "Diablo",
+            "Estrella",
+            "Huasna",
+            "Islay",
+            "Santa Ynez",
+            "Cuesta",
+        ],
+        "Cerro Vista Apartments": [
+            "Building A",
+            "Building B",
+            "Building C",
+            "Building D",
+            "Building E",
+            "Building F",
+            "Building G",
+            "Building H",
+            "Building I",
+            "Building J",
+            "Building K",
+            "Building L",
+            "Building M",
+        ],
+        "Poly Canyon Village (PCV) Apartments": [
+            "Aliso",
+            "Bristlecone",
+            "Ceanothus",
+            "Manzanita",
+            "Oak",
+            "Pinion",
+            "Sage",
+            "Torrey",
+            "Willow",
+        ],
+    };
 
     const uploadMediaToFirebase = async (files, listingId) => {
         const photosURL = [];
@@ -109,7 +187,7 @@ function CreateListing() {
                 }
             );
 
-            // return updated mongoDB object(currently unused)
+            // return updated mongoDB object (currently unused)
             return response.data;
         } catch (error) {
             if (error.code === "storage/unauthenticated") {
@@ -142,12 +220,24 @@ function CreateListing() {
         }
     };
 
+    const checkMinimumMediaCount = () => {
+        if (photos.length === 0) {
+            toast({
+                title: "At least one photo is required.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+            throw new Error("At least one photo is required.");
+        }
+    };
+
     const handleSubmit = async (e) => {
         // PROCESS:
-        // initiate post process by posting the listing to mongodb without the photos/videos.
-        // the response will return the listingId, then we'll use that listingId to properly store the media files in Firebase
-        // we then get the media URLs from firebase and update the mongodb listing with the media
-        // if at any point of this fails, there are failsafes to delete from firebase and mongodb
+        // Post the listing to MongoDB (without the photos/videos),
+        // then use the returned listingId to store media files in Firebase.
+        // After media upload, update the MongoDB listing with media URLs.
+        // In case of failure, failsafes delete from Firebase and MongoDB.
         e.preventDefault();
         setIsSubmitting(true);
         let listingId;
@@ -155,12 +245,18 @@ function CreateListing() {
         try {
             checkMinimumMediaCount();
 
+            // Construct final location string based on dropdown selections.
+            const finalLocation =
+                locationType === "On Campus"
+                    ? `${residenceArea} - ${specificBuilding}`
+                    : "Off Campus";
+
             const listing = {
                 name: itemName,
                 price: price,
                 category: category,
                 description: description,
-                location: location,
+                location: finalLocation,
                 condition: condition,
                 tags: tags,
             };
@@ -203,18 +299,6 @@ function CreateListing() {
         }
     };
 
-    const checkMinimumMediaCount = () => {
-        if (photos.length == 0) {
-            toast({
-                title: "At least one photo is required.",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            });
-            throw new Error("At least one photo is required.");
-        }
-    };
-
     return (
         <Box h="100vh" w="100vw" bg="white" overflow="scroll">
             <Navbar />
@@ -253,29 +337,34 @@ function CreateListing() {
                                     width="100%"
                                     type="text"
                                     value={itemName}
-                                    onChange={(e) =>
-                                        setItemName(e.target.value)
-                                    }
+                                    onChange={(e) => setItemName(e.target.value)}
                                     required
                                 />
 
                                 <Text fontSize="sm" mt={5}>
                                     Category
                                 </Text>
-                                <Input
+                                {/* Replaced text input with a dropdown for Category */}
+                                <Select
                                     borderWidth={1}
                                     borderRadius="10px"
                                     color="#989898"
                                     backgroundColor="white"
                                     mt={1}
                                     width="100%"
-                                    type="text"
                                     value={category}
-                                    onChange={(e) =>
-                                        setCategory(e.target.value)
-                                    }
+                                    onChange={(e) => setCategory(e.target.value)}
                                     required
-                                />
+                                >
+                                    <option value="" disabled>
+                                        Select a category
+                                    </option>
+                                    {categoryOptions.map((cat, index) => (
+                                        <option key={index} value={cat}>
+                                            {cat}
+                                        </option>
+                                    ))}
+                                </Select>
 
                                 <Text fontSize="sm" mt={5}>
                                     Description
@@ -290,9 +379,7 @@ function CreateListing() {
                                     height="250px"
                                     type="text"
                                     value={description}
-                                    onChange={(e) =>
-                                        setDescription(e.target.value)
-                                    }
+                                    onChange={(e) => setDescription(e.target.value)}
                                     required
                                 />
 
@@ -302,20 +389,26 @@ function CreateListing() {
                                 >
                                     <Box flex="1">
                                         <Text fontSize="sm">Price</Text>
-                                        <Input
-                                            borderWidth={1}
-                                            borderRadius="10px"
-                                            color="#989898"
-                                            backgroundColor="white"
-                                            mt={1}
-                                            width="100%"
-                                            type="text"
-                                            value={price}
-                                            onChange={(e) =>
-                                                setPrice(e.target.value)
-                                            }
-                                            required
-                                        />
+                                        <InputGroup mt={1} width="100%">
+                                            <InputLeftElement pointerEvents="none" children="$" />
+                                            <Input
+                                                borderWidth={1}
+                                                borderRadius="10px"
+                                                color="#989898"
+                                                backgroundColor="white"
+                                                type="number"
+                                                step="0.01"
+                                                value={price}
+                                                onChange={(e) => setPrice(e.target.value)}
+                                                onBlur={(e) => {
+                                                    const num = parseFloat(e.target.value);
+                                                    if (!isNaN(num)) {
+                                                        setPrice(num.toFixed(2));
+                                                    }
+                                                }}
+                                                required
+                                            />
+                                        </InputGroup>
                                     </Box>
                                     <Box
                                         flex="1"
@@ -336,37 +429,100 @@ function CreateListing() {
                                             }
                                             required
                                         >
-                                            {conditions.map(
-                                                (condition, index) => (
-                                                    <option
-                                                        key={index}
-                                                        value={condition}
-                                                    >
-                                                        {condition}
-                                                    </option>
-                                                )
-                                            )}
+                                            {conditions.map((condition, index) => (
+                                                <option key={index} value={condition}>
+                                                    {condition}
+                                                </option>
+                                            ))}
                                         </Select>
                                     </Box>
                                 </Flex>
 
+                                {/* Updated Location Section */}
                                 <Text fontSize="sm" mt={5}>
                                     Location
                                 </Text>
-                                <Input
+                                <Select
                                     borderWidth={1}
                                     borderRadius="10px"
                                     color="#989898"
                                     backgroundColor="white"
                                     mt={1}
                                     width="100%"
-                                    type="text"
-                                    value={location}
-                                    onChange={(e) =>
-                                        setLocation(e.target.value)
-                                    }
+                                    value={locationType}
+                                    onChange={(e) => {
+                                        setLocationType(e.target.value);
+                                        // Reset residence area and building if location type changes
+                                        setResidenceArea("");
+                                        setSpecificBuilding("");
+                                    }}
                                     required
-                                />
+                                >
+                                    <option value="" disabled>
+                                        Select location type
+                                    </option>
+                                    <option value="On Campus">On Campus</option>
+                                    <option value="Off Campus">Off Campus</option>
+                                </Select>
+                                {locationType === "On Campus" && (
+                                    <>
+                                        <Text fontSize="sm" mt={5}>
+                                            Residence Area
+                                        </Text>
+                                        <Select
+                                            borderWidth={1}
+                                            borderRadius="10px"
+                                            color="#989898"
+                                            backgroundColor="white"
+                                            mt={1}
+                                            width="100%"
+                                            value={residenceArea}
+                                            onChange={(e) => {
+                                                setResidenceArea(e.target.value);
+                                                setSpecificBuilding("");
+                                            }}
+                                            required
+                                        >
+                                            <option value="" disabled>
+                                                Select a residence area
+                                            </option>
+                                            {Object.keys(residenceAreasData).map((area, index) => (
+                                                <option key={index} value={area}>
+                                                    {area}
+                                                </option>
+                                            ))}
+                                        </Select>
+                                        {residenceArea && (
+                                            <>
+                                                <Text fontSize="sm" mt={5}>
+                                                    Building
+                                                </Text>
+                                                <Select
+                                                    borderWidth={1}
+                                                    borderRadius="10px"
+                                                    color="#989898"
+                                                    backgroundColor="white"
+                                                    mt={1}
+                                                    width="100%"
+                                                    value={specificBuilding}
+                                                    onChange={(e) =>
+                                                        setSpecificBuilding(e.target.value)
+                                                    }
+                                                    required
+                                                >
+                                                    <option value="" disabled>
+                                                        Select a building
+                                                    </option>
+                                                    {residenceAreasData[residenceArea].map((building, index) => (
+                                                        <option key={index} value={building}>
+                                                            {building}
+                                                        </option>
+                                                    ))}
+                                                </Select>
+                                            </>
+                                        )}
+                                    </>
+                                )}
                             </Box>
                             <Box
                                 flex="1"
@@ -383,30 +539,6 @@ function CreateListing() {
                                     accept="video/*"
                                     onChange={setVideos}
                                 />
-                                <Text fontSize="sm">Tags</Text>
-                                <InputGroup width="100%">
-                                    <InputRightElement
-                                        pointerEvents="none"
-                                        mt={1}
-                                    >
-                                        <Search color="#989898" />
-                                    </InputRightElement>
-                                    <Input
-                                        mb={10}
-                                        borderWidth={1}
-                                        borderRadius="10px"
-                                        color="#989898"
-                                        backgroundColor="white"
-                                        mt={1}
-                                        width="100%"
-                                        type="text"
-                                        value={tags}
-                                        onChange={(e) =>
-                                            setTags(e.target.value)
-                                        }
-                                        required
-                                    />
-                                </InputGroup>
                             </Box>
                         </Flex>
                     </form>
