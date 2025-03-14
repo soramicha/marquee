@@ -4,8 +4,6 @@ import {
     Image,
     IconButton,
     Text,
-    Wrap,
-    WrapItem,
     Tag,
 } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
@@ -57,7 +55,7 @@ const removeFavorite = async (token, username, listing_id) => {
     }
 };
 
-function ListingCard({ id, name, price, location, imageSrc, tags, favorited }) {
+function ListingCard({ id, name, price, location, imageSrc, category, favorited }) {
     // Local state to toggle heart color (dummy functionality)
     const [isFavorite, setIsFavorite] = useState(
         favorited === "true" ? true : false
@@ -110,17 +108,8 @@ function ListingCard({ id, name, price, location, imageSrc, tags, favorited }) {
             </Text>
             <Text fontSize="sm">{price}</Text>
             <Text fontSize="sm">{location}</Text>
-            {tags && tags.length > 0 && (
-                <Wrap spacing={2} mt={2}>
-                    {tags.map((tag) => (
-                        <WrapItem key={tag}>
-                            <Tag size="sm" variant="solid" colorScheme="blue">
-                                {tag}
-                            </Tag>
-                        </WrapItem>
-                    ))}
-                </Wrap>
-            )}
+            <Tag size="sm" variant="solid" colorScheme="blue">{category}</Tag>
+
         </Box>
     );
 }

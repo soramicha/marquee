@@ -57,7 +57,7 @@ function App() {
                     <Route element={<RequireAuth />}>
                         {/* Place your protected routes here, e.g.:
                 <Route path="dashboard" element={<Dashboard />} />
-            */}
+                */}
                     </Route>
                 </Route>
             </Routes>
