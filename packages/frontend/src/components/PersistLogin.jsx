@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import useRefreshToken from "@/hooks/useRefreshToken";
 import { useAuth } from "@/context/AuthContext";
-import { Heading } from '@chakra-ui/react';
+import { Heading } from "@chakra-ui/react";
 
 const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +18,7 @@ const PersistLogin = () => {
             } finally {
                 setIsLoading(false);
             }
-        }
+        };
 
         !auth?.access_token ? verifyRefreshToken() : setIsLoading(false);
     }, []);
@@ -26,16 +26,12 @@ const PersistLogin = () => {
     if (isLoading) {
         return (
             <div>
-                <Heading>
-                    Loading...    
-                </Heading>
+                <Heading>Loading...</Heading>
             </div>
-        )
+        );
     }
 
-    return (
-        <Outlet />
-    );
+    return <Outlet />;
 };
 
 export default PersistLogin;

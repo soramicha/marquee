@@ -80,9 +80,7 @@ function Home() {
               }
           </SimpleGrid>
         </Box>
-      </Flex>
-    </Box>
-  );
+    );
 }
 
 export default Home;
