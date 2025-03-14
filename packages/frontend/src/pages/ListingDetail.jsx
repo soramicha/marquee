@@ -9,8 +9,6 @@ import {
     IconButton,
     Avatar,
     SimpleGrid,
-    Wrap,
-    WrapItem,
     Tag,
     TagLabel,
 } from "@chakra-ui/react";
@@ -51,13 +49,18 @@ const getUserInfo = async (username) => {
     }
 };
 
-function ListingDetail() {
-    const similarListings = [
-        { id: 1, name: "Gray Hoodie", price: "$15", location: "Yosemite Hall", category: "Clothing" },
-        { id: 2, name: "Blue Sweater", price: "$25", location: "Cerro Vista", category: "Clothing" },
-        { id: 3, name: "Black Jacket", price: "$30", location: "Sierra Madre", category: "Clothing" },
-    ];
+const getAllListings = async () => {
+    try {
+        const response = await axiosPrivate.get("/listing");
+        console.log(response.data);
+        console.log("Successfully retrieved listings!");
+        return response.data;
+    } catch (error) {
+        console.log("Unable to successfully retrieve all listings:", error);
+    }
+};
 
+function ListingDetail() {
     // retrieve id from url
     const { id } = useParams();
     const [interested, setInterested] = useState(false);
@@ -66,6 +69,7 @@ function ListingDetail() {
     const [productData, setProductData] = useState({})
     const [sellerUsername, setSellerUsername] = useState("");
     const username = localStorage.getItem('username');
+    const [similarListings, setSimilarListings] = useState([])
 
     useEffect(() => {
         // get listing info
@@ -73,6 +77,15 @@ function ListingDetail() {
             console.log("retrived listing info!", res.data[0])
             setProductData(res.data[0])
             setSelectedImage(res.data[0].photos[0])
+
+            getAllListings().then(listing => {
+                console.log("category", res.data[0].category, "LISTING DATA", listing.data);
+                const similar = listing.data.filter((item) => {
+                    return (res.data[0].category.includes(item.category) && (id != item._id))
+                })
+                console.log('SIMILAR:', similar)
+                setSimilarListings(similar)
+            });
         })
 
         // get user info
@@ -84,6 +97,12 @@ function ListingDetail() {
             }
         })
     }, [])
+
+    /*const similarListings = [
+        { id: 1, name: "Gray Hoodie", price: "$15", location: "Yosemite Hall", category: "Clothing" },
+        { id: 2, name: "Blue Sweater", price: "$25", location: "Cerro Vista", category: "Clothing" },
+        { id: 3, name: "Black Jacket", price: "$30", location: "Sierra Madre", category: "Clothing" },
+    ];*/
 
     return (
         <Box bg="gray.100" minH="100vh">
@@ -190,7 +209,7 @@ function ListingDetail() {
                                 </Text>
                             </Box>
                             {/* Tags */}
-                            <Wrap mt={6}>
+                            {/*<Wrap mt={6}>
                                 {productData.tags?.map((tag) => (
                                     <WrapItem key={tag}>
                                         <Tag
@@ -202,7 +221,8 @@ function ListingDetail() {
                                         </Tag>
                                     </WrapItem>
                                 ))}
-                            </Wrap>
+                            </Wrap>*/}
+                            <Tag size="md" mt={5} variant="solid" colorScheme="blue"><TagLabel>{productData.category}</TagLabel></Tag>
                             <Flex align="center" mt={6}>
                                 <Avatar
                                     name={sellerUsername}
@@ -233,21 +253,24 @@ function ListingDetail() {
                 </Flex>
                 {/* Similar Listings */}
                 <Box mt={12}>
+                {similarListings && similarListings.length > 0 && (
                     <Text fontSize="2xl" fontWeight="bold" mb={4}>
                         Similar Listings
                     </Text>
+                    )}
                     <SimpleGrid
                         columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
                         spacing={6}
                     >
-                        {similarListings.map((item) => (
+                        {similarListings.map(item => (
                             <ListingCard
-                                key={item.id}
-                                id={item.id}
+                                key={item._id}
+                                id={item._id}
                                 name={item.name}
                                 price={item.price}
                                 location={item.location}
                                 category={item.category}
+                                photos={item.photos}
                             />
                         ))}
                     </SimpleGrid>
