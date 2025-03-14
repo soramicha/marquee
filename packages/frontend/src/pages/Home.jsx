@@ -1,5 +1,5 @@
 // src/pages/Home.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -10,6 +10,7 @@ import { axiosPrivate } from "@/api/axios";
 const getAllListings = async () => {
   try {
     const response = await axiosPrivate.get("/listing");
+    console.log(response.data)
     console.log("Successfully retrieved listings!");
     return response.data
   } catch (error) {
@@ -28,6 +29,7 @@ function Home() {
     console.log("gathered all listings");
     getAllListings().then((res) => 
     {
+        console.log(res.data)
       setAllListings(res.data)
       setFilteredItems(res.data)
     })
@@ -37,11 +39,12 @@ function Home() {
   useEffect(() => {
     // If no filters are applied, reset to all listings
     const filteredListings = allListings.filter((item) => { 
-      return ((selectedLocations.length === 0 || selectedLocations.includes(item.location)) &&
-              (selectedCategories.length === 0 || selectedCategories.includes(item.category)))
+        return ((selectedLocations.length === 0 || selectedLocations.includes(item.location)) &&
+            (selectedCategories.length === 0 || selectedCategories.includes(item.category)))
     });
     console.log("Filtered Listings:", filteredListings)
     setFilteredItems(filteredListings);
+    
   }, [selectedCategories, selectedLocations, allListings]);
   
 
@@ -73,13 +76,15 @@ function Home() {
                     name={item.name}
                     price={item.price}
                     location={item.location}
-                    categories ={item.category}
+                    category ={item.category}
                   />
                 </Link>
               ))
               }
           </SimpleGrid>
         </Box>
+    </Flex>
+    </Box>
     );
 }
 

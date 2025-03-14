@@ -23,8 +23,7 @@ export async function postListing(req, res) {
             });
         }
 
-        const result = await 
-        ListingToDB({
+        const result = await ListingToDB({
             ...req.body,
             status: true,
             user: req.user.userID,
@@ -67,15 +66,13 @@ export async function getListing(req, res) {
     }
 }
 
-
 async function getListingFromDB(id) {
     try {
         let listing;
         if (id) {
             const objectID = new mongoose.Types.ObjectId(id.toString());
-            listing = await Listing.find({ _id: objectID});
-        }
-        else {
+            listing = await Listing.find({ _id: objectID });
+        } else {
             listing = await Listing.find();
         }
 
