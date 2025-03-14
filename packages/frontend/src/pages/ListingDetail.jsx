@@ -15,40 +15,75 @@ import {
     TagLabel,
 } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
-import { useState } from "react";
-import grayHoodie from "../assets/grayhoodie.png";
-import alt1 from "../assets/alt1.webp";
-import alt2 from "../assets/alt2.webp";
-import alt3 from "../assets/alt3.webp";
-
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { axiosPrivate } from "@/api/axios";
 import Navbar from "./Navbar";
 import ListingCard from "../components/ui/ListingCard";
 
-function ListingDetail() {
-    // Example product data including tags
-    const productData = {
-        title: "Oversized Gray Hoodie",
-        price: 20.0,
-        description:
-            "Super comfy and perfect for those cold lecture halls or lazy days. I’ve loved this hoodie, but I just don’t wear it enough anymore. Still in great condition—no stains or holes! Just trying to clear out my closet. Let me know if you’re interested!",
-        condition: "Used",
-        location: "Poly Canyon Village",
-        sellerName: "Samantha Smith",
-        sellerEmail: "samantha@calpoly.edu",
-        mainImage: grayHoodie,
-        otherImages: [grayHoodie, alt1, alt2, alt3],
-        tags: ["Apparel", "Casual", "Vintage"],
-    };
+const getListingDetail = async (listing_id) => {
+    try {
+        const response = await axiosPrivate.get("/listing", {
+            params: {
+                id: listing_id,
+            },
+        });
+        console.log("Successfully retrieved listing!", response.data);
+        return response.data;
+    } catch (error) {
+        console.log("Unable to get listings:", error);
+    }
+};
 
+
+const getUserInfo = async (username) => {
+    try {
+        const response = await axiosPrivate.get("/users", {
+            params: {
+                username: username,
+            },
+        });
+        console.log("Successfully retrieved user!", response.data);
+        const user = response.data;
+        return user[0];
+    } catch (error) {
+        console.log("Unable to successfully retriever user info:", error);
+    }
+};
+
+function ListingDetail() {
     const similarListings = [
-        { id: 1, name: "Gray Hoodie", price: "$15", location: "Yosemite Hall" },
-        { id: 2, name: "Blue Sweater", price: "$25", location: "Cerro Vista" },
-        { id: 3, name: "Black Jacket", price: "$30", location: "Sierra Madre" },
+        { id: 1, name: "Gray Hoodie", price: "$15", location: "Yosemite Hall", category: "Clothing" },
+        { id: 2, name: "Blue Sweater", price: "$25", location: "Cerro Vista", category: "Clothing" },
+        { id: 3, name: "Black Jacket", price: "$30", location: "Sierra Madre", category: "Clothing" },
     ];
 
+    // retrieve id from url
+    const { id } = useParams();
     const [interested, setInterested] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(productData.mainImage);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [productData, setProductData] = useState({})
+    const [sellerUsername, setSellerUsername] = useState("");
+    const username = localStorage.getItem('username');
+
+    useEffect(() => {
+        // get listing info
+        getListingDetail(id).then(res => {
+            console.log("retrived listing info!", res.data[0])
+            setProductData(res.data[0])
+            setSelectedImage(res.data[0].photos[0])
+        })
+
+        // get user info
+        getUserInfo(username).then(res => {
+            console.log(res.favorites, " is the user info!")
+            setSellerUsername(res.username)
+            if (res.favorites.includes(id)) {
+                setIsFavorite(true)
+            }
+        })
+    }, [])
 
     return (
         <Box bg="gray.100" minH="100vh">
@@ -72,7 +107,20 @@ function ListingDetail() {
                         gap={4}
                         alignItems={{ base: "center", md: "flex-start" }}
                     >
-                        {productData.otherImages.map((img, idx) => (
+                        {productData.photos?.map((img, idx) => (
+                            <Image
+                                key={idx}
+                                src={img}
+                                alt={`Thumbnail ${idx + 1}`}
+                                boxSize="90px"
+                                objectFit="cover"
+                                borderRadius="md"
+                                cursor="pointer"
+                                onClick={() => setSelectedImage(img)}
+                                _hover={{ borderColor: "#2E55C4" }}
+                            />
+                        ))}
+                        {productData.videos?.map((img, idx) => (
                             <Image
                                 key={idx}
                                 src={img}
@@ -92,7 +140,7 @@ function ListingDetail() {
                         <Box position="relative">
                             <Image
                                 src={selectedImage}
-                                alt={productData.title}
+                                alt={productData.name}
                                 maxH="700px"
                                 objectFit="cover"
                                 borderRadius="md"
@@ -123,10 +171,10 @@ function ListingDetail() {
                     >
                         <Box>
                             <Text fontSize="3xl" fontWeight="bold">
-                                {productData.title}
+                                {productData.name}
                             </Text>
                             <Text fontSize="2xl" fontWeight="semibold" mt={2}>
-                                ${productData.price.toFixed(2)}
+                                ${productData.price?.toFixed(2)}
                             </Text>
                             <Text mt={6} fontSize="lg" color="gray.700">
                                 {productData.description}
@@ -143,7 +191,7 @@ function ListingDetail() {
                             </Box>
                             {/* Tags */}
                             <Wrap mt={6}>
-                                {productData.tags.map((tag) => (
+                                {productData.tags?.map((tag) => (
                                     <WrapItem key={tag}>
                                         <Tag
                                             size="md"
@@ -157,12 +205,12 @@ function ListingDetail() {
                             </Wrap>
                             <Flex align="center" mt={6}>
                                 <Avatar
-                                    name={productData.sellerName}
+                                    name={sellerUsername}
                                     size="md"
                                     mr={3}
                                 />
                                 <Text fontSize="lg">
-                                    {productData.sellerName}
+                                    {sellerUsername}
                                 </Text>
                             </Flex>
                         </Box>
@@ -177,7 +225,7 @@ function ListingDetail() {
                                 _hover={{ opacity: 0.8 }}
                             >
                                 {interested
-                                    ? productData.sellerEmail
+                                    ? sellerUsername
                                     : "I'm Interested"}
                             </Button>
                         </Box>
@@ -199,6 +247,7 @@ function ListingDetail() {
                                 name={item.name}
                                 price={item.price}
                                 location={item.location}
+                                category={item.category}
                             />
                         ))}
                     </SimpleGrid>

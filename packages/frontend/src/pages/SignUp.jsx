@@ -6,7 +6,7 @@ import {
     Button,
     Input,
     FormControl,
-    useToast
+    useToast,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";

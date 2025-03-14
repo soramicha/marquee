@@ -18,7 +18,13 @@ import Navbar from "./Navbar";
 import { useAuth } from "@/context/AuthContext";
 import { axiosPrivate } from "@/api/axios";
 import { storage } from "@/config/firebase-config";
-import { uploadBytes, ref, getDownloadURL, listAll, deleteObject } from "firebase/storage";
+import {
+    uploadBytes,
+    ref,
+    getDownloadURL,
+    listAll,
+    deleteObject,
+} from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 

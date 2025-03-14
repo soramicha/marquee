@@ -83,30 +83,30 @@ function Profile() {
     fetchListings();
   }, [auth]);
 
-  // Compute the average rating from reviewsData
-  const averageRating = reviewsData.length
-      ? (
-            reviewsData.reduce((sum, r) => sum + r.rating, 0) /
-            reviewsData.length
-        ).toFixed(1)
-      : 0;
+    // Compute the average rating from reviewsData
+    const averageRating = reviewsData.length
+        ? (
+              reviewsData.reduce((sum, r) => sum + r.rating, 0) /
+              reviewsData.length
+          ).toFixed(1)
+        : 0;
 
-  // Renders a row of star icons for a given numeric rating (integer only)
-  // If you want to handle half-stars, you'll need a custom icon or approach.
-  const renderStars = (rating) => {
-      const stars = [];
-      for (let i = 1; i <= 5; i++) {
-          stars.push(
-              <StarIcon
-                  key={i}
-                  color={i <= rating ? "#2E55C4" : "gray"}
-                  boxSize={4}
-                  style={{ marginRight: "2px" }}
-              />
-          );
-      }
-      return <div style={{ display: "flex" }}>{stars}</div>;
-  };
+    // Renders a row of star icons for a given numeric rating (integer only)
+    // If you want to handle half-stars, you'll need a custom icon or approach.
+    const renderStars = (rating) => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            stars.push(
+                <StarIcon
+                    key={i}
+                    color={i <= rating ? "#2E55C4" : "gray"}
+                    boxSize={4}
+                    style={{ marginRight: "2px" }}
+                />
+            );
+        }
+        return <div style={{ display: "flex" }}>{stars}</div>;
+    };
 
   return (
     <Box minH="100vh" minW="100vw" bg="gray.50">

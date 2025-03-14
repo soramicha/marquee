@@ -9,10 +9,9 @@ async function setTokensAndRespond(res, username, id) {
     const refresh_token = await generateRefreshToken(username, id);
 
     if (access_token && refresh_token) {
-        // ADDED: Set refresh token as HTTP-only cookie
         res.cookie("refreshToken", refresh_token, {
             httpOnly: true,
-            secure: false, // Change to true in production (HTTPS)
+            secure: false,
             sameSite: "lax",
             path: "/",
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
@@ -48,7 +47,6 @@ export async function loginUser(req, res) {
 }
 
 export function logout(req, res) {
-    // ADDED: Clear the refresh token cookie on logout
     res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: false,

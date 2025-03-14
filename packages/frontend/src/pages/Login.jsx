@@ -1,4 +1,12 @@
-import { Heading, Box, Text, Button, Input, Flex, useToast } from "@chakra-ui/react";
+import {
+    Heading,
+    Box,
+    Text,
+    Button,
+    Input,
+    Flex,
+    useToast,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -84,7 +92,7 @@ function Login() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 type="email"
-                                data-testid = "email-input"
+                                data-testid="email-input"
                             />
                             <Input
                                 borderWidth={0}
@@ -96,7 +104,7 @@ function Login() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 type="password"
-                                data-testid = "password-input"
+                                data-testid="password-input"
                             />
                             <Box
                                 fontWeight={400}
@@ -118,7 +126,7 @@ function Login() {
                             backgroundColor="#2E55C4"
                             isLoading={isLoading}
                             loadingText="Signing In"
-                            data-testid = "sign-in-button"
+                            data-testid="sign-in-button"
                         >
                             <Text color="white">Sign In</Text>
                         </Button>
