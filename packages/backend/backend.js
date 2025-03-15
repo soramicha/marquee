@@ -32,15 +32,9 @@ import {
     updateReadStatus,
     addReplytoEmail,
 } from "./services/email-service.js";
-import fs from "fs";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-import { join } from "path";
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
 // Firebase initialization

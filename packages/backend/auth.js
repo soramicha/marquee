@@ -10,9 +10,9 @@ async function setTokensAndRespond(res, username, id) {
 
     if (access_token && refresh_token) {
         res.cookie("refreshToken", refresh_token, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "lax",
+            httpOnly: true, // inaccessible by javascript
+            secure: true, // HTTPS connections only
+            sameSite: "none", // requests across different domains
             path: "/",
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
         });
