@@ -15,6 +15,8 @@ import {
 import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext"; // Adjust path as needed
+import profileImage from '@/assets/cat.png';  // If image is in src/assets
+
 
 function Navbar() {
     const { auth, logout } = useAuth();
@@ -98,7 +100,7 @@ function Navbar() {
                                 p={0}
                             >
                                 <Image
-                                    src="cat.png"
+                                    src={profileImage}
                                     boxSize="50px"
                                     borderRadius="full"
                                     fit="cover"
