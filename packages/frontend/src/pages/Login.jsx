@@ -86,7 +86,6 @@ function Login() {
                                 mt={5}
                                 borderWidth={0}
                                 borderRadius={"10px"}
-                                color="#989898"
                                 backgroundColor="#F3F3F3"
                                 placeholder="Username@yourschool.edu"
                                 value={email}
@@ -97,7 +96,6 @@ function Login() {
                             <Input
                                 borderWidth={0}
                                 borderRadius={"10px"}
-                                color="#989898"
                                 backgroundColor="#F3F3F3"
                                 mt={4}
                                 placeholder="Password"

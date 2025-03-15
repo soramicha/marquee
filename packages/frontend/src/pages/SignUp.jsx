@@ -112,7 +112,6 @@ function SignUp() {
                                         borderRadius={"10px"}
                                         backgroundColor="#F3F3F3"
                                         mt={8}
-                                        color="black"
                                         placeholder="School"
                                         value={school}
                                         onChange={(e) =>
@@ -123,7 +122,6 @@ function SignUp() {
                                     <Input
                                         borderWidth={0}
                                         borderRadius={"10px"}
-                                        color="black"
                                         backgroundColor="#F3F3F3"
                                         mt={4}
                                         placeholder="Student Email (ex. john@college.edu)"
@@ -136,7 +134,6 @@ function SignUp() {
                                     <Input
                                         borderWidth={0}
                                         borderRadius={"10px"}
-                                        color="black"
                                         backgroundColor="#F3F3F3"
                                         mt={4}
                                         placeholder="Password"
@@ -149,7 +146,6 @@ function SignUp() {
                                     <Input
                                         borderWidth={0}
                                         borderRadius={"10px"}
-                                        color="black"
                                         backgroundColor="#F3F3F3"
                                         mt={4}
                                         placeholder="Confirm Password"
