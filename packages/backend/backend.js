@@ -120,13 +120,13 @@ app.get("/api/protected", authenticateUser, (req, res) => {
 });
 
 app.listen(process.env.PORT || port, () => {
-    console.log(process.env.PORT);
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.error(process.env.PORT, "IS the port");
+    console.error(`Example app listening at port ${port}`);
 });
 
 // see logged routes
 app._router.stack.forEach((route) => {
     if (route.route && route.route.path) {
-        console.log(route.route.path);
+        console.error("Route:", route.route.path);
     }
 });
