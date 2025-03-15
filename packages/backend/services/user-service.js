@@ -4,7 +4,6 @@ import Listing from "../models/listing-model.js";
 export async function getUsers(req, res) {
     try {
         let users;
-        console.log(req.query.username);
         if (req.query.username) {
             users = await getUsersFromDB(req.query.username);
         } else {

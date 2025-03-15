@@ -13,31 +13,30 @@ import ListingDetail from "./pages/ListingDetail";
 import Favorites from "./pages/Favorites"; // we'll create this page below
 import SendEmail from "./pages/SendEmail";
 import ViewAllEmails from "./pages/ViewAllEmails";
+import Layout from "./components/ui/Layout";
 
 function App() {
     return (
         <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Navigate to="/signup" />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="login" element={<Login />} />
-                <Route path="signup" element={<SignUp />} />
-                <Route path="listing/:id" element={<ListingDetail />} />
-                {/* Protected routes wrapper (for future use) */}
-                <Route element={<PersistLogin />}>
-                    <Route element={<RequireAuth />}>
-                        {/* Place your protected routes here, e.g.:
-                            <Route path="dashboard" element={<Dashboard />} />
-                        */}
-                        <Route
-                            path="listing/create"
-                            element={<CreateListing />}
-                        />
-                        <Route path="email" element={<ViewAllEmails />} />
-                        <Route path="email/create" element={<SendEmail />} />
-                        <Route path="/favorites" element={<Favorites />} />
-                        <Route path="email/:id" element={<IndivEmail />} />
-                        <Route path="profile" element={<Profile />} />
+            <Routes>            
+                {/* Routes with Navbar */}
+                <Route element={<Layout />}>
+                    {/* Protected routes */}
+                    <Route element={<PersistLogin />}>
+                        <Route path="/" element={<Navigate to="/signup" />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<SignUp />} />
+                        <Route path="/home" element={<Home />} />
+                        <Route path="listing/:id" element={<ListingDetail />} />
+                    
+                        <Route element={<RequireAuth />}>
+                            <Route path="listing/create" element={<CreateListing />} />
+                            <Route path="email" element={<ViewAllEmails />} />
+                            <Route path="email/create" element={<SendEmail />} />
+                            <Route path="/favorites" element={<Favorites />} />
+                            <Route path="email/:id" element={<IndivEmail />} />
+                            <Route path="profile" element={<Profile />} />
+                        </Route>
                     </Route>
                 </Route>
             </Routes>
