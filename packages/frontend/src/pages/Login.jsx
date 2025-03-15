@@ -21,6 +21,14 @@ function Login() {
 
     const logUser = async () => {
         setIsLoading(true);
+        if (!email || !password) {
+            toast({
+                title: "Invalid email/password",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
         try {
             await login(email, password);
             navigate("/home");

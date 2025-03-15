@@ -23,10 +23,12 @@ async function setTokensAndRespond(res, username, id) {
 
 export async function loginUser(req, res) {
     const { username, password } = req.body; // from form
-    const existingUser = await getUsersFromDB(username);
-    if (!password) {
-        return res.status(401).send("No password was given");
+
+    if (!username || !password) {
+        return res.status(401).send("Invalid login credentials");
     }
+
+    const existingUser = await getUsersFromDB(username);
 
     if (existingUser.length === 0) {
         // invalid username

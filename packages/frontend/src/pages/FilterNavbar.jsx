@@ -1,4 +1,3 @@
-"use client";
 import { Box, Text, Flex, CheckboxGroup, Checkbox } from "@chakra-ui/react";
 
 function FilterNavbar({
