@@ -41,14 +41,7 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const serviceAccount = JSON.parse(
-    fs.readFileSync(
-        join(
-            __dirname,
-            "./marquee-7b1a9-firebase-adminsdk-fbsvc-e1820b4288.json"
-        )
-    )
-);
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
 // Firebase initialization
 initializeApp({
