@@ -51,7 +51,7 @@ export function logout(req, res) {
     res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: true,
-        sameSite: "none", 
+        sameSite: "none",
         path: "/",
     });
     return res.status(204).send("Logged out successfully");
