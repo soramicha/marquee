@@ -2,7 +2,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getUsersFromDB, addUser } from "./services/user-service.js";
-//TODO: when not testing on localhost, set cookies' secure flags to true
 // Generates tokens, sets cookies, and sends a response with added user details.
 async function setTokensAndRespond(res, username, id) {
     const access_token = await generateAccessToken(username, id);
@@ -51,7 +50,9 @@ export async function loginUser(req, res) {
 export function logout(req, res) {
     res.clearCookie("refreshToken", {
         httpOnly: true,
-        secure: false,
+        secure: true,
+        sameSite: "none", 
+        path: "/",
     });
     return res.status(204).send("Logged out successfully");
 }
