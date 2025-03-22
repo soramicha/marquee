@@ -108,7 +108,8 @@ function IndivEmail() {
         // retreive email from database
         getIndivEmail(id, token).then((email) => {
             setSubject(email[0].emailSubject);
-            setTimestamp(email[0].createdAt);
+            const date = new Date(email[0].createdAt)
+            setTimestamp(date.toLocaleDateString('en-US', {hour: '2-digit', minute: '2-digit',}));
             setBody(email[0].emailContent);
 
             // get users by id
