@@ -235,7 +235,7 @@ function ListingDetail() {
                                 _hover={{ opacity: 0.8 }}
                             >
                                 {interested
-                                    ? navigate('/email')
+                                    ? navigate('/email/create', { state: { sellerEmail : sellerUsername} })
                                     : "I'm Interested"}
                             </Button>
                         </Box>
