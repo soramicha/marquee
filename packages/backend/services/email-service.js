@@ -93,11 +93,23 @@ async function findEmailFromDB(id) {
 
 export async function updateReadStatus(req, res) {
     try {
-        const updatedEmail = await Email.findByIdAndUpdate(
-            req.query.id,
-            { isRead: true },
-            { new: true }
-        );
+        let updatedEmail;
+        if (req.query.user == "isReadReceiver") {
+            console.log(req.query.user, "for updating status for receiver");
+
+            updatedEmail = await Email.findByIdAndUpdate(
+                req.query.id,
+                { isReadReceiver: true },
+                { new: true }
+            );
+        } else {
+            console.log(req.query.user, "for updating status for sender");
+            updatedEmail = await Email.findByIdAndUpdate(
+                req.query.id,
+                { isReadSender: true },
+                { new: true }
+            );
+        }
         console.log("Successfully updated read status from backend!");
         res.status(200).json(updatedEmail);
     } catch (error) {

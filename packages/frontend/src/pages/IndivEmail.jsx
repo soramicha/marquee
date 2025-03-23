@@ -17,7 +17,7 @@ const getIndivEmail = async (id, token) => {
         });
         console.log(
             "Email retreived from MongoDB successfully:",
-            response.data
+            //response.data
         );
         return response.data;
     } catch (error) {
@@ -42,7 +42,7 @@ const getUsersById = async (id, token) => {
     }
 };
 
-const updateReadStatus = async (id, token) => {
+const updateReadStatus = async (id, user, token) => {
     try {
         const res = await axiosPrivate.patch(
             "/email",
@@ -53,6 +53,7 @@ const updateReadStatus = async (id, token) => {
                 },
                 params: {
                     id: id,
+                    user: user,
                 },
             }
         );
@@ -90,6 +91,7 @@ const addReply = async (id, username, message, token) => {
 function IndivEmail() {
     // temporary solution
     const token = localStorage.getItem("authToken");
+    const username = localStorage.getItem("username")
     const [subject, setSubject] = useState("");
     const [sender, setSender] = useState("");
     const [body, setBody] = useState("");
@@ -106,20 +108,30 @@ function IndivEmail() {
         // retreive email from database
         getIndivEmail(id, token).then((email) => {
             setSubject(email[0].emailSubject);
-            setTimestamp(email[0].createdAt);
+            const date = new Date(email[0].createdAt)
+            setTimestamp(date.toLocaleDateString('en-US', {hour: '2-digit', minute: '2-digit',}));
             setBody(email[0].emailContent);
 
             // get users by id
-            getUsersById(email[0].sender_id, token).then((email) => {
-                setSender(email.username);
+            getUsersById(email[0].sender_id, token).then((e) => {
+                setSender(e.username);
+
+                // update the isRead status of the email!
+                // check if we're sender or receiver
+                console.log("sender username:", e.username)
+                if (e.username == username) {
+                    console.log("we are the sender")
+                    updateReadStatus(email[0]._id, "isReadSender", token);
+                }
+                else {
+                    console.log("we are the receiver")
+                    updateReadStatus(email[0]._id, "isReadReceiver", token);
+                }
             });
 
-            getUsersById(email[0].receiver_id, token).then((email) => {
-                setReceiver(email.username);
+            getUsersById(email[0].receiver_id, token).then((e) => {
+                setReceiver(e.username);
             });
-
-            // update the isRead status of the email!
-            updateReadStatus(email[0]._id, token);
 
             setAllReplies(email[0].replies);
         });
