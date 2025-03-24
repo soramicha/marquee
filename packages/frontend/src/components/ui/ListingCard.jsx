@@ -100,7 +100,7 @@ function ListingCard({ id, name, price, location, photos, category, condition })
     };
 
     return (
-        <Box p={4} w="100%">
+        <Box style={{ cursor: "pointer" }} p={4} w="100%">
             <Box position="relative">
                 <Image
                     src={displayedImage}
