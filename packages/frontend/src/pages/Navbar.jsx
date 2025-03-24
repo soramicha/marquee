@@ -12,14 +12,78 @@ import {
     Image,
     Button,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext"; // Adjust path as needed
+import { useEffect, useState } from 'react'
 import profileImage from '@/assets/cat.png';  // If image is in src/assets
+import { axiosPrivate } from "@/api/axios";
 
+const getAllEmails = async (token) => {
+    try {
+        //const token = localStorage.getItem("authToken")
+        const response = await axiosPrivate.get("/email", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(
+            "Emails retreived from MongoDB successfully:",
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error retreiving emails:", error);
+    }
+};
+
+const findUserbyId = async (id) => {
+    try {
+        const response = await axiosPrivate.get("/findUser", {
+            params: {
+                id: id,
+            },
+        })
+        console.log(
+            "User retreived by id from MongoDB successfully:",
+            response.data.username
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error retreiving user by id:", error);
+    }
+}
 
 function Navbar() {
     const { auth, logout } = useAuth();
+    const token = localStorage.getItem("authToken")
+    const [ numMessages, setNumMessages ] = useState(0)
+    const location = useLocation();
+    let { id } = useParams();
+
+    useEffect(() => {
+        // get the number of messages user has
+        if (auth?.username) {
+            getAllEmails(token).then(async (res) => {
+                const usersPromises = res.map(email => findUserbyId(email.receiver_id))
+                const users = await Promise.all(usersPromises);
+
+                const unreadCount = res.reduce((count, email, index) => {
+                    const user = users[index];
+                    
+                    if (user.username === auth?.username) {
+                        if (location.pathname === `/email/${id}` && email._id === id) {
+                            console.log("EMAIL MATCHES!!!")
+                            return count;
+                        }
+                        return email.isReadReceiver ? count : count + 1;
+                    }
+                    return count
+                }, 0);
+            
+                setNumMessages(unreadCount);
+            })
+        }
+    }, [])
 
     return (
         <Box
@@ -57,6 +121,7 @@ function Navbar() {
                         </Text>
                     </Link>
                     <Link to="/email">
+                    <Flex justify={"space-evenly"}>
                         <Text
                             fontSize="md"
                             color="white"
@@ -64,6 +129,8 @@ function Navbar() {
                         >
                             Messages
                         </Text>
+                        { auth?.username && numMessages != 0 ? <Text ml={2} bg="orange" borderRadius={10} paddingLeft={2} paddingRight={2}>{numMessages}</Text> : <></>}
+                        </Flex> 
                     </Link>
                 </Flex>
 

@@ -24,7 +24,7 @@ const EmailSchema = new mongoose.Schema(
         },
         isReadSender: {
             type: Boolean,
-            default: false, // all emails aren't read yet by default
+            default: true, // all emails by sender are read by default
         },
         isReadReceiver: {
             type: Boolean,

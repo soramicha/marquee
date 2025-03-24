@@ -15,10 +15,7 @@ const getIndivEmail = async (id, token) => {
                 id: id,
             },
         });
-        console.log(
-            "Email retreived from MongoDB successfully:",
-            //response.data
-        );
+        //console.log("Email retreived from MongoDB successfully:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error retreiving emails:", error);
@@ -35,7 +32,7 @@ const getUsersById = async (id, token) => {
                 id: id,
             },
         });
-        console.log("User retreived from MongoDB successfully:", response.data);
+        //console.log("User retreived from MongoDB successfully:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error retreiving user by id:", error);
