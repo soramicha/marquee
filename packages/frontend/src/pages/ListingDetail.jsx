@@ -261,6 +261,7 @@ function ListingDetail() {
                                 location={item.location}
                                 category={item.category}
                                 photos={item.photos}
+                                condition={item.condition}
                             />
                         ))}
                     </SimpleGrid>
