@@ -61,6 +61,30 @@ export async function findUserById(req, res) {
     }
 }
 
+// finds multiple users passed in as array
+export async function findUsersById(req, res) {
+    const { ids } = req.query;
+
+    if (!ids || !Array.isArray(ids)) {
+        return res.status(400).json({ error: "Invalid ID format" });
+    }
+
+    try {
+        const users = await UserModel.find({ 
+            _id: { $in: ids }
+        });
+
+        if (!users.length) {
+            return res.status(404).json({ error: "No users found" });
+        }
+
+        return res.status(200).json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
 // user is a javascript object
 export async function addUser(user) {
     try {
@@ -72,7 +96,6 @@ export async function addUser(user) {
     }
 }
 
-// jessica code here
 export async function addFavorite(req, res) {
     try {
         const username = req.query.username;

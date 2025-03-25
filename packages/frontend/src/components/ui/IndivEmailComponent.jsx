@@ -13,10 +13,7 @@ const getUsersById = async (id, token) => {
                 id: id,
             },
         });
-        console.log(
-            "Username retreived from MongoDB successfully:",
-            response.data
-        );
+        //console.log("Username retreived from MongoDB successfully:",response.data);
         return response.data;
     } catch (error) {
         console.error("Error retreiving username:", error);

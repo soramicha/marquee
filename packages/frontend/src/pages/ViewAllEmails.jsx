@@ -14,10 +14,7 @@ const getAllEmails = async (token) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(
-            "Emails retreived from MongoDB successfully:",
-            //response.data
-        );
+        //console.log("Emails retreived from MongoDB successfully:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error retreiving emails:", error);
@@ -31,10 +28,7 @@ const findUserbyId = async (id) => {
                 id: id,
             },
         })
-        console.log(
-            "User retreived by id from MongoDB successfully:",
-            response.data.username
-        );
+        //console.log("User retreived by id from MongoDB successfully:", response.data.username);
         return response.data;
     } catch (error) {
         console.error("Error retreiving user by id:", error);
