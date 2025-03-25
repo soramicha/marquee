@@ -65,7 +65,7 @@ const getUserFavs = async (username) => {
     }
 };
 
-function ListingCard({ id, name, price, location, photos, category }) {
+function ListingCard({ id, name, price, location, photos, category, condition }) {
     let navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState(false);
     const token = localStorage.getItem("authToken");
@@ -100,7 +100,7 @@ function ListingCard({ id, name, price, location, photos, category }) {
     };
 
     return (
-        <Box p={4} w="100%">
+        <Box style={{ cursor: "pointer" }} p={4} w="100%">
             <Box position="relative">
                 <Image
                     src={displayedImage}
@@ -145,6 +145,16 @@ function ListingCard({ id, name, price, location, photos, category }) {
                 mt={3}
             >
                 {category}
+            </Tag>
+            <Tag
+                onClick={goToParticularListingPage}
+                size="sm"
+                variant="solid"
+                bg="#EA9835"
+                mt={3}
+                ml={3}
+            >
+                {condition}
             </Tag>
         </Box>
     );

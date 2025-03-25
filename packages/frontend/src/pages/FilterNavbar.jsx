@@ -5,6 +5,10 @@ function FilterNavbar({
     setSelectedCategories,
     selectedLocations,
     setSelectedLocations,
+    selectedCondition,
+    setSelectedCondition,
+    selectedPriceRange,
+    setSelectedPriceRange
 }) {
     const categories = [
         "Apparel",
@@ -17,11 +21,27 @@ function FilterNavbar({
         "Vehicles",
     ];
 
+    const priceRanges = [
+        "Below $15",
+        "$15 - $25",
+        "$25 - $50",
+        "$100 - $500",
+        "Above $500"
+    ]
+
+    const conditions = [
+        "Brand New",
+        "Like New",
+        "Gently Used",
+        "Fair Condition",
+        "Needs Repair",
+    ];
+
     const locations = ["On Campus", "Off Campus"];
 
     return (
-        <Box w="64" h="100vh" p="6" bg="gray.200">
-            <Text fontSize="xl" fontWeight="bold" mb="4">
+        <Box w="64" p="6" bg="gray.200" mt={-5}>
+            <Text mt={5} fontSize="xl" fontWeight="bold" mb="4">
                 Filters
             </Text>
 
@@ -54,7 +74,7 @@ function FilterNavbar({
                 </CheckboxGroup>
             </Box>
 
-            <Box p="2">
+            <Box mb={6} p="2">
                 <Text fontSize="md" fontWeight="semibold" mb="2">
                     Location
                 </Text>
@@ -70,6 +90,50 @@ function FilterNavbar({
                                 borderColor="gray.600"
                             >
                                 {loc}
+                            </Checkbox>
+                        ))}
+                    </Flex>
+                </CheckboxGroup>
+            </Box>
+
+            <Box mb={6} p="2">
+                <Text fontSize="md" fontWeight="semibold" mb="2">
+                    Condition
+                </Text>
+                <CheckboxGroup
+                    value={selectedCondition}
+                    onChange={(values) => setSelectedCondition([...values])}
+                >
+                    <Flex direction="column" gap="2">
+                        {conditions.map((condition) => (
+                            <Checkbox
+                                key={condition}
+                                value={condition}
+                                borderColor="gray.600"
+                            >
+                                {condition}
+                            </Checkbox>
+                        ))}
+                    </Flex>
+                </CheckboxGroup>
+            </Box>
+
+            <Box p="2">
+                <Text fontSize="md" fontWeight="semibold" mb="2">
+                    Price
+                </Text>
+                <CheckboxGroup
+                    value={selectedPriceRange}
+                    onChange={(values) => setSelectedPriceRange([...values])}
+                >
+                    <Flex direction="column" gap="2">
+                        {priceRanges.map((price) => (
+                            <Checkbox
+                                key={price}
+                                value={price}
+                                borderColor="gray.600"
+                            >
+                                {price}
                             </Checkbox>
                         ))}
                     </Flex>

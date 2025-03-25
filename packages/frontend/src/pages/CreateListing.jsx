@@ -10,6 +10,7 @@ import {
     InputLeftElement,
     Flex,
     useToast,
+    Textarea,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import FileUpload from "@/components/ui/FileUpload";
@@ -303,7 +304,7 @@ function CreateListing() {
         <Box h="100vh" w="100vw" bg="white" overflow="scroll">
             <Navbar />
             <Center>
-                <Box mt={150} w={{ base: "90%", md: "80%", lg: "60%" }}>
+                <Box mb={20} mt={150} w={{ base: "90%", md: "80%", lg: "60%" }}>
                     <form onSubmit={handleSubmit}>
                         <Flex
                             direction={{ base: "column", md: "row" }}
@@ -331,7 +332,6 @@ function CreateListing() {
                                 <Input
                                     borderWidth={1}
                                     borderRadius="10px"
-                                    color="#989898"
                                     backgroundColor="white"
                                     mt={1}
                                     width="100%"
@@ -348,7 +348,6 @@ function CreateListing() {
                                 <Select
                                     borderWidth={1}
                                     borderRadius="10px"
-                                    color="#989898"
                                     backgroundColor="white"
                                     mt={1}
                                     width="100%"
@@ -369,12 +368,12 @@ function CreateListing() {
                                 <Text fontSize="sm" mt={5}>
                                     Description
                                 </Text>
-                                <Input
+                                <Textarea
                                     borderWidth={1}
                                     borderRadius="10px"
-                                    color="#989898"
                                     backgroundColor="white"
                                     mt={1}
+                                    textAlign={"start"}
                                     width="100%"
                                     height="250px"
                                     type="text"
@@ -394,7 +393,6 @@ function CreateListing() {
                                             <Input
                                                 borderWidth={1}
                                                 borderRadius="10px"
-                                                color="#989898"
                                                 backgroundColor="white"
                                                 type="number"
                                                 step="0.01"
@@ -419,7 +417,6 @@ function CreateListing() {
                                         <Select
                                             borderWidth={1}
                                             borderRadius="10px"
-                                            color="#989898"
                                             backgroundColor="white"
                                             mt={1}
                                             width="100%"
@@ -445,7 +442,6 @@ function CreateListing() {
                                 <Select
                                     borderWidth={1}
                                     borderRadius="10px"
-                                    color="#989898"
                                     backgroundColor="white"
                                     mt={1}
                                     width="100%"
@@ -472,7 +468,6 @@ function CreateListing() {
                                         <Select
                                             borderWidth={1}
                                             borderRadius="10px"
-                                            color="#989898"
                                             backgroundColor="white"
                                             mt={1}
                                             width="100%"
@@ -500,7 +495,6 @@ function CreateListing() {
                                                 <Select
                                                     borderWidth={1}
                                                     borderRadius="10px"
-                                                    color="#989898"
                                                     backgroundColor="white"
                                                     mt={1}
                                                     width="100%"
