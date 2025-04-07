@@ -8,7 +8,7 @@ function FilterNavbar({
     selectedCondition,
     setSelectedCondition,
     selectedPriceRange,
-    setSelectedPriceRange
+    setSelectedPriceRange,
 }) {
     const categories = [
         "Apparel",
@@ -26,8 +26,8 @@ function FilterNavbar({
         "$15 - $25",
         "$25 - $50",
         "$100 - $500",
-        "Above $500"
-    ]
+        "Above $500",
+    ];
 
     const conditions = [
         "Brand New",

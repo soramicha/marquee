@@ -18,7 +18,7 @@ import Layout from "./components/ui/Layout";
 function App() {
     return (
         <BrowserRouter>
-            <Routes>            
+            <Routes>
                 {/* Routes with Navbar */}
                 <Route element={<Layout />}>
                     {/* Protected routes */}
@@ -28,11 +28,17 @@ function App() {
                         <Route path="/signup" element={<SignUp />} />
                         <Route path="/home" element={<Home />} />
                         <Route path="listing/:id" element={<ListingDetail />} />
-                    
+
                         <Route element={<RequireAuth />}>
-                            <Route path="listing/create" element={<CreateListing />} />
+                            <Route
+                                path="listing/create"
+                                element={<CreateListing />}
+                            />
                             <Route path="email" element={<ViewAllEmails />} />
-                            <Route path="email/create" element={<SendEmail />} />
+                            <Route
+                                path="email/create"
+                                element={<SendEmail />}
+                            />
                             <Route path="/favorites" element={<Favorites />} />
                             <Route path="email/:id" element={<IndivEmail />} />
                             <Route path="profile" element={<Profile />} />

@@ -55,7 +55,7 @@ function SignUp() {
 
         setIsLoading(true);
         try {
-            console.log("CALLING SIGN UP BACKEND")
+            console.log("CALLING SIGN UP BACKEND");
             await signup(email, password);
             navigate("/home");
         } catch (error) {

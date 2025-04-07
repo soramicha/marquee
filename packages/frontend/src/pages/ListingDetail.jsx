@@ -33,7 +33,6 @@ const getListingDetail = async (listing_id) => {
     }
 };
 
-
 const getUserInfo = async (id) => {
     try {
         const response = await axiosPrivate.get("/findUser", {
@@ -66,35 +65,43 @@ function ListingDetail() {
     const [interested, setInterested] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
-    const [productData, setProductData] = useState({})
+    const [productData, setProductData] = useState({});
     const [sellerUsername, setSellerUsername] = useState("");
-    const [similarListings, setSimilarListings] = useState([])
+    const [similarListings, setSimilarListings] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         // get listing info
-        getListingDetail(id).then(res => {
+        getListingDetail(id).then((res) => {
             console.log("retrived listing info!", res.data[0]);
             setProductData(res.data[0]);
             setSelectedImage(res.data[0].photos[0]);
-            getAllListings().then(listing => {
-                console.log("category", res.data[0].category, "LISTING DATA", listing.data);
+            getAllListings().then((listing) => {
+                console.log(
+                    "category",
+                    res.data[0].category,
+                    "LISTING DATA",
+                    listing.data
+                );
                 const similar = listing.data.filter((item) => {
-                    return (res.data[0].category.includes(item.category) && (id != item._id));
-                })
-                console.log('SIMILAR:', similar);
+                    return (
+                        res.data[0].category.includes(item.category) &&
+                        id != item._id
+                    );
+                });
+                console.log("SIMILAR:", similar);
                 setSimilarListings(similar);
             });
             console.log("test", res.data[0].user);
             // get user info
-            getUserInfo(res.data[0].user).then(seller => {
-                console.log(seller?.favorites, " is the user info!")
+            getUserInfo(res.data[0].user).then((seller) => {
+                console.log(seller?.favorites, " is the user info!");
                 setSellerUsername(seller.username);
                 if (seller?.favorites.includes(id)) {
                     setIsFavorite(true);
                 }
             });
-        })
+        });
     }, [id]);
 
     /*const similarListings = [
@@ -145,9 +152,9 @@ function ListingDetail() {
                                     height="100%"
                                     onClick={() => setSelectedImage(video)}
                                     style={{
-                                        borderRadius: 'md',
-                                        cursor: 'pointer',
-                                        objectFit: 'cover'
+                                        borderRadius: "md",
+                                        cursor: "pointer",
+                                        objectFit: "cover",
                                     }}
                                 >
                                     <source src={video} type="video/mp4" />
@@ -212,16 +219,21 @@ function ListingDetail() {
                                     {productData.location}
                                 </Text>
                             </Box>
-                            <Tag size="md" mt={5} variant="solid" colorScheme="blue"><TagLabel>{productData.category}</TagLabel></Tag>
+                            <Tag
+                                size="md"
+                                mt={5}
+                                variant="solid"
+                                colorScheme="blue"
+                            >
+                                <TagLabel>{productData.category}</TagLabel>
+                            </Tag>
                             <Flex align="center" mt={6}>
                                 <Avatar
                                     name={sellerUsername}
                                     size="md"
                                     mr={3}
                                 />
-                                <Text fontSize="lg">
-                                    {sellerUsername}
-                                </Text>
+                                <Text fontSize="lg">{sellerUsername}</Text>
                             </Flex>
                         </Box>
                         <Box mt={8}>
@@ -235,7 +247,11 @@ function ListingDetail() {
                                 _hover={{ opacity: 0.8 }}
                             >
                                 {interested
-                                    ? navigate('/email/create', { state: { sellerEmail : sellerUsername} })
+                                    ? navigate("/email/create", {
+                                          state: {
+                                              sellerEmail: sellerUsername,
+                                          },
+                                      })
                                     : "I'm Interested"}
                             </Button>
                         </Box>
@@ -243,16 +259,16 @@ function ListingDetail() {
                 </Flex>
                 {/* Similar Listings */}
                 <Box mt={12}>
-                {similarListings && similarListings.length > 0 && (
-                    <Text fontSize="2xl" fontWeight="bold" mb={4}>
-                        Similar Listings
-                    </Text>
+                    {similarListings && similarListings.length > 0 && (
+                        <Text fontSize="2xl" fontWeight="bold" mb={4}>
+                            Similar Listings
+                        </Text>
                     )}
                     <SimpleGrid
                         columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
                         spacing={6}
                     >
-                        {similarListings.map(item => (
+                        {similarListings.map((item) => (
                             <ListingCard
                                 key={item._id}
                                 id={item._id}
