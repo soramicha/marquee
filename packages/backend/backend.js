@@ -16,6 +16,7 @@ import {
     getUsers,
     removeFavorite,
     findUserById,
+    findUsersById,
     getUserListings,
 } from "./services/user-service.js";
 import {
@@ -69,7 +70,8 @@ app.post("/api/login", loginUser);
 app.get("/api/logout", logout);
 app.get("/api/refresh", refreshUserTokens);
 app.get("/api/users", getUsers);
-app.get("/api/findUser", findUserById);
+app.get("/api/findUser", findUserById); // find singular user
+app.get("/api/findUsers", findUsersById); // find multiple at once
 app.delete("/api/users", authenticateUser, deleteUser);
 // TODO: make a function that verifies the appropriate user with the tokens
 // TODO: that is making these API calls

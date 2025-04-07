@@ -12,13 +12,85 @@ import {
     Image,
     Button,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext"; // Adjust path as needed
-import profileImage from "@/assets/cat.png"; // If image is in src/assets
+import { useEffect, useState } from 'react'
+import profileImage from '@/assets/cat.png';  // If image is in src/assets
+import { axiosPrivate } from "@/api/axios";
+
+const getAllEmails = async (token) => {
+    try {
+        const response = await axiosPrivate.get("/email", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(
+            "Emails retreived from MongoDB successfully:",
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error retreiving emails:", error);
+    }
+};
+
+const getAllUsers = async (userIds) => {
+    try {
+        const response = await axiosPrivate.get("/findUsers", {
+            params: {
+                ids: userIds
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error retrieving users:", error);
+        return [];
+    }
+};
+
+const countUnreadMessages = (emails, userMap, auth, location, currentEmailId) => {
+    return emails.reduce((count, email) => {
+        const user = userMap[email.receiver_id];
+        
+        if (user.username === auth?.username) {
+            // skip counting if we're currently viewing this email
+            if (location.pathname === `/email/${currentEmailId}` && email._id === currentEmailId) {
+                return count;
+            }
+            // increment count when email is unread
+            return email.isReadReceiver ? count : count + 1;
+        }
+        return count;
+    }, 0);
+};
+
+const fetchMessageCount = async (auth, token, location, id) => {
+    if (!auth?.username) return 0;
+
+    const emails = await getAllEmails(token);
+    const uniqueUserIds = [...new Set(emails.map(email => email.receiver_id))];
+    const users = await getAllUsers(uniqueUserIds);
+    const userMap = users.reduce((acc, user) => {
+        acc[user._id] = user;
+        return acc;
+    }, {});
+    
+    return countUnreadMessages(emails, userMap, auth, location, id);
+};
 
 function Navbar() {
     const { auth, logout } = useAuth();
+    const token = localStorage.getItem("authToken");
+    const [ numMessages, setNumMessages ] = useState(0);
+    const location = useLocation();
+    let { id } = useParams();
+
+    useEffect(() => {
+        fetchMessageCount(auth, token, location, id)
+            .then(count => setNumMessages(count))
+            .catch(error => console.error('Error fetching message count:', error));
+    }, [auth?.username, token, location.pathname, id]);
 
     return (
         <Box

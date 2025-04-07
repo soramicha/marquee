@@ -57,7 +57,7 @@ const getUserFavs = async (username) => {
                 username: username,
             },
         });
-        console.log("Successfully retrieved user!", response.data);
+        //console.log("Successfully retrieved user!", response.data);
         const user = response.data;
         return user[0].favorites;
     } catch (error) {
