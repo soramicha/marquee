@@ -65,7 +65,15 @@ const getUserFavs = async (username) => {
     }
 };
 
-function ListingCard({ id, name, price, location, photos, category, condition }) {
+function ListingCard({
+    id,
+    name,
+    price,
+    location,
+    photos,
+    category,
+    condition,
+}) {
     let navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState(false);
     const token = localStorage.getItem("authToken");
@@ -95,7 +103,7 @@ function ListingCard({ id, name, price, location, photos, category, condition })
     };
 
     const goToParticularListingPage = () => {
-        console.log("clicked to go to listing detail page!")
+        console.log("clicked to go to listing detail page!");
         navigate(`/listing/${id}`);
     };
 

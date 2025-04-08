@@ -127,70 +127,76 @@ function Navbar() {
                             Home
                         </Text>
                     </Link>
-                    <Link to="/email">
-                    <Flex justify={"space-evenly"}>
-                        <Text
-                            fontSize="md"
-                            color="white"
-                            _hover={{ textDecoration: "underline" }}
-                        >
-                            Messages
-                        </Text>
-                        { auth?.username && numMessages != 0 ? <Text ml={2} bg="orange" borderRadius={10} paddingLeft={2} paddingRight={2}>{numMessages}</Text> : <></>}
-                        </Flex> 
-                    </Link>
+                    {auth?.username ? (
+                        <Link to="/email">
+                            <Text
+                                fontSize="md"
+                                color="white"
+                                _hover={{ textDecoration: "underline" }}
+                            >
+                                Messages
+                            </Text>
+                        </Link>
+                    ) : (
+                        <></>
+                    )}
                 </Flex>
 
                 <Spacer />
 
                 {/* Right Side: Favorites Icon, Create Listing, and Avatar/Sign In */}
                 <Flex align="center" gap={4}>
-                    <Link to="/favorites">
-                        <IconButton
-                            aria-label="Favorites"
-                            icon={<FaHeart />}
-                            bg="transparent"
-                            color="white"
-                            _hover={{ color: "gray.300", bg: "transparent" }}
-                        />
-                    </Link>
-                    <Link to="/listing/create">
-                        <Text
-                            fontSize="md"
-                            color="white"
-                            _hover={{ textDecoration: "underline" }}
-                        >
-                            Create Listing
-                        </Text>
-                    </Link>
-
                     {auth?.username ? (
-                        <Menu>
-                            <MenuButton
-                                as={Button}
-                                bg="transparent"
-                                _hover={{ bg: "transparent" }}
-                                _active={{ bg: "transparent" }}
-                                p={0}
-                            >
-                                <Image
-                                    src={profileImage}
-                                    boxSize="50px"
-                                    borderRadius="full"
-                                    fit="cover"
-                                    alt="Profile"
+                        <>
+                            <Link to="/favorites">
+                                <IconButton
+                                    aria-label="Favorites"
+                                    icon={<FaHeart />}
+                                    bg="transparent"
+                                    color="white"
+                                    _hover={{
+                                        color: "gray.300",
+                                        bg: "transparent",
+                                    }}
                                 />
-                            </MenuButton>
-                            <MenuList color="black">
-                                <MenuItem as={Link} to="/profile">
-                                    My Profile
-                                </MenuItem>
-                                <MenuItem onClick={logout}>Logout</MenuItem>
-                            </MenuList>
-                        </Menu>
+                            </Link>
+                            <Link to="/listing/create">
+                                <Text
+                                    fontSize="md"
+                                    color="white"
+                                    _hover={{ textDecoration: "underline" }}
+                                >
+                                    Create Listing
+                                </Text>
+                            </Link>
+                            <Menu>
+                                <MenuButton
+                                    as={Button}
+                                    bg="transparent"
+                                    _hover={{ bg: "transparent" }}
+                                    _active={{ bg: "transparent" }}
+                                    p={0}
+                                >
+                                    <Image
+                                        src={profileImage}
+                                        boxSize="50px"
+                                        borderRadius="full"
+                                        fit="cover"
+                                        alt="Profile"
+                                    />
+                                </MenuButton>
+                                <MenuList color="black">
+                                    <MenuItem as={Link} to="/profile">
+                                        My Profile
+                                    </MenuItem>
+                                    <MenuItem onClick={logout}>Logout</MenuItem>
+                                </MenuList>
+                            </Menu>
+                        </>
                     ) : (
                         <Link to="/login">
                             <Text
+                                padding={2}
                                 fontSize="md"
                                 color="white"
                                 _hover={{ textDecoration: "underline" }}

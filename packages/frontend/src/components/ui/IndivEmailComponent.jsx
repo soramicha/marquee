@@ -22,8 +22,11 @@ const getUsersById = async (id, token) => {
 
 function IndivEmailComponent(props) {
     const subject_header = props.subject;
-    const date = new Date(props.timestamp)
-    const timestamp = date.toLocaleDateString('en-US', {hour: '2-digit', minute: '2-digit',});
+    const date = new Date(props.timestamp);
+    const timestamp = date.toLocaleDateString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+    });
     const bgColor = props.readStatus ? "#E0E0E0" : "white";
     const token = localStorage.getItem("authToken");
     const [sender_email, setSenderEmail] = useState("");

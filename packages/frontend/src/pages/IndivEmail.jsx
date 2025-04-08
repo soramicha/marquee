@@ -15,7 +15,10 @@ const getIndivEmail = async (id, token) => {
                 id: id,
             },
         });
-        //console.log("Email retreived from MongoDB successfully:", response.data);
+        console.log(
+            "Email retreived from MongoDB successfully:"
+            //response.data
+        );
         return response.data;
     } catch (error) {
         console.error("Error retreiving emails:", error);
@@ -88,7 +91,7 @@ const addReply = async (id, username, message, token) => {
 function IndivEmail() {
     // temporary solution
     const token = localStorage.getItem("authToken");
-    const username = localStorage.getItem("username")
+    const username = localStorage.getItem("username");
     const [subject, setSubject] = useState("");
     const [sender, setSender] = useState("");
     const [body, setBody] = useState("");
@@ -105,8 +108,13 @@ function IndivEmail() {
         // retreive email from database
         getIndivEmail(id, token).then((email) => {
             setSubject(email[0].emailSubject);
-            const date = new Date(email[0].createdAt)
-            setTimestamp(date.toLocaleDateString('en-US', {hour: '2-digit', minute: '2-digit',}));
+            const date = new Date(email[0].createdAt);
+            setTimestamp(
+                date.toLocaleDateString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                })
+            );
             setBody(email[0].emailContent);
 
             // get users by id
@@ -115,13 +123,12 @@ function IndivEmail() {
 
                 // update the isRead status of the email!
                 // check if we're sender or receiver
-                console.log("sender username:", e.username)
+                console.log("sender username:", e.username);
                 if (e.username == username) {
-                    console.log("we are the sender")
+                    console.log("we are the sender");
                     updateReadStatus(email[0]._id, "isReadSender", token);
-                }
-                else {
-                    console.log("we are the receiver")
+                } else {
+                    console.log("we are the receiver");
                     updateReadStatus(email[0]._id, "isReadReceiver", token);
                 }
             });

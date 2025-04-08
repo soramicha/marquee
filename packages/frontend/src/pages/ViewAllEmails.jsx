@@ -29,21 +29,22 @@ const findUserbyId = async (id) => {
             },
         })
         //console.log("User retreived by id from MongoDB successfully:", response.data.username);
+
         return response.data;
     } catch (error) {
         console.error("Error retreiving user by id:", error);
     }
-}
+};
 
 function ViewAllEmails() {
     //const { auth } = useAuth();
     //const token = auth?.access_token
     // temporary solution
     const token = localStorage.getItem("authToken");
-    const username = localStorage.getItem("username")
-    console.log("VIEW ALL EMAIL from user ACCOUNT: ", username)
+    const username = localStorage.getItem("username");
+    console.log("VIEW ALL EMAIL from user ACCOUNT: ", username);
     const [AllEmails, setAllEmails] = useState([]);
-    const [senders, setSenders] = useState({})
+    const [senders, setSenders] = useState({});
 
     // runs once when page loads
     useEffect(() => {
@@ -62,14 +63,17 @@ function ViewAllEmails() {
                 setAllEmails(sortedEmails);
 
                 Promise.all(
-                    sortedEmails.map((email) => 
-                        findUserbyId(email.sender_id).then(user => [email.sender_id, user.username])
+                    sortedEmails.map((email) =>
+                        findUserbyId(email.sender_id).then((user) => [
+                            email.sender_id,
+                            user.username,
+                        ])
                     )
                 ).then((senderEntries) => {
                     const senderMap = Object.fromEntries(senderEntries);
                     setSenders(senderMap);
-                    console.log("Senders: ", senderMap)
-                })
+                    console.log("Senders: ", senderMap);
+                });
             }
         });
     }, []);
@@ -92,7 +96,11 @@ function ViewAllEmails() {
                             subject={email.emailSubject}
                             timestamp={email.createdAt}
                             sender_id={email.sender_id}
-                            readStatus={senders[email.sender_id] === username ? email.isReadSender : email.isReadReceiver}
+                            readStatus={
+                                senders[email.sender_id] === username
+                                    ? email.isReadSender
+                                    : email.isReadReceiver
+                            }
                         />
                     </Link>
                 ))}

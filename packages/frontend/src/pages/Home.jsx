@@ -37,7 +37,7 @@ function Home() {
 
     useEffect(() => {
         // If no filters are applied, reset to all listings
-        console.log("Picked price range: ", selectedPriceRange)
+        console.log("Picked price range: ", selectedPriceRange);
         const filteredListings = allListings.filter((item) => {
             return (
                 (selectedLocations.length === 0 ||
@@ -48,16 +48,30 @@ function Home() {
                     selectedCondition.includes(item.condition)) &&
                 // filter price ranges
                 (selectedPriceRange.length === 0 ||
-                    (selectedPriceRange.includes("Above $500") && item.price >= 500) ||
-                    (selectedPriceRange.includes("$100 - $500") && item.price >= 100 && item.price <= 500) ||
-                    (selectedPriceRange.includes("$25 - $50") && item.price >= 25 && item.price <= 50) ||
-                    (selectedPriceRange.includes("$15 - $25") && item.price >= 15 && item.price <= 25) ||
-                    (selectedPriceRange.includes("Below $15") && item.price <= 15))
+                    (selectedPriceRange.includes("Above $500") &&
+                        item.price >= 500) ||
+                    (selectedPriceRange.includes("$100 - $500") &&
+                        item.price >= 100 &&
+                        item.price <= 500) ||
+                    (selectedPriceRange.includes("$25 - $50") &&
+                        item.price >= 25 &&
+                        item.price <= 50) ||
+                    (selectedPriceRange.includes("$15 - $25") &&
+                        item.price >= 15 &&
+                        item.price <= 25) ||
+                    (selectedPriceRange.includes("Below $15") &&
+                        item.price <= 15))
             );
         });
         console.log("Filtered Listings:", filteredListings);
         setFilteredItems(filteredListings);
-    }, [selectedPriceRange, selectedCondition, selectedCategories, selectedLocations, allListings]);
+    }, [
+        selectedPriceRange,
+        selectedCondition,
+        selectedCategories,
+        selectedLocations,
+        allListings,
+    ]);
 
     return (
         <Box bg="gray.100" minH="100vh" minW="100vw">

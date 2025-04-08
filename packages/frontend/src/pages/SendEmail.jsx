@@ -7,9 +7,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { axiosPrivate } from "../api/axios";
 
 function SendEmail() {
-    const location = useLocation()
+    const location = useLocation();
     const specific_sender = location.state ? location.state.sellerEmail : null;
-    console.log("SENDER SPECIFIC: ", specific_sender)
+    console.log("SENDER SPECIFIC: ", specific_sender);
     // create a ref hook
     const form = useRef(null);
     let navigate = useNavigate();
@@ -17,7 +17,9 @@ function SendEmail() {
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
     // TODO: hard code receiver to seller
-    const [receiver, setReceiver] = useState(specific_sender ? specific_sender : "");
+    const [receiver, setReceiver] = useState(
+        specific_sender ? specific_sender : ""
+    );
     //const [sender, setSender] = auth?.username;
     // temporary solution
     const [sender, setSender] = useState(localStorage.getItem("username"));

@@ -337,7 +337,9 @@ function CreateListing() {
                                     width="100%"
                                     type="text"
                                     value={itemName}
-                                    onChange={(e) => setItemName(e.target.value)}
+                                    onChange={(e) =>
+                                        setItemName(e.target.value)
+                                    }
                                     required
                                 />
 
@@ -352,7 +354,9 @@ function CreateListing() {
                                     mt={1}
                                     width="100%"
                                     value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
+                                    onChange={(e) =>
+                                        setCategory(e.target.value)
+                                    }
                                     required
                                 >
                                     <option value="" disabled>
@@ -378,7 +382,9 @@ function CreateListing() {
                                     height="250px"
                                     type="text"
                                     value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
+                                    onChange={(e) =>
+                                        setDescription(e.target.value)
+                                    }
                                     required
                                 />
 
@@ -389,7 +395,10 @@ function CreateListing() {
                                     <Box flex="1">
                                         <Text fontSize="sm">Price</Text>
                                         <InputGroup mt={1} width="100%">
-                                            <InputLeftElement pointerEvents="none" children="$" />
+                                            <InputLeftElement
+                                                pointerEvents="none"
+                                                children="$"
+                                            />
                                             <Input
                                                 borderWidth={1}
                                                 borderRadius="10px"
@@ -397,11 +406,17 @@ function CreateListing() {
                                                 type="number"
                                                 step="0.01"
                                                 value={price}
-                                                onChange={(e) => setPrice(e.target.value)}
+                                                onChange={(e) =>
+                                                    setPrice(e.target.value)
+                                                }
                                                 onBlur={(e) => {
-                                                    const num = parseFloat(e.target.value);
+                                                    const num = parseFloat(
+                                                        e.target.value
+                                                    );
                                                     if (!isNaN(num)) {
-                                                        setPrice(num.toFixed(2));
+                                                        setPrice(
+                                                            num.toFixed(2)
+                                                        );
                                                     }
                                                 }}
                                                 required
@@ -426,11 +441,16 @@ function CreateListing() {
                                             }
                                             required
                                         >
-                                            {conditions.map((condition, index) => (
-                                                <option key={index} value={condition}>
-                                                    {condition}
-                                                </option>
-                                            ))}
+                                            {conditions.map(
+                                                (condition, index) => (
+                                                    <option
+                                                        key={index}
+                                                        value={condition}
+                                                    >
+                                                        {condition}
+                                                    </option>
+                                                )
+                                            )}
                                         </Select>
                                     </Box>
                                 </Flex>
@@ -458,7 +478,9 @@ function CreateListing() {
                                         Select location type
                                     </option>
                                     <option value="On Campus">On Campus</option>
-                                    <option value="Off Campus">Off Campus</option>
+                                    <option value="Off Campus">
+                                        Off Campus
+                                    </option>
                                 </Select>
                                 {locationType === "On Campus" && (
                                     <>
@@ -473,7 +495,9 @@ function CreateListing() {
                                             width="100%"
                                             value={residenceArea}
                                             onChange={(e) => {
-                                                setResidenceArea(e.target.value);
+                                                setResidenceArea(
+                                                    e.target.value
+                                                );
                                                 setSpecificBuilding("");
                                             }}
                                             required
@@ -481,8 +505,13 @@ function CreateListing() {
                                             <option value="" disabled>
                                                 Select a residence area
                                             </option>
-                                            {Object.keys(residenceAreasData).map((area, index) => (
-                                                <option key={index} value={area}>
+                                            {Object.keys(
+                                                residenceAreasData
+                                            ).map((area, index) => (
+                                                <option
+                                                    key={index}
+                                                    value={area}
+                                                >
                                                     {area}
                                                 </option>
                                             ))}
@@ -500,15 +529,22 @@ function CreateListing() {
                                                     width="100%"
                                                     value={specificBuilding}
                                                     onChange={(e) =>
-                                                        setSpecificBuilding(e.target.value)
+                                                        setSpecificBuilding(
+                                                            e.target.value
+                                                        )
                                                     }
                                                     required
                                                 >
                                                     <option value="" disabled>
                                                         Select a building
                                                     </option>
-                                                    {residenceAreasData[residenceArea].map((building, index) => (
-                                                        <option key={index} value={building}>
+                                                    {residenceAreasData[
+                                                        residenceArea
+                                                    ].map((building, index) => (
+                                                        <option
+                                                            key={index}
+                                                            value={building}
+                                                        >
                                                             {building}
                                                         </option>
                                                     ))}
